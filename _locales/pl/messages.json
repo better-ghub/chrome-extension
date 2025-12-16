@@ -1,0 +1,245 @@
+{
+  "extensionName": {
+    "message": "Better GHub"
+  },
+  "extensionDescription": {
+    "message": "Pokazuje ostatnią aktywność i nierozwiązane sugestie na liście pull requestów GitHub"
+  },
+  "lastComment": {
+    "message": "Ostatni komentarz"
+  },
+  "lastCommit": {
+    "message": "Ostatni commit"
+  },
+  "unresolvedSuggestions": {
+    "message": "Nierozwiązane sugestie"
+  },
+  "reviewComments": {
+    "message": "Komentarze review"
+  },
+  "unresolvedTooltip": {
+    "message": "Nierozwiązane wątki review (pobrane przez GraphQL API)"
+  },
+  "by": {
+    "message": "przez"
+  },
+  "unresolvedSuggestionsCount": {
+    "message": "$COUNT$ nierozwiązanych",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "authRequired": {
+    "message": "Wymagana autoryzacja"
+  },
+  "authDescription": {
+    "message": "Połącz swoje konto GitHub, aby zobaczyć szczegółowe informacje o aktywności PR."
+  },
+  "setupInstructions": {
+    "message": "Instrukcje konfiguracji:"
+  },
+  "step1": {
+    "message": "Przejdź do GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)"
+  },
+  "step2": {
+    "message": "Kliknij \"Generate new token (classic)\""
+  },
+  "step3": {
+    "message": "Wybierz uprawnienia w zależności od potrzeb"
+  },
+  "step4": {
+    "message": "Skopiuj token i wklej go poniżej"
+  },
+  "tokenLabel": {
+    "message": "GitHub Personal Access Token:"
+  },
+  "saveToken": {
+    "message": "Zapisz Token"
+  },
+  "createToken": {
+    "message": "→ Utwórz nowy token na GitHubie (publiczne repozytoria)"
+  },
+  "createTokenPrivate": {
+    "message": "→ Utwórz nowy token na GitHubie (prywatne repozytoria)"
+  },
+  "authenticated": {
+    "message": "Zalogowano"
+  },
+  "apiCalls": {
+    "message": "Wywołania API dzisiaj:"
+  },
+  "rateLimit": {
+    "message": "Limit wywołań:"
+  },
+  "logout": {
+    "message": "Wyloguj"
+  },
+  "madeWith": {
+    "message": "Stworzone z"
+  },
+  "loading": {
+    "message": "Ładowanie aktywności..."
+  },
+  "unresolvedBreakdown": {
+    "message": "Nierozwiązane wg autora:"
+  },
+  "noUnresolved": {
+    "message": "Brak nierozwiązanych wątków"
+  },
+  "rateLimit": {
+    "message": "Limit API:"
+  },
+  "logout": {
+    "message": "Wyloguj"
+  },
+  "pleaseEnterToken": {
+    "message": "Proszę wprowadzić token"
+  },
+  "invalidToken": {
+    "message": "Nieprawidłowy format tokena. Token powinien zaczynać się od ghp_ lub github_pat_"
+  },
+  "testing": {
+    "message": "Testowanie tokena..."
+  },
+  "tokenSaved": {
+    "message": "Token zapisany pomyślnie!"
+  },
+  "tokenValidationFailed": {
+    "message": "Walidacja tokena nie powiodła się"
+  },
+  "confirmLogout": {
+    "message": "Czy na pewno chcesz się wylogować?"
+  },
+  "loggedOut": {
+    "message": "Wylogowano pomyślnie"
+  },
+  "languageSaved": {
+    "message": "Język zapisany. Przeładowanie..."
+  },
+  "cacheTimeSet": {
+    "message": "Czas cache ustawiony na $1"
+  },
+  "batchDelaySet": {
+    "message": "Opóźnienie wsadowe ustawione na $1ms"
+  },
+  "cacheCleared": {
+    "message": "Cache wyczyszczony pomyślnie!"
+  },
+  "tabAuthorization": {
+    "message": "Autoryzacja"
+  },
+  "tabSettings": {
+    "message": "Ustawienia"
+  },
+  "githubAuth": {
+    "message": "Autoryzacja GitHub"
+  },
+  "checkingAuth": {
+    "message": "Sprawdzanie autoryzacji..."
+  },
+  "notAuthenticated": {
+    "message": "Nie zalogowano"
+  },
+  "accountConnected": {
+    "message": "Twoje konto GitHub jest połączone."
+  },
+  "extensionSettings": {
+    "message": "Ustawienia rozszerzenia"
+  },
+  "languageSetting": {
+    "message": "Język / Language"
+  },
+  "languageDesc": {
+    "message": "Wybierz język wyświetlania rozszerzenia"
+  },
+  "cacheEnabled": {
+    "message": "Włącz cache"
+  },
+  "cacheEnabledDesc": {
+    "message": "Przechowuj dane PR w pamięci, aby ograniczyć wywołania API"
+  },
+  "cacheEnabledLabel": {
+    "message": "Włącz cache"
+  },
+  "cacheDisabledWarning": {
+    "message": "Ostrzeżenie: Wyłączenie cache może prowadzić do nadmiernej liczby wywołań API przy odwiedzaniu wielu repozytoriów. Może to szybko wyczerpać limit wywołań API."
+  },
+  "cacheDisabled": {
+    "message": "Cache wyłączony"
+  },
+  "cacheDuration": {
+    "message": "Czas cache"
+  },
+  "cacheDurationDesc": {
+    "message": "Jak długo trzymać dane PR w pamięci podręcznej"
+  },
+  "cacheTimeRecommendation": {
+    "message": "Dla optymalnego wykorzystania tokenów, zalecany czas cache to 5 minut."
+  },
+  "clearCache": {
+    "message": "Wyczyść cache"
+  },
+  "clearCacheDesc": {
+    "message": "Wyczyść wszystkie zapisane dane PR"
+  },
+  "batchDelay": {
+    "message": "Opóźnienie wsadowe"
+  },
+  "batchDelayDesc": {
+    "message": "Opóźnienie przed wsadowym zapytaniem GraphQL (w milisekundach)"
+  },
+  "autoSave": {
+    "message": "Ustawienia są zapisywane automatycznie"
+  },
+  "openSettings": {
+    "message": "Ustawienia"
+  },
+  "signInWithGitHub": {
+    "message": "Zaloguj się przez GitHub (OAuth)"
+  },
+  "recommendedMethod": {
+    "message": "✓ Zalecane - Bezpieczniejsze"
+  },
+  "waitingForAuth": {
+    "message": "Oczekiwanie na autoryzację..."
+  },
+  "enterCode": {
+    "message": "Wpisz ten kod na GitHubie:"
+  },
+  "openGitHub": {
+    "message": "Otwórz GitHub aby autoryzować"
+  },
+  "codeExpires": {
+    "message": "Kod wygasa za: "
+  },
+  "cancel": {
+    "message": "Anuluj"
+  },
+  "orUseToken": {
+    "message": "lub użyj tokena"
+  },
+  "usePersonalToken": {
+    "message": "Użyj Personal Access Token (Ręcznie)"
+  },
+  "oauthSuccess": {
+    "message": "Pomyślnie uwierzytelniono z GitHubem!"
+  },
+  "oauthFailed": {
+    "message": "OAuth nie powiódł się"
+  },
+  "oauthError": {
+    "message": "Nie udało się uruchomić OAuth"
+  },
+  "codeExpired": {
+    "message": "Kod autoryzacji wygasł"
+  },
+  "yourPRs": {
+    "message": "Twoje PR-y"
+  },
+  "noOpenPRs": {
+    "message": "Brak otwartych pull requestów"
+  }
+}
+

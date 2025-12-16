@@ -1,0 +1,133 @@
+/* Better GHub - Dashboard Styles */
+/* Styles matching GitHub's Feed exactly */
+
+/* Animation for section appearance */
+@keyframes better-ghub-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#better-ghub-your-prs {
+  animation: better-ghub-fade-in 0.3s ease;
+}
+
+/* Heading spacing matching Feed */
+#better-ghub-your-prs h2 {
+  line-height: 1.25;
+}
+
+/* PR item wrapper (for activity below) */
+.better-ghub-item {
+  /* Box-row already has border, no need to duplicate */
+}
+
+.better-ghub-item:last-child {
+  border-bottom: none !important;
+}
+
+/* Loading state */
+.better-ghub-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  color: var(--color-fg-muted, #57606a);
+}
+
+/* Empty state matching Feed blankslate */
+#better-ghub-prs-list .blankslate {
+  padding: 32px 16px;
+}
+
+/* PR item hover effect - matching GitHub Feed */
+#better-ghub-your-prs .Box-row--focus-gray:hover {
+  background-color: var(--color-canvas-subtle, #f6f8fa);
+  transition: background-color 0.1s ease-in-out;
+}
+
+/* Octicon colors matching GitHub */
+#better-ghub-your-prs .octicon-git-pull-request,
+#better-ghub-your-prs .octicon-issue-opened {
+  color: var(--color-success-fg, #1a7f37);
+}
+
+#better-ghub-your-prs .octicon-git-pull-request-draft {
+  color: var(--color-fg-muted, #57606a);
+}
+
+#better-ghub-your-prs .octicon-comment {
+  color: var(--color-fg-muted, #57606a);
+}
+
+/* Link styling */
+#better-ghub-your-prs .Link--primary:hover {
+  text-decoration: underline;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  #better-ghub-your-prs .Box-row--focus-gray:hover {
+    background-color: var(--color-canvas-subtle, #161b22);
+  }
+  
+  #better-ghub-your-prs .octicon-git-pull-request,
+  #better-ghub-your-prs .octicon-issue-opened {
+    color: var(--color-success-fg, #3fb950);
+  }
+  
+  #better-ghub-your-prs .octicon-git-pull-request-draft {
+    color: var(--color-fg-muted, #8b949e);
+  }
+  
+  #better-ghub-your-prs .octicon-comment {
+    color: var(--color-fg-muted, #8b949e);
+  }
+  
+  .better-ghub-loading {
+    color: var(--color-fg-muted, #8b949e);
+  }
+}
+
+/* Comments column styling */
+#better-ghub-your-prs .octicon-comment {
+  vertical-align: middle;
+}
+
+/* Activity element styling */
+.better-ghub-item .better-ghub-activity-info {
+  font-size: 12px;
+}
+
+.better-ghub-item .better-ghub-unresolved {
+  font-size: 12px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #better-ghub-your-prs .Box-row {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    flex-direction: column !important;
+  }
+  
+  #better-ghub-your-prs .Box-row > div:last-child {
+    margin-left: 0 !important;
+    margin-top: 8px;
+    text-align: left !important;
+  }
+  
+  #better-ghub-your-prs .f6 {
+    font-size: 11px !important;
+  }
+  
+  #better-ghub-your-prs .h4 {
+    font-size: 13px !important;
+  }
+}

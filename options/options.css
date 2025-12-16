@@ -1,0 +1,112 @@
+/* Better GHub - Options Page Styles */
+/* Minimal overrides - using Primer CSS as base */
+
+/* Brand colors */
+:root {
+    --color-brand-primary: #6E40C9;
+    --color-brand-secondary: #3C1E70;
+}
+
+/* Octicon inline helper */
+.octicon-inline {
+    display: inline-block;
+    fill: currentColor;
+    vertical-align: text-bottom;
+}
+
+.octicon-inline .octicon {
+    display: inline-block;
+    fill: currentColor;
+    vertical-align: text-bottom;
+}
+
+/* Tab content visibility */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Active tab highlight with brand color */
+.tabnav-tab.active {
+    border-bottom-color: #6E40C9;
+    color: #6E40C9;
+}
+
+.tabnav-tab:hover {
+    color: #6E40C9;
+}
+
+/* Loader animation */
+.AnimatedEllipsis::after {
+    content: '...';
+    animation: ellipsis 1.5s infinite;
+}
+
+@keyframes ellipsis {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+}
+
+/* Range slider styling */
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: #d0d7de;
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #6E40C9;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #6E40C9;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Flash messages for cache settings */
+.flash-warn {
+    background-color: #fff8c5;
+    border-color: #d4a72c;
+}
+
+@media (prefers-color-scheme: dark) {
+    input[type="range"] {
+        background: #30363d;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        background: #8b58f7;
+        border-color: #21262d;
+    }
+    
+    input[type="range"]::-moz-range-thumb {
+        background: #8b58f7;
+        border-color: #21262d;
+    }
+    
+    .flash-warn {
+        background-color: #3b2e1f;
+        border-color: #9e6a03;
+        color: #e3b341;
+    }
+}

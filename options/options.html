@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  data-color-mode="auto"
+  data-light-theme="light"
+  data-dark-theme="dark"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Better GHub - Settings</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@primer/css@21.0.7/dist/primer.css"
+    />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="container-lg p-4">
+      <!-- Header -->
+      <div class="text-center mb-4 pb-4 border-bottom">
+        <h1
+          class="h1 mb-2"
+          style="
+            background: linear-gradient(180deg, #6e40c9 0%, #3c1e70 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+          "
+        >
+          Better GHub
+        </h1>
+        <span
+          class="Label Label--large"
+          id="version"
+          style="background: #6e40c9; color: white"
+          >v2.1.0</span
+        >
+      </div>
+
+      <!-- Tabs Navigation (Primer Tabnav) -->
+      <div class="tabnav mb-4">
+        <nav class="tabnav-tabs" aria-label="Settings">
+          <button class="tabnav-tab active" data-tab="auth" aria-current="page">
+            <span class="tab-icon octicon-inline mr-1"></span>
+            <span data-i18n="tabAuthorization">Authorization</span>
+          </button>
+          <button class="tabnav-tab" data-tab="settings">
+            <span class="tab-icon octicon-inline mr-1"></span>
+            <span data-i18n="tabSettings">Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Tab: Authorization -->
+      <div class="tab-content" id="tab-auth" style="display: block">
+        <div class="Box">
+          <div class="Box-header">
+            <h3 class="Box-title" data-i18n="githubAuth">
+              GitHub Authentication
+            </h3>
+          </div>
+
+          <!-- Loading state -->
+          <div id="auth-status-loading" class="Box-row text-center py-4">
+            <div class="anim-pulse">
+              <div class="AnimatedEllipsis mb-2"></div>
+              <p class="color-fg-muted" data-i18n="checkingAuth">
+                Checking authentication...
+              </p>
+            </div>
+          </div>
+
+          <!-- Logged Out -->
+          <div id="auth-status-logged-out" style="display: none">
+            <div class="Box-row">
+              <div class="flash mb-3">
+                <span class="alert-icon octicon-inline mr-2"></span>
+                <div>
+                  <strong data-i18n="notAuthenticated"
+                    >Not authenticated</strong
+                  >
+                  <p
+                    class="color-fg-muted mt-1 mb-0"
+                    data-i18n="authDescription"
+                  >
+                    Connect your GitHub account to see detailed PR activity
+                    information.
+                  </p>
+                </div>
+              </div>
+
+              <div class="Subhead mb-3">
+                <h4 class="Subhead-heading" data-i18n="setupInstructions">
+                  Setup Instructions:
+                </h4>
+              </div>
+              <ol class="mb-3 pl-3">
+                <li class="mb-1" data-i18n="step1">
+                  Go to GitHub Settings → Developer settings → Personal access
+                  tokens → Tokens (classic)
+                </li>
+                <li class="mb-1" data-i18n="step2">
+                  Click "Generate new token (classic)"
+                </li>
+                <li class="mb-1" data-i18n="step3">
+                  Select scopes based on your needs
+                </li>
+                <li class="mb-1" data-i18n="step4">
+                  Copy the token and paste it below
+                </li>
+              </ol>
+
+              <div class="form-group">
+                <div class="form-group-header">
+                  <label for="github-token" data-i18n="tokenLabel"
+                    >GitHub Personal Access Token</label
+                  >
+                </div>
+                <div class="form-group-body">
+                  <input
+                    type="password"
+                    id="github-token"
+                    class="form-control input-block mb-2"
+                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                  />
+                  <button
+                    id="save-token"
+                    class="btn btn-primary btn-block"
+                    data-i18n="saveToken"
+                    style="background: #6e40c9; border-color: #6e40c9"
+                  >
+                    Save Token
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-center mt-3">
+                <a
+                  href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub"
+                  target="_blank"
+                  class="btn-link mr-2"
+                  data-i18n="createToken"
+                >
+                  → Create token (public repos)
+                </a>
+                <a
+                  href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub"
+                  target="_blank"
+                  class="btn-link"
+                  data-i18n="createTokenPrivate"
+                >
+                  → Create token (all repos)
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logged In -->
+          <div id="auth-status-logged-in" style="display: none">
+            <div class="Box-row">
+              <div class="flash flash-success mb-3 d-flex flex-row">
+                <span class="alert-icon octicon-inline"></span>
+
+                <strong data-i18n="authenticated">Authenticated</strong>
+                <p class="ml-1 mb-0" data-i18n="accountConnected">
+                  your GitHub account is connected.
+                </p>
+              </div>
+
+              <div class="d-flex flex-items-center p-3 border rounded-2 mb-3">
+                <img
+                  id="user-avatar"
+                  src=""
+                  alt="Avatar"
+                  class="avatar avatar-8 circle mr-3"
+                />
+                <div class="flex-1">
+                  <div class="text-bold f4 mb-1" id="user-name">Loading...</div>
+                  <div class="color-fg-muted f5 mb-2" id="user-login">
+                    @username
+                  </div>
+                  <div class="d-flex flex-items-center">
+                    <span class="color-fg-muted mr-2" data-i18n="rateLimit"
+                      >Rate Limit:</span
+                    >
+                    <span
+                      class="Counter"
+                      id="rate-limit"
+                      style="background: #6e40c9; color: white"
+                      >-</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <button id="logout-btn" class="btn btn-block" data-i18n="logout">
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Settings -->
+      <div class="tab-content" id="tab-settings" style="display: none">
+        <div class="Box">
+          <div class="Box-header">
+            <h3 class="Box-title" data-i18n="extensionSettings">
+              Extension Settings
+            </h3>
+          </div>
+
+          <!-- Language -->
+          <div class="Box-row">
+            <div class="form-group mb-0">
+              <div class="form-group-header">
+                <label for="setting-language" data-i18n="languageSetting"
+                  >Language / Język</label
+                >
+              </div>
+              <div class="form-group-body">
+                <p class="note mb-2" data-i18n="languageDesc">
+                  Choose the display language for the extension
+                </p>
+                <select id="setting-language" class="form-select">
+                  <option value="system">System default / Systemowy</option>
+                  <option value="en">English</option>
+                  <option value="pl">Polski</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cache Enable/Disable -->
+          <div class="Box-row">
+            <div class="form-group mb-0">
+              <div class="form-group-header">
+                <label for="setting-cache-enabled" data-i18n="cacheEnabled"
+                  >Enable Cache</label
+                >
+              </div>
+              <div class="form-group-body">
+                <p class="note mb-2" data-i18n="cacheEnabledDesc">
+                  Cache PR data to reduce API calls
+                </p>
+                <div class="form-checkbox">
+                  <label>
+                    <input type="checkbox" id="setting-cache-enabled" checked />
+                    <span data-i18n="cacheEnabledLabel">Enable caching</span>
+                  </label>
+                </div>
+                <div
+                  id="cache-disabled-warning"
+                  class="flash flash-warn mt-2"
+                  style="display: none"
+                >
+                  <span class="octicon-inline"></span>
+                  <span data-i18n="cacheDisabledWarning"
+                    >Warning: Disabling cache can lead to excessive API calls
+                    when visiting many repositories. This may quickly exhaust
+                    your API rate limit.</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cache Duration -->
+          <div class="Box-row" id="cache-duration-section">
+            <div class="form-group mb-0">
+              <div class="form-group-header">
+                <label for="setting-cache-time" data-i18n="cacheDuration"
+                  >Cache Duration</label
+                >
+              </div>
+              <div class="form-group-body">
+                <p class="note mb-2" data-i18n="cacheDurationDesc">
+                  How long to cache PR data
+                </p>
+                <div class="d-flex flex-items-center">
+                  <input
+                    type="range"
+                    id="setting-cache-time"
+                    class="flex-1"
+                    min="100"
+                    max="600000"
+                    step="100"
+                    value="300000"
+                  />
+                  <span
+                    class="Label Label--large ml-3"
+                    style="min-width: 100px"
+                  >
+                    <span id="cache-time-value">5</span>
+                    <span id="cache-time-unit">min</span>
+                  </span>
+                </div>
+                <div
+                  id="cache-time-recommendation"
+                  class="flash mt-2"
+                  style="display: none"
+                >
+                  <span class="octicon-inline"></span>
+                  <span data-i18n="cacheTimeRecommendation"
+                    >For optimal token usage, 5 minutes is the recommended cache
+                    duration.</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clear Cache -->
+          <div class="Box-row">
+            <div class="form-group mb-0">
+              <div class="form-group-header">
+                <label data-i18n="clearCache">Clear Cache</label>
+              </div>
+              <div class="form-group-body">
+                <p class="note mb-2" data-i18n="clearCacheDesc">
+                  Clear all cached PR data
+                </p>
+                <button id="clear-cache-btn" class="btn">
+                  <span class="btn-icon octicon-inline mr-1"></span>
+                  <span data-i18n="clearCache">Clear Cache</span>
+                </button>
+                <span
+                  id="cache-cleared"
+                  class="Label Label--success ml-2"
+                  style="display: none"
+                  data-i18n="cacheCleared"
+                  >Cache cleared!</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Batch Delay -->
+          <div class="Box-row">
+            <div class="form-group mb-0">
+              <div class="form-group-header">
+                <label for="setting-batch-delay" data-i18n="batchDelay"
+                  >Batch Delay</label
+                >
+              </div>
+              <div class="form-group-body">
+                <p class="note mb-2" data-i18n="batchDelayDesc">
+                  Delay before batching GraphQL requests (in milliseconds)
+                </p>
+                <div class="d-flex flex-items-center">
+                  <input
+                    type="range"
+                    id="setting-batch-delay"
+                    class="flex-1"
+                    min="100"
+                    max="2000"
+                    step="100"
+                    value="500"
+                  />
+                  <span class="Label Label--large ml-3" style="min-width: 80px">
+                    <span id="batch-delay-value">500</span> ms
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Auto-save notice -->
+          <div class="Box-row border-top">
+            <div class="flash text-center mb-0">
+              <span class="notice-icon octicon-inline mr-2"></span>
+              <span data-i18n="autoSave">Settings are saved automatically</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Messages -->
+      <div id="status-message" class="flash mt-3" style="display: none"></div>
+    </div>
+
+    <script src="../src/utils/octicons.js"></script>
+    <script src="../src/utils/i18n-popup.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>
