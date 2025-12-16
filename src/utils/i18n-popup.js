@@ -6,20 +6,20 @@ async function BetterGHub_loadLanguage() {
   const result = await new Promise(resolve => {
     chrome.storage.local.get(['language'], resolve);
   });
-  
+
   let lang = result.language || 'system';
-  
+
   if (lang === 'system') {
     // Use Chrome's default
     lang = chrome.i18n.getUILanguage().split('-')[0]; // en-US -> en
   }
-  
+
   // Load messages for selected language
   try {
     const url = chrome.runtime.getURL(`_locales/${lang}/messages.json`);
     const response = await fetch(url);
     const messages = await response.json();
-    
+
     // Translate all elements with data-i18n attribute
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -34,7 +34,7 @@ async function BetterGHub_loadLanguage() {
         }
       }
     });
-    
+
     console.log(`Better GHub: UI language set to ${lang}`);
   } catch (error) {
     console.warn(`Failed to load UI messages for ${lang}:`, error);

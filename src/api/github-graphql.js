@@ -26,7 +26,7 @@ class BetterGHub_GitHubGraphQLAPI {
       console.log(`Better GHub v${BetterGHub_Constants.VERSION}: GraphQL Query`);
 
       const authHeader = this.tokenType === 'oauth' ? `Bearer ${this.token}` : `bearer ${this.token}`;
-      
+
       const response = await fetch(this.endpoint, {
         method: 'POST',
         headers: {
@@ -41,7 +41,7 @@ class BetterGHub_GitHubGraphQLAPI {
       }
 
       const result = await response.json();
-      
+
       if (result.errors) {
         console.error(`Better GHub v${BetterGHub_Constants.VERSION}: GraphQL Errors:`, result.errors);
         return null;
@@ -84,7 +84,7 @@ class BetterGHub_GitHubGraphQLAPI {
 
     const threads = data.repository.pullRequest.reviewThreads.nodes;
     const unresolvedThreads = threads.filter(t => !t.isResolved && !t.isOutdated);
-    
+
     // Count by author
     const byAuthor = {};
     unresolvedThreads.forEach(thread => {
@@ -144,11 +144,11 @@ class BetterGHub_GitHubGraphQLAPI {
     prList.forEach((pr, index) => {
       const key = `${pr.owner}/${pr.repo}/${pr.number}`;
       const prData = data[`pr${index}`];
-      
+
       if (prData?.pullRequest?.reviewThreads) {
         const threads = prData.pullRequest.reviewThreads.nodes;
         const unresolvedThreads = threads.filter(t => !t.isResolved && !t.isOutdated);
-        
+
         // Count by author
         const byAuthor = {};
         unresolvedThreads.forEach(thread => {

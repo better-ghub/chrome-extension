@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run linter
+      run: npm run lint
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Validate manifest
+      run: npm run validate-manifest
+      
+    - name: Check bundle size
+      run: npm run check-size
+      
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Verify icons exist
+      run: |
+        test -f icons/icon16.png || exit 1
+        test -f icons/icon48.png || exit 1
+        test -f icons/icon128.png || exit 1
+        echo "✓ All icons present"
+        
+    - name: Verify manifest structure
+      run: node -e "const m = require('./manifest.json'); if (!m.manifest_version || !m.name || !m.version) throw new Error('Invalid manifest')"
+      
+    - name: Create extension package
+      run: |
+        mkdir -p dist
+        zip -r dist/better-ghub-${{ github.sha }}.zip . \
+          -x "*.git*" \
+          -x "node_modules/*" \
+          -x "dist/*" \
+          -x "*.md" \
+          -x "package*.json" \
+          -x ".github/*"
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: extension-package
+        path: dist/*.zip
+        retention-days: 30
+

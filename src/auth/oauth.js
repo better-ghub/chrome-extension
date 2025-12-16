@@ -6,12 +6,12 @@
 // For development/personal use, set:
 // - Homepage URL: https://github.com/yourusername/BetterGithubPR
 // - Authorization callback URL: Not needed for Device Flow, use: http://localhost
-// 
+//
 // IMPORTANT: Replace this with your own Client ID or remove OAuth feature
 const GITHUB_CLIENT_ID = null; // Set your OAuth Client ID here after registering
 const DEVICE_CODE_URL = 'https://github.com/login/device/code';
 const ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token';
-const POLL_INTERVAL = 5000; // 5 seconds
+const BetterGHub_POLL_INTERVAL = 5000; // 5 seconds (reserved for future use)
 
 class GitHubOAuth {
   constructor() {
@@ -28,7 +28,7 @@ class GitHubOAuth {
     if (!GITHUB_CLIENT_ID) {
       throw new Error('OAuth Client ID not configured. Please register an OAuth App on GitHub or use Personal Access Token instead.');
     }
-    
+
     try {
       const response = await fetch(DEVICE_CODE_URL, {
         method: 'POST',
@@ -47,7 +47,7 @@ class GitHubOAuth {
       }
 
       const data = await response.json();
-      
+
       if (data.error) {
         throw new Error(data.error_description || data.error);
       }
@@ -114,7 +114,7 @@ class GitHubOAuth {
                   });
                 }
                 return;
-              
+
               case 'slow_down':
                 // We're polling too fast, increase interval
                 if (onProgress) {
@@ -123,17 +123,17 @@ class GitHubOAuth {
                   });
                 }
                 return;
-              
+
               case 'expired_token':
                 this.stopPolling();
                 reject(new Error('Device code expired'));
                 return;
-              
+
               case 'access_denied':
                 this.stopPolling();
                 reject(new Error('User denied authorization'));
                 return;
-              
+
               default:
                 this.stopPolling();
                 reject(new Error(data.error_description || data.error));
@@ -144,10 +144,10 @@ class GitHubOAuth {
           // Success! We got the access token
           if (data.access_token) {
             this.stopPolling();
-            
+
             // Get user info
             const userInfo = await this.getUserInfo(data.access_token);
-            
+
             resolve({
               accessToken: data.access_token,
               tokenType: data.token_type,
@@ -213,7 +213,7 @@ class GitHubOAuth {
       }
 
       const deviceInfo = await this.requestDeviceCode();
-      
+
       if (callbacks.onDeviceCode) {
         callbacks.onDeviceCode({
           status: 'ready',
@@ -223,7 +223,7 @@ class GitHubOAuth {
 
       // Step 2: Poll for access token
       const result = await this.pollForAccessToken(callbacks.onProgress);
-      
+
       if (callbacks.onSuccess) {
         callbacks.onSuccess(result);
       }
@@ -253,7 +253,7 @@ class GitHubOAuth {
         const user = await response.json();
         return { valid: true, user };
       }
-      
+
       return { valid: false };
     } catch (error) {
       return { valid: false, error: error.message };
@@ -263,7 +263,7 @@ class GitHubOAuth {
   /**
    * Revoke token
    */
-  static async revokeToken(token) {
+  static async revokeToken(_token) {
     // Note: GitHub doesn't provide a way to revoke OAuth tokens via API
     // User needs to revoke manually at https://github.com/settings/applications
     // We just remove it from storage
@@ -271,8 +271,10 @@ class GitHubOAuth {
   }
 }
 
-// Export for use in other scripts
-if (typeof module !== 'undefined' && module.exports) {
+// Export for use in other scripts (CommonJS compatibility)
+// eslint-disable-next-line no-undef
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+  // eslint-disable-next-line no-undef
   module.exports = GitHubOAuth;
 }
 

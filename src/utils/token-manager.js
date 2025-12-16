@@ -16,11 +16,11 @@ const BetterGHub_TokenManager = {
         githubToken: token,
         tokenType: tokenType
       };
-      
+
       if (user) {
         data.githubUser = user;
       }
-      
+
       chrome.storage.local.set(data, resolve);
     });
   },
@@ -39,7 +39,7 @@ const BetterGHub_TokenManager = {
   async testToken(token, tokenType = 'pat') {
     try {
       const authHeader = tokenType === 'oauth' ? `Bearer ${token}` : `token ${token}`;
-      
+
       const response = await fetch('https://api.github.com/user', {
         headers: {
           'Authorization': authHeader,
@@ -63,7 +63,7 @@ const BetterGHub_TokenManager = {
   async getRateLimit(token, tokenType = 'pat') {
     try {
       const authHeader = tokenType === 'oauth' ? `Bearer ${token}` : `token ${token}`;
-      
+
       const response = await fetch('https://api.github.com/rate_limit', {
         headers: {
           'Authorization': authHeader,

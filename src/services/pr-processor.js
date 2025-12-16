@@ -56,12 +56,12 @@ class BetterGHub_PRProcessor {
       let cachedData = this.cache.getPRData(owner, repo, number);
       if (cachedData) {
         console.log(`Better GHub v${BetterGHub_Constants.VERSION}: Using cached data for PR #${number}`);
-        
+
         loadingElement.remove();
 
         const activityElement = BetterGHub_ActivityElement.createActivityElement(cachedData);
         if (!activityElement) return;
-        
+
         prContainer.appendChild(activityElement);
         return;
       }
@@ -73,7 +73,7 @@ class BetterGHub_PRProcessor {
       }
 
       const unresolvedData = await this.graphqlAPI.getUnresolvedThreads(owner, repo, number);
-      
+
       const fullData = {
         ...prData,
         unresolvedCount: unresolvedData.count,
@@ -89,12 +89,12 @@ class BetterGHub_PRProcessor {
 
       const activityElement = BetterGHub_ActivityElement.createActivityElement(activityData);
       if (!activityElement) return;
-      
+
       prContainer.appendChild(activityElement);
 
     } catch (error) {
       console.error(`Better GHub v${BetterGHub_Constants.VERSION}: Error processing PR #${number}:`, error);
-      
+
       const existingLoader = prContainer.querySelector(`.${BetterGHub_Constants.ACTIVITY_CLASS}`);
       if (existingLoader) {
         existingLoader.remove();

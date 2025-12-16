@@ -22,10 +22,10 @@ const BetterGHub_ActivityElement = {
       activitySpan.style.display = 'flex';
       activitySpan.style.alignItems = 'center';
       activitySpan.style.gap = '4px';
-      
+
       let icon = '';
       let activityText = '';
-      
+
       if (activityData.lastActivityType === 'comment') {
         icon = Octicons.get('comment', 16);
         activityText = BetterGHub_i18n.getMessage('lastComment');
@@ -33,19 +33,19 @@ const BetterGHub_ActivityElement = {
         icon = Octicons.get('git-commit', 16);
         activityText = BetterGHub_i18n.getMessage('lastCommit');
       }
-      
+
       activityText += ` ${BetterGHub_i18n.getMessage('by')} ${activityData.lastActivityAuthor}`;
-      
+
       // Add commit title if available
       if (activityData.lastActivityTitle && activityData.lastActivityType === 'commit') {
         activityText += `: "${activityData.lastActivityTitle}"`;
       }
-      
+
       activitySpan.innerHTML = icon;
       const textNode = document.createElement('span');
       textNode.textContent = activityText;
       activitySpan.appendChild(textNode);
-      
+
       container.appendChild(activitySpan);
     }
 
@@ -57,17 +57,17 @@ const BetterGHub_ActivityElement = {
       unresolvedSpan.style.display = 'inline-flex';
       unresolvedSpan.style.alignItems = 'center';
       unresolvedSpan.style.gap = '4px';
-      
+
       const alertIcon = Octicons.get('alert', 12);
       const text = `${BetterGHub_i18n.getMessage('unresolvedSuggestions')} (${activityData.unresolvedCount})`;
-      
+
       unresolvedSpan.innerHTML = alertIcon;
       const textNode = document.createElement('span');
       textNode.textContent = text;
       unresolvedSpan.appendChild(textNode);
-      
+
       let currentTooltip = null;
-      
+
       // Show tooltip on hover
       unresolvedSpan.addEventListener('mouseenter', () => {
         if (activityData.unresolvedByAuthor && Object.keys(activityData.unresolvedByAuthor).length > 0) {
@@ -75,7 +75,7 @@ const BetterGHub_ActivityElement = {
           BetterGHub_Tooltip.showTooltip(unresolvedSpan, currentTooltip);
         }
       });
-      
+
       // Hide tooltip on mouse leave
       unresolvedSpan.addEventListener('mouseleave', () => {
         if (currentTooltip) {
@@ -83,7 +83,7 @@ const BetterGHub_ActivityElement = {
           currentTooltip = null;
         }
       });
-      
+
       container.appendChild(unresolvedSpan);
     }
 

@@ -5,7 +5,7 @@ class BetterGHub_PRAnalyzer {
     }
 
     const { pr, commits, unresolvedCount, unresolvedByAuthor } = data;
-    
+
     let lastActivityType = null;
     let lastActivityAuthor = null;
     let lastActivityTitle = null;
@@ -13,11 +13,11 @@ class BetterGHub_PRAnalyzer {
 
     lastActivityTime = new Date(pr.updated_at);
     lastActivityAuthor = pr.user.login;
-    
+
     if (commits && commits.length > 0) {
       const lastCommit = commits[commits.length - 1];
       const commitDate = new Date(lastCommit.commit.committer.date);
-      
+
       lastActivityType = 'commit';
       lastActivityAuthor = lastCommit.author?.login || lastCommit.committer?.login || pr.user.login;
       lastActivityTitle = lastCommit.commit.message.split('\n')[0];
@@ -58,7 +58,7 @@ class BetterGHub_PRAnalyzer {
 
     let icon = '';
     let text = '';
-    
+
     if (activityData.lastActivityType === 'comment') {
       icon = 'comment';
       text = `Last comment by ${activityData.lastActivityAuthor}`;

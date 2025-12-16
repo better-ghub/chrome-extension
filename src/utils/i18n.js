@@ -4,7 +4,7 @@
 const BetterGHub_i18n = {
   currentLanguage: null,
   messages: {},
-  
+
   // Initialize i18n system
   async init() {
     try {
@@ -12,19 +12,19 @@ const BetterGHub_i18n = {
       const result = await new Promise(resolve => {
         chrome.storage.local.get(['language'], resolve);
       });
-      
+
       let lang = result.language || 'system';
-      
+
       if (lang === 'system') {
         // Use Chrome's default
         lang = chrome.i18n.getUILanguage().split('-')[0]; // en-US -> en
       }
-      
+
       this.currentLanguage = lang;
-      
+
       // Load messages for selected language
       await this.loadMessages(lang);
-      
+
       console.log(`Better GHub: i18n loaded (${lang}) with ${Object.keys(this.messages).length} messages`);
     } catch (error) {
       console.error('Better GHub: Failed to initialize i18n', error);
@@ -32,7 +32,7 @@ const BetterGHub_i18n = {
       this.messages = {};
     }
   },
-  
+
   // Load messages.json for specific language via background script
   async loadMessages(lang) {
     try {
@@ -42,11 +42,11 @@ const BetterGHub_i18n = {
           action: 'loadMessages',
           language: lang
         }),
-        new Promise((_, reject) => 
+        new Promise((_, reject) =>
           setTimeout(() => reject(new Error('Background script timeout')), 3000)
         )
       ]);
-      
+
       if (response && response.success) {
         this.messages = response.messages;
         console.log(`Better GHub: Loaded ${Object.keys(response.messages).length} messages (${lang})`);
@@ -55,20 +55,20 @@ const BetterGHub_i18n = {
       }
     } catch (error) {
       console.warn(`Better GHub: Failed to load messages (${error.message}), using Chrome i18n fallback`);
-      
+
       // Fallback: use Chrome's built-in i18n (works but can't switch language dynamically)
       // This will use the browser's default language
       this.messages = {};
       this.currentLanguage = chrome.i18n.getUILanguage().split('-')[0];
     }
   },
-  
+
   // Get translated message
   getMessage: function(key, substitutions) {
     // If messages are loaded, use custom system
     if (this.messages && this.messages[key]) {
       let message = this.messages[key].message;
-      
+
       // Handle substitutions
       if (substitutions) {
         if (Array.isArray(substitutions)) {
@@ -79,10 +79,10 @@ const BetterGHub_i18n = {
           message = message.replace('$1', substitutions);
         }
       }
-      
+
       return message;
     }
-    
+
     // Fallback to Chrome i18n
     const fallback = chrome.i18n.getMessage(key, substitutions);
     if (!fallback) {
@@ -90,7 +90,7 @@ const BetterGHub_i18n = {
     }
     return fallback || key;
   },
-  
+
   getCurrentLocale: function() {
     return this.currentLanguage || chrome.i18n.getUILanguage();
   }
