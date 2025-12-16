@@ -2,16 +2,16 @@ const VERSION = '0.1.0';
 
 console.log(`Better GHub v${VERSION}: Background service worker initialized`);
 
-const TOKEN_CHECK_INTERVAL = 6 * 60 * 60 * 1000;
+const BetterGHub_TOKEN_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // Reserved for future periodic token validation
 
 async function validateStoredToken() {
     try {
         const result = await chrome.storage.local.get(['githubToken', 'tokenType']);
-        
+
         if (!result.githubToken) {
             return; // No token to validate
         }
-        
+
         // Check if token is still valid
         const response = await fetch('https://api.github.com/user', {
             headers: {
@@ -19,12 +19,12 @@ async function validateStoredToken() {
                 'Accept': 'application/vnd.github.v3+json'
             }
         });
-        
+
         if (!response.ok) {
             // Token is invalid, remove it
             console.warn('Better GHub: Token validation failed, removing token');
             await chrome.storage.local.remove(['githubToken', 'githubUser', 'tokenType']);
-            
+
             // Notify all GitHub tabs
             const tabs = await chrome.tabs.query({url: 'https://github.com/*/*/pulls*'});
             tabs.forEach(tab => {
@@ -54,7 +54,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'loadMessages') {
         const lang = request.language || 'en';
         const url = chrome.runtime.getURL(`_locales/${lang}/messages.json`);
-        
+
         fetch(url)
             .then(response => {
                 if (!response.ok) {
@@ -69,10 +69,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 console.error(`Better GHub: Error loading messages for ${lang}`, error);
                 sendResponse({ success: false, error: error.message });
             });
-        
+
         return true; // Keep channel open for async response
     }
-    
+
     // Manual token validation request
     if (request.action === 'validateToken') {
         validateStoredToken().then(() => {
@@ -80,10 +80,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }).catch(error => {
             sendResponse({ success: false, error: error.message });
         });
-        
+
         return true; // Keep channel open for async response
     }
-    
+
     return false;
 });
 

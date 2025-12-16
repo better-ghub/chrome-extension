@@ -11,7 +11,7 @@ class BetterGHub_CacheManager {
   getPRData(owner, repo, number) {
     const key = `${owner}/${repo}/${number}`;
     const cached = this.prCache.get(key);
-    
+
     if (cached && (Date.now() - cached.timestamp < BetterGHub_Constants.CACHE_DURATION)) {
       return cached.data;
     }
@@ -30,7 +30,7 @@ class BetterGHub_CacheManager {
   getUnresolvedCount(owner, repo, number) {
     const key = `unresolved_${owner}/${repo}/${number}`;
     const cached = this.unresolvedThreadsCache.get(key);
-    
+
     if (cached && (Date.now() - cached.timestamp < BetterGHub_Constants.CACHE_DURATION)) {
       return cached.count;
     }

@@ -11,14 +11,14 @@ const BetterGHub_Loader = {
 
     const spinner = document.createElement('span');
     spinner.className = 'better-ghub-spinner';
-    
+
     const loadingText = document.createElement('span');
     loadingText.className = 'better-ghub-loading-text';
     loadingText.textContent = BetterGHub_i18n.getMessage('loading') || 'Loading activity...';
 
     container.appendChild(spinner);
     container.appendChild(loadingText);
-    
+
     return container;
   }
 };

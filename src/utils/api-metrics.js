@@ -5,22 +5,24 @@ const BetterGHub_ApiMetrics = {
 
   incrementCall(type = 'rest', endpoint = '') {
     this.callCount++;
-    
+
     // Record in history
     this.callHistory.push({
       type,
       endpoint,
       timestamp: Date.now()
     });
-    
+
     // Trim history if too large
     if (this.callHistory.length > this.maxHistorySize) {
       this.callHistory.shift();
     }
-    
+
     try {
       chrome.runtime.sendMessage({ action: 'incrementApiCalls', type, endpoint }).catch(() => {});
-    } catch (error) {}
+    } catch (error) {
+      // Silently ignore if background script is not available
+    }
   },
 
   getCount() {
@@ -31,7 +33,7 @@ const BetterGHub_ApiMetrics = {
     if (minutes === null) {
       return [...this.callHistory];
     }
-    
+
     const cutoff = Date.now() - (minutes * 60 * 1000);
     return this.callHistory.filter(call => call.timestamp >= cutoff);
   },
@@ -50,7 +52,7 @@ const BetterGHub_ApiMetrics = {
     const last5min = this.getHistory(5);
     const restCalls = last5min.filter(c => c.type === 'rest').length;
     const graphqlCalls = last5min.filter(c => c.type === 'graphql').length;
-    
+
     return {
       total: this.callCount,
       last5Minutes: last5min.length,

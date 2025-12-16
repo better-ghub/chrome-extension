@@ -11,9 +11,9 @@ const BetterGHub_VersionBadge = {
     const badge = document.createElement('div');
     badge.className = 'better-ghub-version';
     badge.textContent = `Better GHub v${BetterGHub_Constants.VERSION}`;
-    
+
     document.body.appendChild(badge);
-    
+
     console.log(`Better GHub v${BetterGHub_Constants.VERSION}: Initialized`);
   }
 };

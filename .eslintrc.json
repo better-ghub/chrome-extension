@@ -1,0 +1,44 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "webextensions": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "script"
+  },
+  "globals": {
+    "BetterGHub_Constants": "readonly",
+    "BetterGHub_TokenManager": "readonly",
+    "BetterGHub_ApiMetrics": "readonly",
+    "BetterGHub_CacheManager": "readonly",
+    "BetterGHub_DOMHelpers": "readonly",
+    "BetterGHub_i18n": "readonly",
+    "BetterGHub_GitHubRestAPI": "readonly",
+    "BetterGHub_GitHubGraphQLAPI": "readonly",
+    "BetterGHub_PRProcessor": "readonly",
+    "BetterGHub_PRAnalyzer": "readonly",
+    "BetterGHub_ActivityElement": "readonly",
+    "BetterGHub_Loader": "readonly",
+    "BetterGHub_Tooltip": "readonly",
+    "BetterGHub_VersionBadge": "readonly",
+    "Octicons": "readonly"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^(BetterGHub_|Octicons)" }],
+    "no-console": "off",
+    "semi": ["error", "always"],
+    "quotes": ["warn", "single", { "avoidEscape": true }],
+    "indent": "off",
+    "no-trailing-spaces": "warn",
+    "eol-last": ["warn", "always"],
+    "no-multiple-empty-lines": ["warn", { "max": 2 }],
+    "no-redeclare": ["error", { "builtinGlobals": false }],
+    "no-empty": "warn",
+    "no-undef": "warn",
+    "no-useless-escape": "warn"
+  }
+}
+
