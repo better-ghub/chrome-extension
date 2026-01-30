@@ -1,16 +1,33 @@
 // Better GHub - Dashboard Script
 // Adds "Your PR's" section on GitHub main page
-// Refactored to use centralized Octicons and TokenManager
 
-let BetterGHub_Dashboard = {
-  token: null,
-  tokenType: 'pat',
-  restAPI: null,
-  graphqlAPI: null,
-  cache: null,
+import { Constants } from './constants';
+import { GitHubRestAPI, GitHubGraphQLAPI } from './api';
+import { CacheManager, DOMHelpers, TokenManager, Octicons } from './utils';
+import { i18n } from './i18n';
+import { ActivityElement } from './ui';
+import type { TokenType, PRActivityData, PRFullData } from './types';
 
-  async init() {
-    console.log(`Better GHub v${BetterGHub_Constants.VERSION}: Dashboard script loaded!`);
+interface SearchPR {
+  html_url: string;
+  repository_url?: string;
+  title?: string;
+  number?: number;
+  comments?: number;
+  draft?: boolean;
+  updated_at?: string;
+  created_at?: string;
+}
+
+const Dashboard = {
+  token: null as string | null,
+  tokenType: 'pat' as TokenType,
+  restAPI: null as GitHubRestAPI | null,
+  graphqlAPI: null as GitHubGraphQLAPI | null,
+  cache: null as CacheManager | null,
+
+  async init(): Promise<void> {
+    console.log(`Better GHub v${Constants.VERSION}: Dashboard script loaded!`);
     console.log(`Better GHub: Current URL: ${window.location.href}`);
     console.log(`Better GHub: Current pathname: ${window.location.pathname}`);
 
@@ -20,12 +37,12 @@ let BetterGHub_Dashboard = {
       return;
     }
 
-    console.log(`Better GHub v${BetterGHub_Constants.VERSION}: Dashboard initializing...`);
+    console.log(`Better GHub v${Constants.VERSION}: Dashboard initializing...`);
 
     // Get GitHub token
-    const tokenData = await this.getGitHubToken();
-    this.token = tokenData.token;
-    this.tokenType = tokenData.tokenType;
+    const tokenData = await TokenManager.getToken();
+    this.token = tokenData.token || null;
+    this.tokenType = tokenData.type;
 
     if (!this.token) {
       console.log('Better GHub: No GitHub token. Configure in extension popup.');
@@ -33,12 +50,12 @@ let BetterGHub_Dashboard = {
     }
 
     // Initialize API clients
-    this.restAPI = new BetterGHub_GitHubRestAPI(this.token, this.tokenType);
-    this.graphqlAPI = new BetterGHub_GitHubGraphQLAPI(this.token, this.tokenType);
-    this.cache = new BetterGHub_CacheManager();
+    this.restAPI = new GitHubRestAPI(this.token, this.tokenType);
+    this.graphqlAPI = new GitHubGraphQLAPI(this.token, this.tokenType);
+    this.cache = new CacheManager();
 
     // Initialize i18n
-    await BetterGHub_i18n.init();
+    await i18n.init();
 
     // Create and inject the "Your PR's" section
     await this.createYourPRsSection();
@@ -47,7 +64,7 @@ let BetterGHub_Dashboard = {
     this.setupNavigationWatcher();
   },
 
-  isDashboardPage() {
+  isDashboardPage(): boolean {
     // Check if we're on the main GitHub dashboard page
     const path = window.location.pathname;
     // Match root path or /dashboard
@@ -56,52 +73,23 @@ let BetterGHub_Dashboard = {
     return isDashboard;
   },
 
-  async getGitHubToken() {
-    // Use TokenManager for centralized token management
-    return BetterGHub_TokenManager.getToken();
-  },
-
-  async fetchUserPRs() {
-    if (!this.token) {
+  async fetchUserPRs(): Promise<SearchPR[]> {
+    if (!this.restAPI) {
       return [];
     }
 
     try {
-      // Get current user first
-      const authHeader = this.tokenType === 'oauth' ? `Bearer ${this.token}` : `token ${this.token}`;
-
-      const userResponse = await fetch('https://api.github.com/user', {
-        headers: {
-          'Authorization': authHeader,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-
-      if (!userResponse.ok) {
+      // Get current user
+      const user = await this.restAPI.getCurrentUser();
+      if (!user) {
         throw new Error('Failed to fetch user info');
       }
 
-      const user = await userResponse.json();
-      const username = user.login;
+      // Search for open PRs created by the user
+      const searchQuery = `is:pr is:open author:${user.login} sort:updated-desc`;
+      const data = await this.restAPI.searchIssues(searchQuery, 10);
 
-      // Fetch open PRs created by the user
-      const searchQuery = `is:pr is:open author:${username} sort:updated-desc`;
-      const searchUrl = `https://api.github.com/search/issues?q=${encodeURIComponent(searchQuery)}&per_page=10`;
-
-      const prsResponse = await fetch(searchUrl, {
-        headers: {
-          'Authorization': authHeader,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-
-      if (!prsResponse.ok) {
-        throw new Error('Failed to fetch PRs');
-      }
-
-      const data = await prsResponse.json();
-      console.log(`Better GHub: Found ${data.total_count} open PRs for user ${username}`);
-
+      console.log(`Better GHub: Found ${data.total_count} open PRs for user ${user.login}`);
       return data.items || [];
     } catch (error) {
       console.error('Better GHub: Error fetching user PRs:', error);
@@ -109,31 +97,29 @@ let BetterGHub_Dashboard = {
     }
   },
 
-  async createYourPRsSection() {
+  async createYourPRsSection(): Promise<void> {
     // Check if section already exists first
     if (document.getElementById('better-ghub-your-prs')) {
       return;
     }
 
     // Find the feed-container element (NOT the mobile repositories section)
-    // The feed-container is in the main desktop layout
     let feedContainer = document.querySelector('feed-container');
 
     if (!feedContainer) {
       console.log('Better GHub: feed-container not found, will retry...');
-      setTimeout(() => this.createYourPRsSection(), 1000);
+      setTimeout(() => void this.createYourPRsSection(), 1000);
       return;
     }
 
     console.log('Better GHub: Found feed-container element');
 
     // Find the Feed heading inside feed-container
-    let feedBox = null;
+    let feedBox: Element | null = null;
     const headings = feedContainer.querySelectorAll('h2');
     for (const heading of headings) {
-      const text = heading.textContent.trim();
+      const text = heading.textContent?.trim() || '';
       if (text.includes('Feed') || text.includes('All activity') || text.includes('Following')) {
-        // Go up to find the parent container - we want to insert BEFORE feed-container itself
         console.log(`Better GHub: Found Feed heading with text: "${text}"`);
         feedBox = feedContainer;
         break;
@@ -142,29 +128,29 @@ let BetterGHub_Dashboard = {
 
     if (!feedBox) {
       console.log('Better GHub: Feed heading not found inside feed-container, will retry...');
-      setTimeout(() => this.createYourPRsSection(), 1000);
+      setTimeout(() => void this.createYourPRsSection(), 1000);
       return;
     }
 
     console.log('Better GHub: Inserting PR section before Feed box...');
 
-    // Create the "Your PR's" section matching GitHub's Feed exactly (no Box wrapper!)
+    // Create the "Your PR's" section
     const section = document.createElement('div');
     section.id = 'better-ghub-your-prs';
     section.className = 'mb-4';
 
-    // Add header matching Feed's header exactly: d-flex flex-items-center flex-justify-between
+    // Add header
     const header = document.createElement('div');
     header.className = 'd-flex flex-items-center flex-justify-between';
 
     const headerTitle = document.createElement('h2');
     headerTitle.className = 'f5 mb-1';
-    headerTitle.innerHTML = `${BetterGHub_i18n.getMessage('yourPRs')}`;
+    headerTitle.innerHTML = `${i18n.getMessage('yourPRs')}`;
 
     header.appendChild(headerTitle);
     section.appendChild(header);
 
-    // Add content area in a Box (like Feed's content)
+    // Add content area in a Box
     const content = document.createElement('div');
     content.id = 'better-ghub-prs-list';
     content.className = 'Box mt-3';
@@ -182,14 +168,14 @@ let BetterGHub_Dashboard = {
     section.appendChild(content);
 
     // Insert BEFORE the feed-container element
-    feedBox.parentNode.insertBefore(section, feedBox);
-    console.log('Better GHub: Inserted "Your PR\'s" section before feed-container');
+    feedBox.parentNode?.insertBefore(section, feedBox);
+    console.log("Better GHub: Inserted \"Your PR's\" section before feed-container");
 
     // Fetch and display PRs
     await this.loadPRs();
   },
 
-  async loadPRs() {
+  async loadPRs(): Promise<void> {
     const listContainer = document.getElementById('better-ghub-prs-list');
 
     if (!listContainer) {
@@ -204,14 +190,14 @@ let BetterGHub_Dashboard = {
       if (prs.length === 0) {
         listContainer.innerHTML = `
           <div data-view-component="true" class="blankslate border color-bg-default rounded-2">
-            <h3 data-view-component="true" class="mb-1">${BetterGHub_i18n.getMessage('noOpenPRs')}</h3>
+            <h3 data-view-component="true" class="mb-1">${i18n.getMessage('noOpenPRs')}</h3>
             <p>You don't have any open pull requests at the moment.</p>
           </div>
         `;
         return;
       }
 
-      // Clear and create PR list matching Feed structure (use turbo-frame style)
+      // Clear and create PR list
       listContainer.innerHTML = '';
 
       // Create all PR items first
@@ -221,7 +207,7 @@ let BetterGHub_Dashboard = {
           listContainer.appendChild(item);
 
           // Enhance with activity data asynchronously
-          this.enhancePRWithActivity(item, pr).catch(error => {
+          this.enhancePRWithActivity(item, pr).catch((error) => {
             console.error('Better GHub: Error enhancing PR with activity:', error);
           });
         } catch (error) {
@@ -238,7 +224,7 @@ let BetterGHub_Dashboard = {
     }
   },
 
-  createPRItem(pr) {
+  createPRItem(pr: SearchPR): HTMLDivElement {
     const wrapper = document.createElement('div');
     wrapper.className = 'better-ghub-item Box-row Box-row--focus-gray';
 
@@ -246,7 +232,7 @@ let BetterGHub_Dashboard = {
     const item = document.createElement('div');
     item.className = 'd-flex flex-items-start flex-justify-between';
 
-    // Parse repo name from URL (with fallback)
+    // Parse repo name from URL
     let repoName = 'unknown/repo';
     try {
       if (pr.repository_url) {
@@ -260,9 +246,9 @@ let BetterGHub_Dashboard = {
     // Format date
     let timeAgo = '';
     try {
-      const updatedDate = new Date(pr.updated_at || pr.created_at);
+      const updatedDate = new Date(pr.updated_at || pr.created_at || '');
       const now = new Date();
-      const diffMs = now - updatedDate;
+      const diffMs = now.getTime() - updatedDate.getTime();
       const diffMins = Math.floor(diffMs / 60000);
       const diffHours = Math.floor(diffMs / 3600000);
       const diffDays = Math.floor(diffMs / 86400000);
@@ -296,13 +282,13 @@ let BetterGHub_Dashboard = {
     const leftSection = document.createElement('div');
     leftSection.className = 'd-flex flex-1 flex-items-start';
 
-    // Create icon column (smaller now)
+    // Create icon column
     const iconCol = document.createElement('div');
     iconCol.className = 'pr-2';
     iconCol.style.flexShrink = '0';
     iconCol.innerHTML = isDraft ? Octicons.get('git-pull-request-draft', 16) : Octicons.get('issue-opened', 16);
 
-    // Create content column (takes remaining space)
+    // Create content column
     const contentCol = document.createElement('div');
     contentCol.className = 'flex-1 ml-2';
 
@@ -314,7 +300,7 @@ let BetterGHub_Dashboard = {
     titleLink.textContent = title;
     titleContainer.appendChild(titleLink);
 
-    // Meta info (without comments now)
+    // Meta info
     const metaContainer = document.createElement('div');
     metaContainer.className = 'f6 color-fg-muted mt-1';
 
@@ -338,7 +324,7 @@ let BetterGHub_Dashboard = {
     leftSection.appendChild(iconCol);
     leftSection.appendChild(contentCol);
 
-    // Right section: comments (top-right)
+    // Right section: comments
     const rightSection = document.createElement('div');
     rightSection.className = 'ml-3 text-right';
     rightSection.style.flexShrink = '0';
@@ -359,54 +345,52 @@ let BetterGHub_Dashboard = {
     return wrapper;
   },
 
-  async enhancePRWithActivity(itemElement, pr) {
+  async enhancePRWithActivity(itemElement: HTMLElement, pr: SearchPR): Promise<void> {
     // Parse PR info from URL
     const prUrl = pr.html_url;
     if (!prUrl) return;
 
-    const prInfo = BetterGHub_DOMHelpers.parsePRUrl(prUrl);
+    const prInfo = DOMHelpers.parsePRUrl(prUrl);
     if (!prInfo) return;
 
     const { owner, repo, number } = prInfo;
 
     try {
       // Check cache first
-      let cachedData = this.cache.getPRData(owner, repo, number);
+      const cachedData = this.cache?.getPRData(owner, repo, number);
 
       if (cachedData) {
         console.log(`Better GHub: Using cached activity data for PR #${number}`);
-        const activityElement = BetterGHub_ActivityElement.createActivityElement(cachedData);
+        const activityElement = ActivityElement.createActivityElement(cachedData);
         if (activityElement) {
-          // Add activity element below the PR row
-          activityElement.style.padding = '0 16px 0 32px'; // Indent to match content
+          activityElement.style.padding = '0 16px 0 32px';
           itemElement.appendChild(activityElement);
         }
         return;
       }
 
       // Fetch fresh data
-      const prData = await this.restAPI.getPRData(owner, repo, number);
+      const prData = await this.restAPI?.getPRData(owner, repo, number);
       if (!prData) return;
 
       // Fetch unresolved threads
-      const unresolvedData = await this.graphqlAPI.getUnresolvedThreads(owner, repo, number);
+      const unresolvedData = await this.graphqlAPI?.getUnresolvedThreads(owner, repo, number);
 
-      const fullData = {
+      const fullData: PRFullData = {
         ...prData,
-        unresolvedCount: unresolvedData.count,
-        unresolvedByAuthor: unresolvedData.byAuthor
+        unresolvedCount: unresolvedData?.count || 0,
+        unresolvedByAuthor: unresolvedData?.byAuthor || {},
       };
 
-      // Analyze data (similar to pr-processor)
+      // Analyze data
       const activityData = this.analyzePRData(fullData);
       if (activityData) {
-        this.cache.setPRData(owner, repo, number, activityData);
+        this.cache?.setPRData(owner, repo, number, activityData);
 
         // Create and add activity element
-        const activityElement = BetterGHub_ActivityElement.createActivityElement(activityData);
+        const activityElement = ActivityElement.createActivityElement(activityData);
         if (activityElement) {
-          // Add activity element below the PR row
-          activityElement.style.padding = '0 16px 0 32px'; // Indent to match content
+          activityElement.style.padding = '0 16px 0 32px';
           itemElement.appendChild(activityElement);
         }
       }
@@ -415,19 +399,15 @@ let BetterGHub_Dashboard = {
     }
   },
 
-  analyzePRData(data) {
+  analyzePRData(data: PRFullData): PRActivityData | null {
     if (!data || !data.pr) return null;
 
     const { pr, commits, unresolvedCount, unresolvedByAuthor } = data;
 
-    let lastActivityType = null;
-    let lastActivityAuthor = null;
-    let lastActivityTitle = null;
-    let lastActivityTime = null;
-
-    // Use PR updated_at as baseline
-    lastActivityTime = new Date(pr.updated_at);
-    lastActivityAuthor = pr.user.login;
+    let lastActivityType: 'commit' | 'comment' = 'commit';
+    let lastActivityAuthor: string = pr.user.login;
+    let lastActivityTitle: string = pr.title;
+    let lastActivityTime: Date = new Date(pr.updated_at);
 
     // Check if there are recent commits
     if (commits && commits.length > 0) {
@@ -438,10 +418,6 @@ let BetterGHub_Dashboard = {
       lastActivityAuthor = lastCommit.author?.login || lastCommit.committer?.login || pr.user.login;
       lastActivityTitle = lastCommit.commit.message.split('\n')[0];
       lastActivityTime = commitDate;
-    } else {
-      lastActivityType = 'commit';
-      lastActivityAuthor = pr.user.login;
-      lastActivityTitle = pr.title;
     }
 
     return {
@@ -451,14 +427,14 @@ let BetterGHub_Dashboard = {
       lastActivityTitle,
       lastActivityTime,
       unresolvedCount: unresolvedCount || 0,
-      unresolvedByAuthor: unresolvedByAuthor || {}
+      unresolvedByAuthor: unresolvedByAuthor || {},
     };
   },
 
-  setupNavigationWatcher() {
+  setupNavigationWatcher(): void {
     let currentURL = window.location.href;
 
-    const handleNavigation = () => {
+    const handleNavigation = (): void => {
       const newURL = window.location.href;
       if (newURL !== currentURL) {
         console.log(`Better GHub Dashboard: Navigation detected from ${currentURL} to ${newURL}`);
@@ -472,7 +448,7 @@ let BetterGHub_Dashboard = {
             if (existingSection) {
               existingSection.remove();
             }
-            this.createYourPRsSection();
+            void this.createYourPRsSection();
           }
         }, 100);
       }
@@ -488,39 +464,43 @@ let BetterGHub_Dashboard = {
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
-    history.pushState = function(...args) {
+    history.pushState = function (...args: Parameters<typeof history.pushState>) {
       originalPushState.apply(this, args);
       handleNavigation();
     };
 
-    history.replaceState = function(...args) {
+    history.replaceState = function (...args: Parameters<typeof history.replaceState>) {
       originalReplaceState.apply(this, args);
       handleNavigation();
     };
 
     // Listen for popstate (back/forward navigation)
     window.addEventListener('popstate', handleNavigation);
-  }
+  },
 };
 
 // Listen for messages from popup
-chrome.runtime.onMessage.addListener((request, _sender, _sendResponse) => {
+chrome.runtime.onMessage.addListener((request: { action: string }) => {
   if (request.action === 'tokenUpdated') {
     console.log('Better GHub: Token updated, reloading dashboard...');
-    BetterGHub_Dashboard.getGitHubToken().then(tokenData => {
-      BetterGHub_Dashboard.token = tokenData.token;
-      BetterGHub_Dashboard.tokenType = tokenData.tokenType;
+    TokenManager.getToken()
+      .then((tokenData: { token: string; type: TokenType }) => {
+        Dashboard.token = tokenData.token || null;
+        Dashboard.tokenType = tokenData.type;
 
-      // Reload PRs
-      const existingSection = document.getElementById('better-ghub-your-prs');
-      if (existingSection) {
-        existingSection.remove();
-      }
-      BetterGHub_Dashboard.createYourPRsSection();
-    });
+        // Reload PRs
+        const existingSection = document.getElementById('better-ghub-your-prs');
+        if (existingSection) {
+          existingSection.remove();
+        }
+        void Dashboard.createYourPRsSection();
+      })
+      .catch((error: Error) => {
+        console.error('Better GHub: Error updating token:', error);
+      });
   } else if (request.action === 'tokenRemoved' || request.action === 'tokenInvalid') {
     console.log(`Better GHub: Token ${request.action === 'tokenInvalid' ? 'invalid' : 'removed'}`);
-    BetterGHub_Dashboard.token = null;
+    Dashboard.token = null;
 
     // Remove section
     const existingSection = document.getElementById('better-ghub-your-prs');
@@ -532,8 +512,9 @@ chrome.runtime.onMessage.addListener((request, _sender, _sendResponse) => {
 
 // Initialize when DOM is ready
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => BetterGHub_Dashboard.init());
+  document.addEventListener('DOMContentLoaded', () => void Dashboard.init());
 } else {
-  BetterGHub_Dashboard.init();
+  void Dashboard.init();
 }
 
+export { Dashboard };

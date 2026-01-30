@@ -2,7 +2,34 @@
  * @jest-environment node
  */
 
-const manifest = require('../manifest.json');
+import * as fs from 'fs';
+import * as path from 'path';
+
+interface ManifestJson {
+  manifest_version: number;
+  name: string;
+  version: string;
+  description: string;
+  icons: Record<string, string>;
+  content_scripts: Array<{
+    matches: string[];
+    js: string[];
+    css: string[];
+  }>;
+  permissions: string[];
+  host_permissions: string[];
+  background: {
+    service_worker: string;
+  };
+  action: {
+    default_popup: string;
+    default_icon: Record<string, string>;
+    default_title: string;
+  };
+}
+
+const manifestPath = path.join(__dirname, '..', 'manifest.json');
+const manifest: ManifestJson = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
 describe('Manifest Validation', () => {
   test('should have manifest_version 3', () => {
@@ -36,8 +63,8 @@ describe('Manifest Validation', () => {
   });
 
   test('content_scripts should have GitHub matches', () => {
-    const hasGitHubMatch = manifest.content_scripts.some(script =>
-      script.matches.some(match => match.includes('github.com'))
+    const hasGitHubMatch = manifest.content_scripts.some((script) =>
+      script.matches.some((match) => match.includes('github.com'))
     );
     expect(hasGitHubMatch).toBe(true);
   });
@@ -53,8 +80,8 @@ describe('Manifest Validation', () => {
 
   test('should have host_permissions for GitHub', () => {
     expect(manifest.host_permissions).toBeDefined();
-    expect(manifest.host_permissions.some(p => p.includes('github.com'))).toBe(true);
-    expect(manifest.host_permissions.some(p => p.includes('api.github.com'))).toBe(true);
+    expect(manifest.host_permissions.some((p) => p.includes('github.com'))).toBe(true);
+    expect(manifest.host_permissions.some((p) => p.includes('api.github.com'))).toBe(true);
   });
 
   test('should have background service worker', () => {
@@ -68,9 +95,8 @@ describe('Manifest Validation', () => {
   });
 
   test('version should match package.json', () => {
-    const fs = require('fs');
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+    const packageJsonPath = path.join(__dirname, '..', 'package.json');
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     expect(manifest.version).toBe(packageJson.version);
   });
 });
-

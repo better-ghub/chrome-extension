@@ -234,6 +234,12 @@
   },
   "noOpenPRs": {
     "message": "No open pull requests"
+  },
+  "note": {
+    "message": "Note"
+  },
+  "authNote": {
+    "message": "Without authentication, the extension works with public repositories only (limited to 60 API calls per hour)."
   }
 }
 

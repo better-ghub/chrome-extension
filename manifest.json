@@ -22,50 +22,19 @@
   "content_scripts": [
     {
       "matches": ["https://github.com/*/*/pulls*"],
-      "js": [
-        "src/constants.js",
-        "src/utils/octicons.js",
-        "src/utils/token-manager.js",
-        "src/utils/api-metrics.js",
-        "src/utils/i18n.js",
-        "src/utils/dom-helpers.js",
-        "src/utils/cache.js",
-        "src/api/github-rest.js",
-        "src/api/github-graphql.js",
-        "src/ui/tooltip.js",
-        "src/ui/loader.js",
-        "src/ui/activity-element.js",
-        "src/ui/version-badge.js",
-        "src/services/pr-analyzer.js",
-        "src/services/pr-processor.js",
-        "src/content.js"
-      ],
-      "css": ["src/styles.css"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
       "run_at": "document_end"
     },
     {
       "matches": ["https://github.com/*"],
-      "js": [
-        "src/constants.js",
-        "src/utils/octicons.js",
-        "src/utils/token-manager.js",
-        "src/utils/api-metrics.js",
-        "src/utils/i18n.js",
-        "src/utils/dom-helpers.js",
-        "src/utils/cache.js",
-        "src/api/github-rest.js",
-        "src/api/github-graphql.js",
-        "src/ui/tooltip.js",
-        "src/ui/activity-element.js",
-        "src/services/pr-analyzer.js",
-        "src/dashboard.js"
-      ],
-      "css": ["src/dashboard-styles.css"],
+      "js": ["dashboard.js"],
+      "css": ["dashboard-styles.css"],
       "run_at": "document_end"
     }
   ],
   "background": {
-    "service_worker": "src/background.js"
+    "service_worker": "background.js"
   },
   "permissions": [
     "storage",

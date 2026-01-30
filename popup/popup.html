@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Better GHub</title>
+    <title>__MSG_extensionName__</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/@primer/css@21.0.7/dist/primer.css"
@@ -32,7 +32,7 @@
           class="Label Label--primary"
           id="version"
           style="background: #6e40c9"
-          >v2.2.0</span
+          >v0.1.0</span
         >
       </div>
 
@@ -50,7 +50,7 @@
         >
           <div class="anim-pulse text-center">
             <div class="AnimatedEllipsis"></div>
-            <p class="text-small color-fg-muted mt-2">Loading...</p>
+            <p class="text-small color-fg-muted mt-2">__MSG_loading__</p>
           </div>
         </div>
 
@@ -59,23 +59,15 @@
             <div class="d-flex flex-items-start">
               <span class="icon octicon-inline mr-2 mt-1"></span>
               <div class="flex-1">
-                <strong data-i18n="authRequired"
-                  >Authentication required</strong
-                >
-                <p
-                  class="color-fg-muted f6 mt-1 mb-0"
-                  data-i18n="authDescription"
-                >
-                  Connect your GitHub account to see detailed PR activity
-                  information.
+                <strong>__MSG_authRequired__</strong>
+                <p class="color-fg-muted f6 mt-1 mb-0">
+                  __MSG_authDescription__
                 </p>
                 <p
                   class="color-fg-muted"
                   style="margin-top: 8px; font-size: 11px"
                 >
-                  <strong>Note:</strong> Without authentication, the extension
-                  works with public repositories only (limited to 60 API calls
-                  per hour).
+                  <strong>__MSG_note__:</strong> __MSG_authNote__
                 </p>
               </div>
             </div>
@@ -89,10 +81,10 @@
               style="background: #6e40c9; border-color: #6e40c9"
             >
               <span class="oauth-icon octicon-inline mr-1"></span>
-              <span data-i18n="signInWithGitHub">Sign in with GitHub (OAuth)</span>
+              <span>__MSG_signInWithGitHub__</span>
             </button>
             <p class="text-small color-fg-muted text-center mt-1 mb-0">
-              <span data-i18n="recommendedMethod">✓ Recommended - More secure</span>
+              __MSG_recommendedMethod__
             </p>
           </div>
 
@@ -103,13 +95,9 @@
                 <div class="anim-pulse mb-2">
                   <span class="oauth-progress-icon octicon-inline"></span>
                 </div>
-                <p class="text-bold mb-2" data-i18n="waitingForAuth">
-                  Waiting for authorization...
-                </p>
+                <p class="text-bold mb-2">__MSG_waitingForAuth__</p>
                 <div class="flash mb-2" style="background: #fff3cd; border-color: #ffc107">
-                  <p class="text-small mb-1">
-                    <span data-i18n="enterCode">Enter this code on GitHub:</span>
-                  </p>
+                  <p class="text-small mb-1">__MSG_enterCode__</p>
                   <div
                     id="user-code-display"
                     class="text-mono text-bold"
@@ -123,17 +111,17 @@
                   class="btn btn-sm btn-primary mb-2"
                   style="background: #6e40c9; border-color: #6e40c9"
                 >
-                  <span data-i18n="openGitHub">Open GitHub to Authorize</span>
+                  __MSG_openGitHub__
                 </button>
                 <p class="text-small color-fg-muted mb-0">
-                  <span data-i18n="codeExpires">Code expires in: </span>
+                  __MSG_codeExpires__
                   <span id="code-timer" class="text-bold">10:00</span>
                 </p>
               </div>
             </div>
             <div class="Box-footer">
               <button id="cancel-oauth" class="btn btn-sm btn-block">
-                <span data-i18n="cancel">Cancel</span>
+                __MSG_cancel__
               </button>
             </div>
           </div>
@@ -141,7 +129,7 @@
           <!-- Divider (only if OAuth is available) -->
           <div class="d-flex flex-items-center mb-3" id="oauth-divider" style="display: none!important">
             <div class="flex-1 border-bottom"></div>
-            <span class="px-2 text-small color-fg-muted" data-i18n="orUseToken">or use token</span>
+            <span class="px-2 text-small color-fg-muted">__MSG_orUseToken__</span>
             <div class="flex-1 border-bottom"></div>
           </div>
 
@@ -149,16 +137,13 @@
           <div id="token-section">
             <details class="details-reset" id="token-details">
               <summary class="btn btn-sm btn-block mb-2">
-                <span data-i18n="usePersonalToken">Use Personal Access Token</span>
+                __MSG_usePersonalToken__
               </summary>
             <div class="mt-2">
               <div class="form-group">
-                <label
-                  class="d-block mb-1 f6"
-                  for="github-token"
-                  data-i18n="tokenLabel"
-                  >GitHub Personal Access Token:</label
-                >
+                <label class="d-block mb-1 f6" for="github-token">
+                  __MSG_tokenLabel__
+                </label>
                 <input
                   type="password"
                   id="github-token"
@@ -169,10 +154,9 @@
                 <button
                   id="save-token"
                   class="btn btn-primary btn-block"
-                  data-i18n="saveToken"
                   style="background: #6e40c9; border-color: #6e40c9"
                 >
-                  Save Token
+                  __MSG_saveToken__
                 </button>
               </div>
 
@@ -181,17 +165,15 @@
                   href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub"
                   target="_blank"
                   class="Link d-block mb-1"
-                  data-i18n="createToken"
                 >
-                  → Create a new token on GitHub (public repos)
+                  __MSG_createToken__
                 </a>
                 <a
                   href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub"
                   target="_blank"
                   class="Link d-block"
-                  data-i18n="createTokenPrivate"
                 >
-                  → Create a new token on GitHub (private repos)
+                  __MSG_createTokenPrivate__
                 </a>
               </div>
             </div>
@@ -215,9 +197,7 @@
                     @username
                   </div>
                   <div class="text-small">
-                    <span class="color-fg-muted" data-i18n="rateLimit"
-                      >Rate Limit:</span
-                    >
+                    <span class="color-fg-muted">__MSG_rateLimit__</span>
                     <span
                       class="text-bold"
                       id="rate-limit"
@@ -230,8 +210,8 @@
             </div>
           </div>
 
-          <button id="logout-btn" class="btn btn-block" data-i18n="logout">
-            Logout
+          <button id="logout-btn" class="btn btn-block">
+            __MSG_logout__
           </button>
         </div>
       </div>
@@ -250,18 +230,16 @@
       <div class="mt-1">
         <button id="open-options" class="btn btn-block mb-2">
           <span class="footer-icon octicon-inline mr-1"></span>
-          <span data-i18n="openSettings">Settings</span>
+          <span>__MSG_openSettings__</span>
         </button>
         <p class="text-center text-small color-fg-muted mb-0">
-          <span data-i18n="madeWith">Made with</span>
+          __MSG_madeWith__
           <span class="footer-heart octicon-inline mx-1"></span>
           <span>for better GitHub experience</span>
         </p>
       </div>
     </div>
 
-    <script src="../src/utils/octicons.js"></script>
-    <script src="../src/utils/i18n-popup.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>
