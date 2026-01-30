@@ -28,15 +28,6 @@ async function processAllPRs(): Promise<void> {
   console.log(`Better GHub v${Constants.VERSION}: All PRs processed`);
 }
 
-async function loadSettings(): Promise<void> {
-  return new Promise((resolve) => {
-    chrome.storage.local.get(['cacheTime', 'batchDelay'], (result) => {
-      console.log(`Better GHub: Settings loaded - cacheTime: ${result.cacheTime || 300000}`);
-      resolve();
-    });
-  });
-}
-
 let currentURL = window.location.href;
 let mutationObserver: MutationObserver | null = null;
 let initialized = false;
@@ -58,57 +49,59 @@ async function init(): Promise<void> {
       await i18n.init();
     }
 
-    await loadSettings();
-
     const tokenData = await TokenManager.getToken();
     if (!tokenData.token) {
       console.log('Better GHub: No GitHub token. Configure in extension popup.');
     }
 
     if (!processor) {
-      processor = new PRProcessor(tokenData.token || null, tokenData.type);
+      processor = new PRProcessor(tokenData.token || null);
     } else {
-      processor.setToken(tokenData.token || null, tokenData.type);
+      processor.setToken(tokenData.token || null);
     }
 
     VersionBadge.showVersionBadge();
     void processAllPRs();
     initialized = true;
-  } catch (error) {
-    console.error('Better GHub: Initialization failed', error);
-  }
+    
+    // Setup observer after successful initialization
+    if (!mutationObserver) {
+      mutationObserver = new MutationObserver((mutations) => {
+        // Guard: only process if initialized and processor exists
+        if (!initialized || !processor) return;
+        
+        let shouldProcess = false;
 
-  if (!mutationObserver) {
-    mutationObserver = new MutationObserver((mutations) => {
-      let shouldProcess = false;
-
-      for (const mutation of mutations) {
-        if (mutation.addedNodes.length > 0) {
-          for (const node of mutation.addedNodes) {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              const element = node as Element;
-              if (
-                element.classList?.contains('js-issue-row') ||
-                element.id?.startsWith('issue_') ||
-                element.querySelector?.('.js-issue-row')
-              ) {
-                shouldProcess = true;
-                break;
+        for (const mutation of mutations) {
+          if (mutation.addedNodes.length > 0) {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                const element = node as Element;
+                if (
+                  element.classList?.contains('js-issue-row') ||
+                  element.id?.startsWith('issue_') ||
+                  element.querySelector?.('.js-issue-row')
+                ) {
+                  shouldProcess = true;
+                  break;
+                }
               }
             }
           }
         }
-      }
 
-      if (shouldProcess) {
-        setTimeout(() => void processAllPRs(), 100);
-      }
-    });
+        if (shouldProcess) {
+          setTimeout(() => void processAllPRs(), 100);
+        }
+      });
 
-    const container = document.querySelector('[data-hpc] .js-navigation-container, [role="main"]');
-    if (container) {
-      mutationObserver.observe(container, { childList: true, subtree: true });
+      const container = document.querySelector('[data-hpc] .js-navigation-container, [role="main"]');
+      if (container) {
+        mutationObserver.observe(container, { childList: true, subtree: true });
+      }
     }
+  } catch (error) {
+    console.error('Better GHub: Initialization failed', error);
   }
 }
 
@@ -130,20 +123,20 @@ const messageHandlers: Record<string, (request: MessageRequest) => Promise<void>
   tokenUpdated: async () => {
     console.log(`Better GHub: Token updated, reloading...`);
     const tokenData = await TokenManager.getToken();
-    processor?.setToken(tokenData.token || null, tokenData.type);
+    processor?.setToken(tokenData.token || null);
     processor?.clearCache();
     document.querySelectorAll(`[${Constants.PROCESSED_ATTR}]`).forEach((el) => el.removeAttribute(Constants.PROCESSED_ATTR));
     void processAllPRs();
   },
 
   tokenRemoved: () => {
-    processor?.setToken(null, 'pat');
+    processor?.setToken(null);
     processor?.clearCache();
     document.querySelectorAll('.better-ghub-activity').forEach((el) => el.remove());
   },
 
   tokenInvalid: () => {
-    processor?.setToken(null, 'pat');
+    processor?.setToken(null);
     processor?.clearCache();
     document.querySelectorAll('.better-ghub-activity').forEach((el) => el.remove());
   },

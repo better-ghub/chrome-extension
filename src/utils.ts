@@ -1,7 +1,7 @@
 // Utility Functions for Better GHub
 
 import { Constants } from './constants';
-import type { TokenType, TokenInfo, GitHubUser, PRActivityData, CachedData, PRInfo } from './types';
+import type { GitHubUser, PRActivityData, CachedData, PRInfo } from './types';
 
 // =============================================================================
 // Octicons
@@ -83,20 +83,17 @@ interface RateLimitInfo {
 }
 
 export const TokenManager = {
-  async getToken(): Promise<TokenInfo> {
+  async getToken(): Promise<{ token: string }> {
     return new Promise((resolve) => {
-      chrome.storage.local.get(['githubToken', 'tokenType'], (result) => {
-        resolve({
-          token: result.githubToken || '',
-          type: (result.tokenType as TokenType) || 'pat',
-        });
+      chrome.storage.local.get(['githubToken'], (result) => {
+        resolve({ token: result.githubToken || '' });
       });
     });
   },
 
-  async setToken(token: string, tokenType: TokenType = 'pat', user: GitHubUser | null = null): Promise<void> {
+  async setToken(token: string, user: GitHubUser | null = null): Promise<void> {
     return new Promise((resolve) => {
-      const data: Record<string, unknown> = { githubToken: token, tokenType };
+      const data: Record<string, unknown> = { githubToken: token };
       if (user) data.githubUser = user;
       chrome.storage.local.set(data, resolve);
     });
@@ -104,20 +101,19 @@ export const TokenManager = {
 
   async removeToken(): Promise<void> {
     return new Promise((resolve) => {
-      chrome.storage.local.remove(['githubToken', 'githubUser', 'tokenType'], resolve);
+      chrome.storage.local.remove(['githubToken', 'githubUser'], resolve);
     });
   },
 
   validateTokenFormat(token: string): boolean {
-    if (!token) return false;
-    return (token.startsWith('ghp_') || token.startsWith('github_pat_')) && token.length >= 40;
+    if (!token || token.length < 40) return false;
+    return token.startsWith('ghp_') || token.startsWith('github_pat_');
   },
 
-  async testToken(token: string, tokenType: TokenType = 'pat'): Promise<TokenTestResult> {
+  async testToken(token: string): Promise<TokenTestResult> {
     try {
-      const authHeader = tokenType === 'oauth' ? `Bearer ${token}` : `token ${token}`;
       const response = await fetch('https://api.github.com/user', {
-        headers: { Authorization: authHeader, Accept: 'application/vnd.github.v3+json' },
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
       });
 
       if (response.ok) {
@@ -131,11 +127,10 @@ export const TokenManager = {
     }
   },
 
-  async getRateLimit(token: string, tokenType: TokenType = 'pat'): Promise<RateLimitInfo | null> {
+  async getRateLimit(token: string): Promise<RateLimitInfo | null> {
     try {
-      const authHeader = tokenType === 'oauth' ? `Bearer ${token}` : `token ${token}`;
       const response = await fetch('https://api.github.com/rate_limit', {
-        headers: { Authorization: authHeader, Accept: 'application/vnd.github.v3+json' },
+        headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' },
       });
 
       if (response.ok) {

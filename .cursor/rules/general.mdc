@@ -45,7 +45,6 @@ src/
   dashboard.ts      - dashboard script for GitHub home
   background.ts     - service worker
   i18n.ts           - internationalization
-  oauth.ts          - GitHub OAuth flow
   pr-service.ts     - PR analysis and processing
   types.ts          - all TypeScript interfaces
   ui.ts             - UI components (loader, tooltip, etc.)

@@ -17,7 +17,7 @@ export { getUnresolvedThreads, getUnresolvedThreadsBatch } from './get-unresolve
 // Class-based API (backward compatibility)
 // =============================================================================
 
-import type { TokenType, GitHubPRData, GitHubUser, UnresolvedThreadsResult, PRBatchItem } from '../types';
+import type { GitHubPRData, GitHubUser, UnresolvedThreadsResult, PRBatchItem } from '../types';
 import * as client from './client';
 import * as prData from './get-pr-data';
 import * as user from './get-current-user';
@@ -25,12 +25,12 @@ import * as search from './search-issues';
 import * as threads from './get-unresolved-threads';
 
 export class GitHubRestAPI {
-  constructor(token: string | null = null, tokenType: TokenType = 'pat') {
-    client.setToken(token, tokenType);
+  constructor(token: string | null = null) {
+    client.setToken(token);
   }
 
-  setToken(token: string | null, tokenType: TokenType = 'pat'): void {
-    client.setToken(token, tokenType);
+  setToken(token: string | null): void {
+    client.setToken(token);
   }
 
   async getPRData(owner: string, repo: string, number: number): Promise<GitHubPRData | null> {
@@ -51,12 +51,12 @@ export class GitHubRestAPI {
 }
 
 export class GitHubGraphQLAPI {
-  constructor(token: string | null = null, tokenType: TokenType = 'pat') {
-    client.setToken(token, tokenType);
+  constructor(token: string | null = null) {
+    client.setToken(token);
   }
 
-  setToken(token: string | null, tokenType: TokenType = 'pat'): void {
-    client.setToken(token, tokenType);
+  setToken(token: string | null): void {
+    client.setToken(token);
   }
 
   async getUnresolvedThreads(owner: string, repo: string, number: number): Promise<UnresolvedThreadsResult> {

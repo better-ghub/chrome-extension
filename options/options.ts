@@ -125,7 +125,7 @@ function initAuthListeners(): void {
     const result = await TokenManager.testToken(token);
 
     if (result.success && result.user) {
-      await TokenManager.setToken(token, 'pat', result.user);
+      await TokenManager.setToken(token, result.user);
       showStatus(Octicons.get('check-circle', 14) + ' ' + msg('tokenSaved', 'Token saved!'), 'success');
       tokenInput.value = '';
       saveBtn.textContent = msg('saveToken', 'Save Token');
@@ -295,7 +295,7 @@ function showStatus(message: string, type: 'success' | 'error' = 'success'): voi
   const statusDiv = document.getElementById('status-message');
   if (!statusDiv) return;
 
-  statusDiv.innerHTML = message;
+  statusDiv.textContent = message;
   statusDiv.style.display = 'block';
   statusDiv.className = 'flash mt-3';
 

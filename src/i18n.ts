@@ -42,9 +42,17 @@ export async function initI18n(): Promise<void> {
       messages = await response.json();
     } else {
       // Fall back to English
-      const enUrl = chrome.runtime.getURL('_locales/en/messages.json');
-      const enResponse = await fetch(enUrl);
-      messages = await enResponse.json();
+      try {
+        const enUrl = chrome.runtime.getURL('_locales/en/messages.json');
+        const enResponse = await fetch(enUrl);
+        if (!enResponse.ok) {
+          throw new Error(`Failed to load English fallback: ${enResponse.status}`);
+        }
+        messages = await enResponse.json();
+      } catch (fallbackError) {
+        console.error('Better GHub: Failed to load English fallback:', fallbackError);
+        throw fallbackError;
+      }
     }
 
     console.log(`Better GHub: i18n loaded (${lang})`);

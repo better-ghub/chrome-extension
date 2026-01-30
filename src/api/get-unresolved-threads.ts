@@ -3,6 +3,11 @@
 import { graphqlCall, getToken } from './client';
 import type { UnresolvedThreadsResult, GraphQLResponse, PRBatchItem } from '../types';
 
+// Helper to check if token is set
+function hasToken(): boolean {
+  return getToken() !== null;
+}
+
 // Single PR
 export async function getUnresolvedThreads(
   owner: string,
@@ -48,8 +53,7 @@ export async function getUnresolvedThreads(
 export async function getUnresolvedThreadsBatch(
   prList: PRBatchItem[]
 ): Promise<Record<string, UnresolvedThreadsResult>> {
-  const { token } = getToken();
-  if (!token || prList.length === 0) return {};
+  if (!hasToken() || prList.length === 0) return {};
 
   console.log(`Better GHub: Batch fetching ${prList.length} PRs`);
 

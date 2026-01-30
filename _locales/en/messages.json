@@ -235,6 +235,9 @@
   "noOpenPRs": {
     "message": "No open pull requests"
   },
+  "noOpenPRsDescription": {
+    "message": "You don't have any open pull requests at the moment."
+  },
   "note": {
     "message": "Note"
   },

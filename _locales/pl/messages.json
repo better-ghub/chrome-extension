@@ -88,12 +88,6 @@
   "noUnresolved": {
     "message": "Brak nierozwiązanych wątków"
   },
-  "rateLimit": {
-    "message": "Limit API:"
-  },
-  "logout": {
-    "message": "Wyloguj"
-  },
   "pleaseEnterToken": {
     "message": "Proszę wprowadzić token"
   },
@@ -240,6 +234,9 @@
   },
   "noOpenPRs": {
     "message": "Brak otwartych pull requestów"
+  },
+  "noOpenPRsDescription": {
+    "message": "Nie masz obecnie żadnych otwartych pull requestów."
   },
   "note": {
     "message": "Uwaga"

@@ -1,27 +1,18 @@
 // Better GHub - Popup Script
 
 import { Octicons, TokenManager } from '../src/utils';
-import { GitHubOAuth } from '../src/oauth';
 import { Constants } from '../src/constants';
 import { initI18n, translatePage, msg } from '../src/i18n';
-
-// OAuth instance
-let oauthFlow: GitHubOAuth | null = null;
-let countdownInterval: ReturnType<typeof setInterval> | null = null;
 
 // Insert Octicons
 function initOcticons(): void {
   const keyIcon = document.querySelector('.flash .icon');
   const gearIcon = document.querySelector('#open-options .footer-icon');
   const heartIcon = document.querySelector('.footer-heart');
-  const oauthIcon = document.querySelector('#oauth-login .oauth-icon');
-  const oauthProgressIcon = document.querySelector('.oauth-progress-icon');
 
   if (keyIcon) keyIcon.innerHTML = Octicons.get('key', 16);
   if (gearIcon) gearIcon.innerHTML = Octicons.get('gear', 14);
   if (heartIcon) heartIcon.innerHTML = Octicons.get('heart', 12);
-  if (oauthIcon) oauthIcon.innerHTML = Octicons.get('mark-github', 16);
-  if (oauthProgressIcon) oauthProgressIcon.innerHTML = Octicons.get('sync', 24);
 }
 
 // Show error message
@@ -39,7 +30,7 @@ function showError(message: string): void {
 function showSuccess(message: string): void {
   const successDiv = document.getElementById('success-message');
   if (!successDiv) return;
-  successDiv.innerHTML = message;
+  successDiv.textContent = message;
   successDiv.style.display = 'block';
   setTimeout(() => {
     successDiv.style.display = 'none';
@@ -137,8 +128,8 @@ async function saveToken(): Promise<void> {
   const result = await TokenManager.testToken(token);
 
   if (result.success && result.user) {
-    await TokenManager.setToken(token, 'pat', result.user);
-    showSuccess(Octicons.get('check-circle', 14) + ' ' + msg('tokenSaved', 'Token saved!'));
+    await TokenManager.setToken(token, result.user);
+    showSuccess(msg('tokenSaved', 'Token saved!'));
     tokenInput.value = '';
     saveBtn.textContent = msg('saveToken', 'Save Token');
     saveBtn.disabled = false;
@@ -149,115 +140,10 @@ async function saveToken(): Promise<void> {
       void checkAuthStatus();
     }, 500);
   } else {
-    showError(`❌ ${msg('tokenValidationFailed', 'Token validation failed')}: ${result.error}`);
+    showError(`${msg('tokenValidationFailed', 'Token validation failed')}: ${result.error}`);
     saveBtn.textContent = msg('saveToken', 'Save Token');
     saveBtn.disabled = false;
   }
-}
-
-// OAuth Login
-async function startOAuthLogin(): Promise<void> {
-  try {
-    const loggedOut = document.getElementById('logged-out');
-    const oauthLogin = document.getElementById('oauth-login') as HTMLButtonElement;
-
-    if (loggedOut) loggedOut.style.opacity = '0.5';
-    if (oauthLogin) oauthLogin.disabled = true;
-
-    oauthFlow = new GitHubOAuth();
-
-    await oauthFlow.authorize({
-      onDeviceCode: (data) => {
-        if (data.status === 'ready' && data.userCode && data.verificationUri && data.expiresIn) {
-          const oauthProgress = document.getElementById('oauth-progress');
-          const userCodeDisplay = document.getElementById('user-code-display');
-          const openGithubAuth = document.getElementById('open-github-auth');
-
-          if (oauthProgress) oauthProgress.style.display = 'block';
-          if (userCodeDisplay) userCodeDisplay.textContent = data.userCode;
-
-          if (openGithubAuth) {
-            openGithubAuth.onclick = () => {
-              chrome.tabs.create({ url: data.verificationUri! });
-            };
-          }
-
-          startCountdownTimer(data.expiresIn);
-        }
-      },
-      onProgress: (progress) => {
-        console.log('OAuth progress:', progress);
-      },
-      onSuccess: async (result) => {
-        await TokenManager.setToken(result.accessToken, 'oauth', result.user);
-        showSuccess(Octicons.get('check-circle', 14) + ' ' + msg('oauthSuccess', 'Authenticated!'));
-        TokenManager.notifyTabs('tokenUpdated');
-
-        setTimeout(() => {
-          void checkAuthStatus();
-        }, 500);
-      },
-      onError: (error) => {
-        showError(`${msg('oauthFailed', 'OAuth failed')}: ${error.message}`);
-        resetOAuthUI();
-      },
-    });
-  } catch (error) {
-    console.error('OAuth error:', error);
-    showError(msg('oauthError', 'Failed to start OAuth') + ': ' + (error as Error).message);
-    resetOAuthUI();
-  }
-}
-
-// Cancel OAuth
-function cancelOAuth(): void {
-  if (oauthFlow) {
-    oauthFlow.stopPolling();
-    oauthFlow = null;
-  }
-  resetOAuthUI();
-}
-
-// Reset OAuth UI
-function resetOAuthUI(): void {
-  const oauthProgress = document.getElementById('oauth-progress');
-  const loggedOut = document.getElementById('logged-out');
-  const oauthLogin = document.getElementById('oauth-login') as HTMLButtonElement;
-
-  if (oauthProgress) oauthProgress.style.display = 'none';
-  if (loggedOut) loggedOut.style.opacity = '1';
-  if (oauthLogin) oauthLogin.disabled = false;
-
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-    countdownInterval = null;
-  }
-}
-
-// Countdown timer
-function startCountdownTimer(seconds: number): void {
-  let remaining = seconds;
-  const timerDisplay = document.getElementById('code-timer');
-
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-  }
-
-  countdownInterval = setInterval(() => {
-    remaining--;
-
-    const minutes = Math.floor(remaining / 60);
-    const secs = remaining % 60;
-    if (timerDisplay) {
-      timerDisplay.textContent = `${minutes}:${secs.toString().padStart(2, '0')}`;
-    }
-
-    if (remaining <= 0) {
-      if (countdownInterval) clearInterval(countdownInterval);
-      cancelOAuth();
-      showError(msg('codeExpired', 'Authorization code expired'));
-    }
-  }, 1000);
 }
 
 // Logout
@@ -275,7 +161,6 @@ async function logout(): Promise<void> {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize i18n and translate HTML __MSG_*__ placeholders
   await initI18n();
   translatePage();
 
@@ -283,17 +168,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (versionEl) versionEl.textContent = `v${Constants.VERSION}`;
 
   initOcticons();
-
-  // Token details always open (OAuth not configured)
-  const tokenDetails = document.getElementById('token-details') as HTMLDetailsElement;
-  if (tokenDetails) {
-    tokenDetails.open = true;
-  }
-
   void checkAuthStatus();
 
-  document.getElementById('oauth-login')?.addEventListener('click', () => void startOAuthLogin());
-  document.getElementById('cancel-oauth')?.addEventListener('click', cancelOAuth);
   document.getElementById('save-token')?.addEventListener('click', () => void saveToken());
   document.getElementById('logout-btn')?.addEventListener('click', () => void logout());
 

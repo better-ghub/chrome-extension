@@ -2,27 +2,19 @@
 
 import { Constants } from '../constants';
 import { apiMetrics } from './metrics';
-import type { TokenType } from '../types';
 
 const BASE_URL = 'https://api.github.com';
 const GRAPHQL_URL = 'https://api.github.com/graphql';
 
 // Shared state
 let token: string | null = null;
-let tokenType: TokenType = 'pat';
 
-export function setToken(newToken: string | null, newType: TokenType = 'pat'): void {
+export function setToken(newToken: string | null): void {
   token = newToken;
-  tokenType = newType;
 }
 
-export function getToken(): { token: string | null; tokenType: TokenType } {
-  return { token, tokenType };
-}
-
-function getAuthHeader(forGraphQL = false): string {
-  if (tokenType === 'oauth') return `Bearer ${token}`;
-  return forGraphQL ? `bearer ${token}` : `token ${token}`;
+export function getToken(): string | null {
+  return token;
 }
 
 // REST API call
@@ -35,7 +27,7 @@ export async function restCall<T>(endpoint: string): Promise<T | null> {
     };
 
     if (token) {
-      headers['Authorization'] = getAuthHeader();
+      headers['Authorization'] = `token ${token}`;
     }
 
     console.log(`Better GHub v${Constants.VERSION}: REST ${endpoint}`);
@@ -67,7 +59,7 @@ export async function graphqlCall<T>(query: string): Promise<T | null> {
     const response = await fetch(GRAPHQL_URL, {
       method: 'POST',
       headers: {
-        Authorization: getAuthHeader(true),
+        Authorization: `bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query }),

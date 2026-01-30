@@ -13,24 +13,22 @@ interface MessagesFile {
 
 async function validateStoredToken(): Promise<void> {
   try {
-    const result = await chrome.storage.local.get(['githubToken', 'tokenType']);
+    const result = await chrome.storage.local.get(['githubToken']);
 
     if (!result.githubToken) {
       return; // No token to validate
     }
 
-    // Check if token is still valid
     const response = await fetch('https://api.github.com/user', {
       headers: {
-        Authorization: `${result.tokenType === 'oauth' ? 'Bearer' : 'token'} ${result.githubToken}`,
+        Authorization: `token ${result.githubToken}`,
         Accept: 'application/vnd.github.v3+json',
       },
     });
 
     if (!response.ok) {
-      // Token is invalid, remove it
       console.warn('Better GHub: Token validation failed, removing token');
-      await chrome.storage.local.remove(['githubToken', 'githubUser', 'tokenType']);
+      await chrome.storage.local.remove(['githubToken', 'githubUser']);
 
       // Notify all GitHub tabs
       const tabs = await chrome.tabs.query({ url: 'https://github.com/*/*/pulls*' });

@@ -6,7 +6,7 @@ import { GitHubRestAPI, GitHubGraphQLAPI } from './api';
 import { CacheManager, DOMHelpers, TokenManager, Octicons } from './utils';
 import { i18n } from './i18n';
 import { ActivityElement } from './ui';
-import type { TokenType, PRActivityData, PRFullData } from './types';
+import type { PRActivityData, PRFullData } from './types';
 
 interface SearchPR {
   html_url: string;
@@ -21,17 +21,13 @@ interface SearchPR {
 
 const Dashboard = {
   token: null as string | null,
-  tokenType: 'pat' as TokenType,
   restAPI: null as GitHubRestAPI | null,
   graphqlAPI: null as GitHubGraphQLAPI | null,
   cache: null as CacheManager | null,
 
   async init(): Promise<void> {
     console.log(`Better GHub v${Constants.VERSION}: Dashboard script loaded!`);
-    console.log(`Better GHub: Current URL: ${window.location.href}`);
-    console.log(`Better GHub: Current pathname: ${window.location.pathname}`);
 
-    // Check if we're on the main GitHub page
     if (!this.isDashboardPage()) {
       console.log('Better GHub: Not a dashboard page, exiting.');
       return;
@@ -39,19 +35,16 @@ const Dashboard = {
 
     console.log(`Better GHub v${Constants.VERSION}: Dashboard initializing...`);
 
-    // Get GitHub token
     const tokenData = await TokenManager.getToken();
     this.token = tokenData.token || null;
-    this.tokenType = tokenData.type;
 
     if (!this.token) {
       console.log('Better GHub: No GitHub token. Configure in extension popup.');
       return;
     }
 
-    // Initialize API clients
-    this.restAPI = new GitHubRestAPI(this.token, this.tokenType);
-    this.graphqlAPI = new GitHubGraphQLAPI(this.token, this.tokenType);
+    this.restAPI = new GitHubRestAPI(this.token);
+    this.graphqlAPI = new GitHubGraphQLAPI(this.token);
     this.cache = new CacheManager();
 
     // Initialize i18n
@@ -145,7 +138,7 @@ const Dashboard = {
 
     const headerTitle = document.createElement('h2');
     headerTitle.className = 'f5 mb-1';
-    headerTitle.innerHTML = `${i18n.getMessage('yourPRs')}`;
+    headerTitle.textContent = i18n.getMessage('yourPRs');
 
     header.appendChild(headerTitle);
     section.appendChild(header);
@@ -188,12 +181,22 @@ const Dashboard = {
       listContainer.className = 'Box mt-3';
 
       if (prs.length === 0) {
-        listContainer.innerHTML = `
-          <div data-view-component="true" class="blankslate border color-bg-default rounded-2">
-            <h3 data-view-component="true" class="mb-1">${i18n.getMessage('noOpenPRs')}</h3>
-            <p>You don't have any open pull requests at the moment.</p>
-          </div>
-        `;
+        listContainer.innerHTML = '';
+        const blankslate = document.createElement('div');
+        blankslate.className = 'blankslate border color-bg-default rounded-2';
+        blankslate.setAttribute('data-view-component', 'true');
+        
+        const heading = document.createElement('h3');
+        heading.className = 'mb-1';
+        heading.setAttribute('data-view-component', 'true');
+        heading.textContent = i18n.getMessage('noOpenPRs');
+        
+        const description = document.createElement('p');
+        description.textContent = i18n.getMessage('noOpenPRsDescription');
+        
+        blankslate.appendChild(heading);
+        blankslate.appendChild(description);
+        listContainer.appendChild(blankslate);
         return;
       }
 
@@ -484,15 +487,14 @@ chrome.runtime.onMessage.addListener((request: { action: string }) => {
   if (request.action === 'tokenUpdated') {
     console.log('Better GHub: Token updated, reloading dashboard...');
     TokenManager.getToken()
-      .then((tokenData: { token: string; type: TokenType }) => {
+      .then((tokenData) => {
         Dashboard.token = tokenData.token || null;
-        Dashboard.tokenType = tokenData.type;
+        
+        if (Dashboard.restAPI) Dashboard.restAPI.setToken(Dashboard.token);
+        if (Dashboard.graphqlAPI) Dashboard.graphqlAPI.setToken(Dashboard.token);
 
-        // Reload PRs
         const existingSection = document.getElementById('better-ghub-your-prs');
-        if (existingSection) {
-          existingSection.remove();
-        }
+        if (existingSection) existingSection.remove();
         void Dashboard.createYourPRsSection();
       })
       .catch((error: Error) => {
@@ -501,12 +503,12 @@ chrome.runtime.onMessage.addListener((request: { action: string }) => {
   } else if (request.action === 'tokenRemoved' || request.action === 'tokenInvalid') {
     console.log(`Better GHub: Token ${request.action === 'tokenInvalid' ? 'invalid' : 'removed'}`);
     Dashboard.token = null;
+    
+    if (Dashboard.restAPI) Dashboard.restAPI.setToken(null);
+    if (Dashboard.graphqlAPI) Dashboard.graphqlAPI.setToken(null);
 
-    // Remove section
     const existingSection = document.getElementById('better-ghub-your-prs');
-    if (existingSection) {
-      existingSection.remove();
-    }
+    if (existingSection) existingSection.remove();
   }
 });
 

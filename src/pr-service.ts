@@ -4,7 +4,7 @@ import { Constants } from './constants';
 import { GitHubRestAPI, GitHubGraphQLAPI } from './api';
 import { CacheManager, DOMHelpers } from './utils';
 import { Loader, ActivityElement } from './ui';
-import type { TokenType, PRActivityData, PRFullData, PRDisplayData } from './types';
+import type { PRActivityData, PRFullData, PRDisplayData } from './types';
 
 // =============================================================================
 // PR Analyzer
@@ -88,15 +88,15 @@ export class PRProcessor {
   private graphqlAPI: GitHubGraphQLAPI;
   private cache: CacheManager;
 
-  constructor(token: string | null = null, tokenType: TokenType = 'pat') {
-    this.restAPI = new GitHubRestAPI(token, tokenType);
-    this.graphqlAPI = new GitHubGraphQLAPI(token, tokenType);
+  constructor(token: string | null = null) {
+    this.restAPI = new GitHubRestAPI(token);
+    this.graphqlAPI = new GitHubGraphQLAPI(token);
     this.cache = new CacheManager();
   }
 
-  setToken(token: string | null, tokenType: TokenType = 'pat'): void {
-    this.restAPI.setToken(token, tokenType);
-    this.graphqlAPI.setToken(token, tokenType);
+  setToken(token: string | null): void {
+    this.restAPI.setToken(token);
+    this.graphqlAPI.setToken(token);
   }
 
   clearCache(): void {
@@ -162,7 +162,7 @@ export class PRProcessor {
       if (activityElement) prContainer.appendChild(activityElement);
     } catch (error) {
       console.error(`Better GHub: Error processing PR #${number}:`, error);
-      prContainer.querySelector(`.${Constants.ACTIVITY_CLASS}`)?.remove();
+      prContainer.querySelectorAll(`.${Constants.ACTIVITY_CLASS}`).forEach((el) => el.remove());
     }
   }
 }

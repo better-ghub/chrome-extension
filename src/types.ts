@@ -87,11 +87,8 @@ export interface UnresolvedThreadsResult {
 // Token Types
 // =============================================================================
 
-export type TokenType = 'pat' | 'oauth';
-
 export interface TokenInfo {
   token: string;
-  type: TokenType;
 }
 
 // =============================================================================
