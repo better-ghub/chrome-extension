@@ -243,6 +243,9 @@
   },
   "authNote": {
     "message": "Bez autoryzacji rozszerzenie działa tylko z publicznymi repozytoriami (limit 60 wywołań API na godzinę)."
+  },
+  "forBetterExperience": {
+    "message": "dla lepszego doświadczenia z GitHub"
   }
 }
 

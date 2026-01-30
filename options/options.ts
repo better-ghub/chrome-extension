@@ -54,8 +54,12 @@ function initTabs(): void {
 // AUTHENTICATION TAB
 // ============================================================================
 
-async function displayUserInfo(token: string): Promise<void> {
+async function displayUserInfo(token: string): Promise<boolean> {
   const result = await TokenManager.testToken(token);
+
+  const loading = document.getElementById('auth-status-loading');
+  const loggedOut = document.getElementById('auth-status-logged-out');
+  const loggedIn = document.getElementById('auth-status-logged-in');
 
   if (result.success && result.user) {
     const user = result.user;
@@ -76,13 +80,16 @@ async function displayUserInfo(token: string): Promise<void> {
       }
     }
 
-    const loading = document.getElementById('auth-status-loading');
-    const loggedOut = document.getElementById('auth-status-logged-out');
-    const loggedIn = document.getElementById('auth-status-logged-in');
-
     if (loading) loading.style.display = 'none';
     if (loggedOut) loggedOut.style.display = 'none';
     if (loggedIn) loggedIn.style.display = 'block';
+    return true;
+  } else {
+    // Token validation failed - show logged out state
+    if (loading) loading.style.display = 'none';
+    if (loggedOut) loggedOut.style.display = 'block';
+    if (loggedIn) loggedIn.style.display = 'none';
+    return false;
   }
 }
 

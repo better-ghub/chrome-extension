@@ -112,13 +112,14 @@ export class PRProcessor {
     const prInfo = DOMHelpers.parsePRUrl(prLink.href);
     if (!prInfo) return;
 
-    const { owner, repo, number } = prInfo;
-    console.log(`Better GHub: Processing PR #${number}`);
-
-    row.setAttribute(Constants.PROCESSED_ATTR, 'true');
-
     const prContainer = prLink.closest('.flex-auto, [class*="p-2"]');
     if (!prContainer) return;
+
+    // Only mark as processed after we've confirmed the container exists
+    row.setAttribute(Constants.PROCESSED_ATTR, 'true');
+
+    const { owner, repo, number } = prInfo;
+    console.log(`Better GHub: Processing PR #${number}`);
 
     // Remove existing activity elements
     prContainer.querySelectorAll(`.${Constants.ACTIVITY_CLASS}`).forEach((el) => el.remove());

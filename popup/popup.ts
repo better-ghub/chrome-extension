@@ -37,9 +37,12 @@ function showSuccess(message: string): void {
   }, 3000);
 }
 
-// Display user info
-async function displayUserInfo(token: string): Promise<void> {
+// Display user info - returns true if successful
+async function displayUserInfo(token: string): Promise<boolean> {
   const result = await TokenManager.testToken(token);
+
+  const loggedOut = document.getElementById('logged-out');
+  const loggedIn = document.getElementById('logged-in');
 
   if (result.success && result.user) {
     const user = result.user;
@@ -62,10 +65,14 @@ async function displayUserInfo(token: string): Promise<void> {
     }
 
     // Show logged in state
-    const loggedOut = document.getElementById('logged-out');
-    const loggedIn = document.getElementById('logged-in');
     if (loggedOut) loggedOut.style.display = 'none';
     if (loggedIn) loggedIn.style.display = 'block';
+    return true;
+  } else {
+    // Token validation failed - show logged out state
+    if (loggedOut) loggedOut.style.display = 'block';
+    if (loggedIn) loggedIn.style.display = 'none';
+    return false;
   }
 }
 
@@ -83,11 +90,15 @@ async function checkAuthStatus(): Promise<void> {
   loggedIn.style.display = 'none';
 
   const { token } = await TokenManager.getToken();
+  let isLoggedIn = false;
 
   if (token) {
-    loggedIn.style.display = 'block';
+    isLoggedIn = await displayUserInfo(token);
+  }
+
+  // Prepare the appropriate panel for display
+  if (isLoggedIn) {
     loggedIn.style.opacity = '0';
-    await displayUserInfo(token);
   } else {
     loggedOut.style.display = 'block';
     loggedOut.style.opacity = '0';
@@ -98,7 +109,7 @@ async function checkAuthStatus(): Promise<void> {
 
   setTimeout(() => {
     loadingState.style.display = 'none';
-    if (token) {
+    if (isLoggedIn) {
       loggedIn.style.opacity = '1';
     } else {
       loggedOut.style.opacity = '1';
