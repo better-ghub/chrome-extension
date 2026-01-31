@@ -133,7 +133,7 @@ function initAuthListeners(): void {
 
     if (result.success && result.user) {
       await TokenManager.setToken(token, result.user);
-      showStatus(Octicons.get('check-circle', 14) + ' ' + msg('tokenSaved', 'Token saved!'), 'success');
+      showStatus('✓ ' + msg('tokenSaved', 'Token saved!'), 'success');
       tokenInput.value = '';
       saveBtn.textContent = msg('saveToken', 'Save Token');
       saveBtn.disabled = false;

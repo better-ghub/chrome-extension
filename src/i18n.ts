@@ -74,6 +74,11 @@ export async function initI18n(): Promise<void> {
       if (response?.success && response.messages) {
         messages = response.messages;
         initialized = true;
+      } else {
+        // Background response failed - fallback to Chrome native
+        console.warn('Better GHub: i18n background response failed, using Chrome native');
+        messages = null;
+        initialized = true;
       }
     } catch {
       console.warn('Better GHub: i18n fallback to Chrome native');
