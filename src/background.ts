@@ -104,6 +104,25 @@ chrome.runtime.onMessage.addListener(
   }
 );
 
+// Handle keyboard shortcuts from commands API
+chrome.commands.onCommand.addListener((command) => {
+  console.log(`Better GHub: Command received from Chrome: ${command}`);
+  if (command === 'toggle-all' || command === 'toggle-files') {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const tab = tabs[0];
+      console.log(`Better GHub: Active tab:`, tab?.url);
+      if (tab?.id && tab.url?.includes('github.com')) {
+        console.log(`Better GHub: Sending ${command} to tab ${tab.id}`);
+        chrome.tabs.sendMessage(tab.id, { action: command }).catch(() => {
+          // Content script not loaded - this happens after extension reload
+          // User needs to refresh the page
+          console.log('Better GHub: Content script not loaded. Please refresh the GitHub page.');
+        });
+      }
+    });
+  }
+});
+
 // Handle extension installation
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {

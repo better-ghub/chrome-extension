@@ -9,6 +9,7 @@ const entryPoints = {
   // Content scripts
   'content': 'src/content.ts',
   'dashboard': 'src/dashboard.ts',
+  'pr-shortcuts': 'src/pr-shortcuts.ts',
   
   // Background service worker
   'background': 'src/background.ts',

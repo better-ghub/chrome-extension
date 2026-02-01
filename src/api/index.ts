@@ -26,10 +26,7 @@ import * as threads from './get-unresolved-threads';
 
 export class GitHubRestAPI {
   constructor(token: string | null = null) {
-    // Only set token if provided to avoid clearing existing token
-    if (token !== null) {
-      client.setToken(token);
-    }
+    client.setToken(token);
   }
 
   setToken(token: string | null): void {
@@ -55,10 +52,7 @@ export class GitHubRestAPI {
 
 export class GitHubGraphQLAPI {
   constructor(token: string | null = null) {
-    // Only set token if provided to avoid clearing existing token
-    if (token !== null) {
-      client.setToken(token);
-    }
+    client.setToken(token);
   }
 
   setToken(token: string | null): void {

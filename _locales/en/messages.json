@@ -170,7 +170,7 @@
     "message": "How long to cache PR data"
   },
   "cacheTimeRecommendation": {
-    "message": "For optimal token usage, 5 minutes is the recommended cache duration."
+    "message": "For optimal token usage, 2 minutes is the recommended cache duration."
   },
   "clearCache": {
     "message": "Clear Cache"
@@ -246,6 +246,18 @@
   },
   "forBetterExperience": {
     "message": "for better GitHub experience"
+  },
+  "keyboardShortcuts": {
+    "message": "Keyboard Shortcuts"
+  },
+  "shortcutToggleComments": {
+    "message": "Toggle comments"
+  },
+  "shortcutToggleFiles": {
+    "message": "Toggle file diffs"
+  },
+  "shortcutFilesViewOnly": {
+    "message": "Files view only"
   }
 }
 

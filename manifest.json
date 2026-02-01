@@ -19,6 +19,22 @@
     "default_title": "Better GHub"
   },
   "options_page": "options/options.html",
+  "commands": {
+    "toggle-all": {
+      "suggested_key": {
+        "default": "Alt+C",
+        "mac": "Alt+C"
+      },
+      "description": "Toggle all comments on PR page"
+    },
+    "toggle-files": {
+      "suggested_key": {
+        "default": "Alt+F",
+        "mac": "Alt+F"
+      },
+      "description": "Toggle all files in Files changed view"
+    }
+  },
   "content_scripts": [
     {
       "matches": ["https://github.com/*/*/pulls*"],
@@ -30,6 +46,12 @@
       "matches": ["https://github.com/*"],
       "js": ["dashboard.js"],
       "css": ["dashboard-styles.css"],
+      "run_at": "document_end"
+    },
+    {
+      "matches": ["https://github.com/*/*/pull/*"],
+      "js": ["pr-shortcuts.js"],
+      "css": ["styles.css"],
       "run_at": "document_end"
     }
   ],

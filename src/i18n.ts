@@ -42,17 +42,9 @@ export async function initI18n(): Promise<void> {
       messages = await response.json();
     } else {
       // Fall back to English
-      try {
-        const enUrl = chrome.runtime.getURL('_locales/en/messages.json');
-        const enResponse = await fetch(enUrl);
-        if (!enResponse.ok) {
-          throw new Error(`Failed to load English fallback: ${enResponse.status}`);
-        }
-        messages = await enResponse.json();
-      } catch (fallbackError) {
-        console.error('Better GHub: Failed to load English fallback:', fallbackError);
-        throw fallbackError;
-      }
+      const enUrl = chrome.runtime.getURL('_locales/en/messages.json');
+      const enResponse = await fetch(enUrl);
+      messages = await enResponse.json();
     }
 
     console.log(`Better GHub: i18n loaded (${lang})`);
@@ -73,11 +65,6 @@ export async function initI18n(): Promise<void> {
 
       if (response?.success && response.messages) {
         messages = response.messages;
-        initialized = true;
-      } else {
-        // Background response failed - fallback to Chrome native
-        console.warn('Better GHub: i18n background response failed, using Chrome native');
-        messages = null;
         initialized = true;
       }
     } catch {
