@@ -234,6 +234,30 @@
   },
   "noOpenPRs": {
     "message": "No open pull requests"
+  },
+  "noOpenPRsDescription": {
+    "message": "You don't have any open pull requests at the moment."
+  },
+  "note": {
+    "message": "Note"
+  },
+  "authNote": {
+    "message": "Without authentication, the extension works with public repositories only (limited to 60 API calls per hour)."
+  },
+  "forBetterExperience": {
+    "message": "for better GitHub experience"
+  },
+  "keyboardShortcuts": {
+    "message": "Keyboard Shortcuts"
+  },
+  "shortcutToggleComments": {
+    "message": "Toggle comments"
+  },
+  "shortcutToggleFiles": {
+    "message": "Toggle file diffs"
+  },
+  "shortcutFilesViewOnly": {
+    "message": "Files view only"
   }
 }
 

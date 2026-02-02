@@ -1,267 +1,101 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  data-color-mode="auto"
-  data-light-theme="light"
-  data-dark-theme="dark"
->
+<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Better GHub</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/@primer/css@21.0.7/dist/primer.css"
-    />
+    <title>__MSG_extensionName__</title>
+    <link rel="stylesheet" href="https://unpkg.com/@primer/css@21.0.7/dist/primer.css" />
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
     <div class="p-3" style="width: 350px; min-height: 200px">
       <div class="d-flex flex-justify-between flex-items-center mb-3">
-        <h2
-          class="h3 m-0"
-          style="
-            background: linear-gradient(180deg, #6e40c9 0%, #3c1e70 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          "
-        >
+        <h2 class="h3 m-0" style="background: linear-gradient(180deg, #6e40c9 0%, #3c1e70 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
           Better GHub
         </h2>
-        <span
-          class="Label Label--primary"
-          id="version"
-          style="background: #6e40c9"
-          >v2.2.0</span
-        >
+        <span class="Label Label--primary" id="version" style="background: #6e40c9">v0.2.0</span>
       </div>
 
       <div id="auth-section" style="position: relative; min-height: 120px">
         <!-- Loading state -->
-        <div
-          id="loading-state"
-          style="
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          "
-        >
+        <div id="loading-state" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
           <div class="anim-pulse text-center">
             <div class="AnimatedEllipsis"></div>
-            <p class="text-small color-fg-muted mt-2">Loading...</p>
+            <p class="text-small color-fg-muted mt-2">__MSG_loading__</p>
           </div>
         </div>
 
+        <!-- Logged out -->
         <div id="logged-out" style="display: none">
           <div class="flash mb-3">
             <div class="d-flex flex-items-start">
               <span class="icon octicon-inline mr-2 mt-1"></span>
               <div class="flex-1">
-                <strong data-i18n="authRequired"
-                  >Authentication required</strong
-                >
-                <p
-                  class="color-fg-muted f6 mt-1 mb-0"
-                  data-i18n="authDescription"
-                >
-                  Connect your GitHub account to see detailed PR activity
-                  information.
-                </p>
-                <p
-                  class="color-fg-muted"
-                  style="margin-top: 8px; font-size: 11px"
-                >
-                  <strong>Note:</strong> Without authentication, the extension
-                  works with public repositories only (limited to 60 API calls
-                  per hour).
+                <strong>__MSG_authRequired__</strong>
+                <p class="color-fg-muted f6 mt-1 mb-0">__MSG_authDescription__</p>
+                <p class="color-fg-muted" style="margin-top: 8px; font-size: 11px">
+                  <strong>__MSG_note__:</strong> __MSG_authNote__
                 </p>
               </div>
             </div>
           </div>
 
-          <!-- OAuth Login (if configured) -->
-          <div class="mb-3" id="oauth-section" style="display: none">
-            <button
-              id="oauth-login"
-              class="btn btn-primary btn-block"
-              style="background: #6e40c9; border-color: #6e40c9"
-            >
-              <span class="oauth-icon octicon-inline mr-1"></span>
-              <span data-i18n="signInWithGitHub">Sign in with GitHub (OAuth)</span>
+          <!-- Token Input -->
+          <div class="form-group">
+            <label class="d-block mb-1 f6" for="github-token">__MSG_tokenLabel__</label>
+            <input type="password" id="github-token" class="form-control input-block mb-2" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+            <button id="save-token" class="btn btn-primary btn-block" style="background: #6e40c9; border-color: #6e40c9">
+              __MSG_saveToken__
             </button>
-            <p class="text-small color-fg-muted text-center mt-1 mb-0">
-              <span data-i18n="recommendedMethod">✓ Recommended - More secure</span>
-            </p>
           </div>
 
-          <!-- OAuth Progress -->
-          <div id="oauth-progress" class="Box mb-3" style="display: none">
-            <div class="Box-row">
-              <div class="text-center">
-                <div class="anim-pulse mb-2">
-                  <span class="oauth-progress-icon octicon-inline"></span>
-                </div>
-                <p class="text-bold mb-2" data-i18n="waitingForAuth">
-                  Waiting for authorization...
-                </p>
-                <div class="flash mb-2" style="background: #fff3cd; border-color: #ffc107">
-                  <p class="text-small mb-1">
-                    <span data-i18n="enterCode">Enter this code on GitHub:</span>
-                  </p>
-                  <div
-                    id="user-code-display"
-                    class="text-mono text-bold"
-                    style="font-size: 24px; letter-spacing: 4px; color: #6e40c9"
-                  >
-                    XXXX-XXXX
-                  </div>
-                </div>
-                <button
-                  id="open-github-auth"
-                  class="btn btn-sm btn-primary mb-2"
-                  style="background: #6e40c9; border-color: #6e40c9"
-                >
-                  <span data-i18n="openGitHub">Open GitHub to Authorize</span>
-                </button>
-                <p class="text-small color-fg-muted mb-0">
-                  <span data-i18n="codeExpires">Code expires in: </span>
-                  <span id="code-timer" class="text-bold">10:00</span>
-                </p>
-              </div>
-            </div>
-            <div class="Box-footer">
-              <button id="cancel-oauth" class="btn btn-sm btn-block">
-                <span data-i18n="cancel">Cancel</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Divider (only if OAuth is available) -->
-          <div class="d-flex flex-items-center mb-3" id="oauth-divider" style="display: none!important">
-            <div class="flex-1 border-bottom"></div>
-            <span class="px-2 text-small color-fg-muted" data-i18n="orUseToken">or use token</span>
-            <div class="flex-1 border-bottom"></div>
-          </div>
-
-          <!-- Manual Token -->
-          <div id="token-section">
-            <details class="details-reset" id="token-details">
-              <summary class="btn btn-sm btn-block mb-2">
-                <span data-i18n="usePersonalToken">Use Personal Access Token</span>
-              </summary>
-            <div class="mt-2">
-              <div class="form-group">
-                <label
-                  class="d-block mb-1 f6"
-                  for="github-token"
-                  data-i18n="tokenLabel"
-                  >GitHub Personal Access Token:</label
-                >
-                <input
-                  type="password"
-                  id="github-token"
-                  class="form-control input-block mb-2"
-                  placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                  autocomplete="off"
-                />
-                <button
-                  id="save-token"
-                  class="btn btn-primary btn-block"
-                  data-i18n="saveToken"
-                  style="background: #6e40c9; border-color: #6e40c9"
-                >
-                  Save Token
-                </button>
-              </div>
-
-              <div class="f6 mt-2">
-                <a
-                  href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub"
-                  target="_blank"
-                  class="Link d-block mb-1"
-                  data-i18n="createToken"
-                >
-                  → Create a new token on GitHub (public repos)
-                </a>
-                <a
-                  href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub"
-                  target="_blank"
-                  class="Link d-block"
-                  data-i18n="createTokenPrivate"
-                >
-                  → Create a new token on GitHub (private repos)
-                </a>
-              </div>
-            </div>
-            </details>
+          <div class="f6 mt-2">
+            <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub" target="_blank" rel="noopener noreferrer" class="Link d-block mb-1">
+              __MSG_createToken__
+            </a>
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub" target="_blank" rel="noopener noreferrer" class="Link d-block">
+              __MSG_createTokenPrivate__
+            </a>
           </div>
         </div>
 
+        <!-- Logged in -->
         <div id="logged-in" style="display: none">
           <div class="Box mb-2">
             <div class="Box-row d-flex flex-items-center">
-              <img
-                id="user-avatar"
-                src=""
-                alt="Avatar"
-                class="avatar avatar-4 circle mr-2"
-              />
+              <img id="user-avatar" src="" alt="Avatar" class="avatar avatar-4 circle mr-2" />
               <div class="flex-1">
                 <div class="text-bold" id="user-name">Loading...</div>
                 <div class="d-flex flex-items-center flex-justify-between">
-                  <div class="text-small color-fg-muted" id="user-login">
-                    @username
-                  </div>
+                  <div class="text-small color-fg-muted" id="user-login">@username</div>
                   <div class="text-small">
-                    <span class="color-fg-muted" data-i18n="rateLimit"
-                      >Rate Limit:</span
-                    >
-                    <span
-                      class="text-bold"
-                      id="rate-limit"
-                      style="color: #6e40c9"
-                      >5000</span
-                    >
+                    <span class="color-fg-muted">__MSG_rateLimit__</span>
+                    <span class="text-bold" id="rate-limit" style="color: #6e40c9">5000</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <button id="logout-btn" class="btn btn-block" data-i18n="logout">
-            Logout
-          </button>
+          <button id="logout-btn" class="btn btn-block">__MSG_logout__</button>
         </div>
       </div>
 
-      <div
-        id="error-message"
-        class="flash flash-error mt-2"
-        style="display: none"
-      ></div>
-      <div
-        id="success-message"
-        class="flash flash-success mt-2"
-        style="display: none"
-      ></div>
+      <div id="error-message" class="flash flash-error mt-2" style="display: none"></div>
+      <div id="success-message" class="flash flash-success mt-2" style="display: none"></div>
 
       <div class="mt-1">
         <button id="open-options" class="btn btn-block mb-2">
           <span class="footer-icon octicon-inline mr-1"></span>
-          <span data-i18n="openSettings">Settings</span>
+          <span>__MSG_openSettings__</span>
         </button>
         <p class="text-center text-small color-fg-muted mb-0">
-          <span data-i18n="madeWith">Made with</span>
+          __MSG_madeWith__
           <span class="footer-heart octicon-inline mx-1"></span>
-          <span>for better GitHub experience</span>
+          <span>__MSG_forBetterExperience__</span>
         </p>
       </div>
     </div>
 
-    <script src="../src/utils/octicons.js"></script>
-    <script src="../src/utils/i18n-popup.js"></script>
     <script src="popup.js"></script>
   </body>
 </html>

@@ -83,12 +83,6 @@ input[type="range"]::-moz-range-thumb {
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 
-/* Flash messages for cache settings */
-.flash-warn {
-    background-color: #fff8c5;
-    border-color: #d4a72c;
-}
-
 @media (prefers-color-scheme: dark) {
     input[type="range"] {
         background: #30363d;
@@ -102,11 +96,5 @@ input[type="range"]::-moz-range-thumb {
     input[type="range"]::-moz-range-thumb {
         background: #8b58f7;
         border-color: #21262d;
-    }
-    
-    .flash-warn {
-        background-color: #3b2e1f;
-        border-color: #9e6a03;
-        color: #e3b341;
     }
 }
