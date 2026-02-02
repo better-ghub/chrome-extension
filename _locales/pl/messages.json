@@ -170,7 +170,7 @@
     "message": "Jak długo trzymać dane PR w pamięci podręcznej"
   },
   "cacheTimeRecommendation": {
-    "message": "Dla optymalnego wykorzystania tokenów, zalecany czas cache to 2 minuty."
+    "message": "Dla optymalnego wykorzystania tokenów, zalecany czas cache to 5 minut."
   },
   "clearCache": {
     "message": "Wyczyść cache"

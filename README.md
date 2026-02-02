@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://www.google.com/chrome/)
-[![Version](https://img.shields.io/badge/version-0.1.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
+[![Version](https://img.shields.io/badge/version-0.2.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Contributing](#-contributing) • [License](#-license)
 

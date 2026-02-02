@@ -1,6 +1,6 @@
 {
   "name": "better-ghub",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Chrome extension that enhances GitHub Pull Request workflow",
   "scripts": {
     "build": "node esbuild.config.js",
