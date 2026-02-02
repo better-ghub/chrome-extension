@@ -1,0 +1,129 @@
+---
+description: General project rules for Better GHub Chrome Extension
+alwaysApply: true
+---
+
+# Better GHub - Project Rules
+
+## Project Overview
+
+This is a **Chrome Extension (Manifest V3)** that enhances GitHub Pull Request workflow. It uses **TypeScript** with **esbuild** for bundling and **ES modules** for imports.
+
+## Code Style
+
+### TypeScript Standards
+
+- Use strict TypeScript (tsconfig strict mode enabled)
+- Target ES2021
+- Use `import/export` syntax (ES modules)
+- Use single quotes for strings
+- Always end statements with semicolons
+
+### Module Exports
+
+```typescript
+// ✅ GOOD - named exports
+export class CacheManager { }
+export const Octicons = { };
+
+// ✅ GOOD - functional API
+export async function getCurrentUser() { }
+```
+
+## File Structure
+
+```
+src/
+  api/              - GitHub API (folder with index.ts)
+    index.ts        - re-exports all API functions
+    client.ts       - base HTTP client
+    metrics.ts      - API call tracking
+    get-*.ts        - individual request files
+  
+  constants.ts      - app constants (VERSION, etc.)
+  content.ts        - content script for PR pages
+  dashboard.ts      - dashboard script for GitHub home
+  background.ts     - service worker
+  i18n.ts           - internationalization
+  pr-service.ts     - PR analysis and processing
+  types.ts          - all TypeScript interfaces
+  ui.ts             - UI components (loader, tooltip, etc.)
+  utils.ts          - utilities (cache, token, DOM helpers)
+
+popup/              - Extension popup UI
+options/            - Extension options page
+dist/               - Built output (gitignored)
+```
+
+## File Size Rules
+
+### When to Split Files
+
+- **Split a file** if it exceeds ~300 lines or has multiple unrelated responsibilities
+- **Create a folder** with the same name as the file
+- **Add index.ts** that re-exports all parts
+- **One responsibility per file** - e.g., one API request per file
+
+### Example: Splitting a Large File
+
+If `api.ts` becomes too large:
+
+```
+src/api.ts (300+ lines)  →  src/api/
+                              index.ts          # exports all
+                              client.ts         # base client
+                              get-user.ts       # GET /user
+                              get-pr-data.ts    # GET /repos/.../pulls
+                              search-issues.ts  # GET /search/issues
+```
+
+### File Size Guidelines
+
+| File Type | Max Lines | Action if exceeded |
+|-----------|-----------|-------------------|
+| Utility files | ~200 | Split by category |
+| Components | ~150 | Extract sub-components |
+| API files | ~100 | One request per file |
+| Type files | ~200 | Split by domain |
+
+## Build System
+
+- **Bundler**: esbuild
+- **Build command**: `npm run build`
+- **Watch mode**: `npm run build:watch`
+- **Type check**: `npm run typecheck`
+- Output goes to `dist/` directory
+
+## Chrome Extension Specifics
+
+- Load extension from `dist/` folder after building
+- Content scripts are bundled into single files
+- Use `chrome.storage` for persistent data
+- Use `chrome.runtime.sendMessage` for background communication
+
+## i18n
+
+- All user-facing strings must use i18n system
+- Locales: `_locales/en/` (primary), `_locales/pl/`
+- Use `__MSG_keyName__` in manifest.json
+- Use `i18n.getMessage('keyName')` or `msg('keyName')` in TypeScript
+- HTML files use `__MSG_keyName__` translated at runtime by `translatePage()`
+
+## Testing
+
+- Tests go in `tests/` directory with `.test.ts` suffix
+- Use Jest with ts-jest preset
+- Run tests with `npm test`
+
+## Git Rules
+
+- **NEVER push changes to the repository** - only commit locally, user will push manually
+- **NEVER run `git push`** under any circumstances
+- Only create commits when explicitly asked by the user
+
+## Before Committing
+
+1. Run `npm run build` - ensure build succeeds
+2. Run `npm run typecheck` - fix TypeScript errors
+3. Run `npm run lint` - fix any lint errors
+4. Run `npm test` - ensure tests pass

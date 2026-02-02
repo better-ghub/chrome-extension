@@ -88,12 +88,6 @@
   "noUnresolved": {
     "message": "Brak nierozwiązanych wątków"
   },
-  "rateLimit": {
-    "message": "Limit API:"
-  },
-  "logout": {
-    "message": "Wyloguj"
-  },
   "pleaseEnterToken": {
     "message": "Proszę wprowadzić token"
   },
@@ -240,6 +234,30 @@
   },
   "noOpenPRs": {
     "message": "Brak otwartych pull requestów"
+  },
+  "noOpenPRsDescription": {
+    "message": "Nie masz obecnie żadnych otwartych pull requestów."
+  },
+  "note": {
+    "message": "Uwaga"
+  },
+  "authNote": {
+    "message": "Bez autoryzacji rozszerzenie działa tylko z publicznymi repozytoriami (limit 60 wywołań API na godzinę)."
+  },
+  "forBetterExperience": {
+    "message": "dla lepszego doświadczenia z GitHub"
+  },
+  "keyboardShortcuts": {
+    "message": "Skróty klawiszowe"
+  },
+  "shortcutToggleComments": {
+    "message": "Przełącz komentarze"
+  },
+  "shortcutToggleFiles": {
+    "message": "Przełącz pliki"
+  },
+  "shortcutFilesViewOnly": {
+    "message": "Tylko widok plików"
   }
 }
 

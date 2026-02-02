@@ -8,7 +8,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Better GHub - Settings</title>
+    <title>__MSG_extensionName__ - __MSG_tabSettings__</title>
     <link
       rel="stylesheet"
       href="https://unpkg.com/@primer/css@21.0.7/dist/primer.css"
@@ -33,7 +33,7 @@
           class="Label Label--large"
           id="version"
           style="background: #6e40c9; color: white"
-          >v2.1.0</span
+          >v0.2.0</span
         >
       </div>
 
@@ -42,11 +42,11 @@
         <nav class="tabnav-tabs" aria-label="Settings">
           <button class="tabnav-tab active" data-tab="auth" aria-current="page">
             <span class="tab-icon octicon-inline mr-1"></span>
-            <span data-i18n="tabAuthorization">Authorization</span>
+            <span>__MSG_tabAuthorization__</span>
           </button>
           <button class="tabnav-tab" data-tab="settings">
             <span class="tab-icon octicon-inline mr-1"></span>
-            <span data-i18n="tabSettings">Settings</span>
+            <span>__MSG_tabSettings__</span>
           </button>
         </nav>
       </div>
@@ -55,18 +55,14 @@
       <div class="tab-content" id="tab-auth" style="display: block">
         <div class="Box">
           <div class="Box-header">
-            <h3 class="Box-title" data-i18n="githubAuth">
-              GitHub Authentication
-            </h3>
+            <h3 class="Box-title">__MSG_githubAuth__</h3>
           </div>
 
           <!-- Loading state -->
           <div id="auth-status-loading" class="Box-row text-center py-4">
             <div class="anim-pulse">
               <div class="AnimatedEllipsis mb-2"></div>
-              <p class="color-fg-muted" data-i18n="checkingAuth">
-                Checking authentication...
-              </p>
+              <p class="color-fg-muted">__MSG_checkingAuth__</p>
             </div>
           </div>
 
@@ -76,45 +72,24 @@
               <div class="flash mb-3">
                 <span class="alert-icon octicon-inline mr-2"></span>
                 <div>
-                  <strong data-i18n="notAuthenticated"
-                    >Not authenticated</strong
-                  >
-                  <p
-                    class="color-fg-muted mt-1 mb-0"
-                    data-i18n="authDescription"
-                  >
-                    Connect your GitHub account to see detailed PR activity
-                    information.
-                  </p>
+                  <strong>__MSG_notAuthenticated__</strong>
+                  <p class="color-fg-muted mt-1 mb-0">__MSG_authDescription__</p>
                 </div>
               </div>
 
               <div class="Subhead mb-3">
-                <h4 class="Subhead-heading" data-i18n="setupInstructions">
-                  Setup Instructions:
-                </h4>
+                <h4 class="Subhead-heading">__MSG_setupInstructions__</h4>
               </div>
               <ol class="mb-3 pl-3">
-                <li class="mb-1" data-i18n="step1">
-                  Go to GitHub Settings → Developer settings → Personal access
-                  tokens → Tokens (classic)
-                </li>
-                <li class="mb-1" data-i18n="step2">
-                  Click "Generate new token (classic)"
-                </li>
-                <li class="mb-1" data-i18n="step3">
-                  Select scopes based on your needs
-                </li>
-                <li class="mb-1" data-i18n="step4">
-                  Copy the token and paste it below
-                </li>
+                <li class="mb-1">__MSG_step1__</li>
+                <li class="mb-1">__MSG_step2__</li>
+                <li class="mb-1">__MSG_step3__</li>
+                <li class="mb-1">__MSG_step4__</li>
               </ol>
 
               <div class="form-group">
                 <div class="form-group-header">
-                  <label for="github-token" data-i18n="tokenLabel"
-                    >GitHub Personal Access Token</label
-                  >
+                  <label for="github-token">__MSG_tokenLabel__</label>
                 </div>
                 <div class="form-group-body">
                   <input
@@ -126,10 +101,9 @@
                   <button
                     id="save-token"
                     class="btn btn-primary btn-block"
-                    data-i18n="saveToken"
                     style="background: #6e40c9; border-color: #6e40c9"
                   >
-                    Save Token
+                    __MSG_saveToken__
                   </button>
                 </div>
               </div>
@@ -138,18 +112,18 @@
                 <a
                   href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub"
                   target="_blank"
+                  rel="noopener noreferrer"
                   class="btn-link mr-2"
-                  data-i18n="createToken"
                 >
-                  → Create token (public repos)
+                  __MSG_createToken__
                 </a>
                 <a
                   href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub"
                   target="_blank"
+                  rel="noopener noreferrer"
                   class="btn-link"
-                  data-i18n="createTokenPrivate"
                 >
-                  → Create token (all repos)
+                  __MSG_createTokenPrivate__
                 </a>
               </div>
             </div>
@@ -160,11 +134,8 @@
             <div class="Box-row">
               <div class="flash flash-success mb-3 d-flex flex-row">
                 <span class="alert-icon octicon-inline"></span>
-
-                <strong data-i18n="authenticated">Authenticated</strong>
-                <p class="ml-1 mb-0" data-i18n="accountConnected">
-                  your GitHub account is connected.
-                </p>
+                <strong>__MSG_authenticated__</strong>
+                <p class="ml-1 mb-0">__MSG_accountConnected__</p>
               </div>
 
               <div class="d-flex flex-items-center p-3 border rounded-2 mb-3">
@@ -180,9 +151,7 @@
                     @username
                   </div>
                   <div class="d-flex flex-items-center">
-                    <span class="color-fg-muted mr-2" data-i18n="rateLimit"
-                      >Rate Limit:</span
-                    >
+                    <span class="color-fg-muted mr-2">__MSG_rateLimit__</span>
                     <span
                       class="Counter"
                       id="rate-limit"
@@ -193,8 +162,8 @@
                 </div>
               </div>
 
-              <button id="logout-btn" class="btn btn-block" data-i18n="logout">
-                Logout
+              <button id="logout-btn" class="btn btn-block">
+                __MSG_logout__
               </button>
             </div>
           </div>
@@ -205,23 +174,17 @@
       <div class="tab-content" id="tab-settings" style="display: none">
         <div class="Box">
           <div class="Box-header">
-            <h3 class="Box-title" data-i18n="extensionSettings">
-              Extension Settings
-            </h3>
+            <h3 class="Box-title">__MSG_extensionSettings__</h3>
           </div>
 
           <!-- Language -->
           <div class="Box-row">
             <div class="form-group mb-0">
               <div class="form-group-header">
-                <label for="setting-language" data-i18n="languageSetting"
-                  >Language / Język</label
-                >
+                <label for="setting-language">__MSG_languageSetting__</label>
               </div>
               <div class="form-group-body">
-                <p class="note mb-2" data-i18n="languageDesc">
-                  Choose the display language for the extension
-                </p>
+                <p class="note mb-2">__MSG_languageDesc__</p>
                 <select id="setting-language" class="form-select">
                   <option value="system">System default / Systemowy</option>
                   <option value="en">English</option>
@@ -235,18 +198,14 @@
           <div class="Box-row">
             <div class="form-group mb-0">
               <div class="form-group-header">
-                <label for="setting-cache-enabled" data-i18n="cacheEnabled"
-                  >Enable Cache</label
-                >
+                <label for="setting-cache-enabled">__MSG_cacheEnabled__</label>
               </div>
               <div class="form-group-body">
-                <p class="note mb-2" data-i18n="cacheEnabledDesc">
-                  Cache PR data to reduce API calls
-                </p>
+                <p class="note mb-2">__MSG_cacheEnabledDesc__</p>
                 <div class="form-checkbox">
                   <label>
                     <input type="checkbox" id="setting-cache-enabled" checked />
-                    <span data-i18n="cacheEnabledLabel">Enable caching</span>
+                    <span>__MSG_cacheEnabledLabel__</span>
                   </label>
                 </div>
                 <div
@@ -255,11 +214,7 @@
                   style="display: none"
                 >
                   <span class="octicon-inline"></span>
-                  <span data-i18n="cacheDisabledWarning"
-                    >Warning: Disabling cache can lead to excessive API calls
-                    when visiting many repositories. This may quickly exhaust
-                    your API rate limit.</span
-                  >
+                  <span>__MSG_cacheDisabledWarning__</span>
                 </div>
               </div>
             </div>
@@ -269,14 +224,10 @@
           <div class="Box-row" id="cache-duration-section">
             <div class="form-group mb-0">
               <div class="form-group-header">
-                <label for="setting-cache-time" data-i18n="cacheDuration"
-                  >Cache Duration</label
-                >
+                <label for="setting-cache-time">__MSG_cacheDuration__</label>
               </div>
               <div class="form-group-body">
-                <p class="note mb-2" data-i18n="cacheDurationDesc">
-                  How long to cache PR data
-                </p>
+                <p class="note mb-2">__MSG_cacheDurationDesc__</p>
                 <div class="d-flex flex-items-center">
                   <input
                     type="range"
@@ -301,10 +252,7 @@
                   style="display: none"
                 >
                   <span class="octicon-inline"></span>
-                  <span data-i18n="cacheTimeRecommendation"
-                    >For optimal token usage, 5 minutes is the recommended cache
-                    duration.</span
-                  >
+                  <span>__MSG_cacheTimeRecommendation__</span>
                 </div>
               </div>
             </div>
@@ -314,23 +262,19 @@
           <div class="Box-row">
             <div class="form-group mb-0">
               <div class="form-group-header">
-                <label data-i18n="clearCache">Clear Cache</label>
+                <label>__MSG_clearCache__</label>
               </div>
               <div class="form-group-body">
-                <p class="note mb-2" data-i18n="clearCacheDesc">
-                  Clear all cached PR data
-                </p>
+                <p class="note mb-2">__MSG_clearCacheDesc__</p>
                 <button id="clear-cache-btn" class="btn">
                   <span class="btn-icon octicon-inline mr-1"></span>
-                  <span data-i18n="clearCache">Clear Cache</span>
+                  <span>__MSG_clearCache__</span>
                 </button>
                 <span
                   id="cache-cleared"
                   class="Label Label--success ml-2"
                   style="display: none"
-                  data-i18n="cacheCleared"
-                  >Cache cleared!</span
-                >
+                >__MSG_cacheCleared__</span>
               </div>
             </div>
           </div>
@@ -339,14 +283,10 @@
           <div class="Box-row">
             <div class="form-group mb-0">
               <div class="form-group-header">
-                <label for="setting-batch-delay" data-i18n="batchDelay"
-                  >Batch Delay</label
-                >
+                <label for="setting-batch-delay">__MSG_batchDelay__</label>
               </div>
               <div class="form-group-body">
-                <p class="note mb-2" data-i18n="batchDelayDesc">
-                  Delay before batching GraphQL requests (in milliseconds)
-                </p>
+                <p class="note mb-2">__MSG_batchDelayDesc__</p>
                 <div class="d-flex flex-items-center">
                   <input
                     type="range"
@@ -369,7 +309,7 @@
           <div class="Box-row border-top">
             <div class="flash text-center mb-0">
               <span class="notice-icon octicon-inline mr-2"></span>
-              <span data-i18n="autoSave">Settings are saved automatically</span>
+              <span>__MSG_autoSave__</span>
             </div>
           </div>
         </div>
@@ -379,8 +319,6 @@
       <div id="status-message" class="flash mt-3" style="display: none"></div>
     </div>
 
-    <script src="../src/utils/octicons.js"></script>
-    <script src="../src/utils/i18n-popup.js"></script>
     <script src="options.js"></script>
   </body>
 </html>
