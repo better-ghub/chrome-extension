@@ -26,7 +26,7 @@ export async function initI18n(): Promise<void> {
 
   try {
     const result = await chrome.storage.local.get(['language']);
-    let lang = result.language || 'system';
+    let lang = typeof result.language === 'string' ? result.language : 'system';
 
     if (lang === 'system') {
       lang = chrome.i18n.getUILanguage().split('-')[0]; // en-US -> en
@@ -53,7 +53,7 @@ export async function initI18n(): Promise<void> {
     // For content scripts, try via background script
     try {
       const result = await chrome.storage.local.get(['language']);
-      let lang = result.language || chrome.i18n.getUILanguage().split('-')[0];
+      let lang = typeof result.language === 'string' ? result.language : chrome.i18n.getUILanguage().split('-')[0];
       if (lang === 'system') lang = chrome.i18n.getUILanguage().split('-')[0];
 
       currentLocale = lang;

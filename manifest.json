@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "icons": {
@@ -43,7 +43,7 @@
       "run_at": "document_end"
     },
     {
-      "matches": ["https://github.com/*"],
+      "matches": ["https://github.com/", "https://github.com/dashboard"],
       "js": ["dashboard.js"],
       "css": ["dashboard-styles.css"],
       "run_at": "document_end"
@@ -66,6 +66,9 @@
   "host_permissions": [
     "https://github.com/*",
     "https://api.github.com/*"
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none'"
+  }
 }
 

@@ -6,7 +6,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://www.google.com/chrome/)
-[![Version](https://img.shields.io/badge/version-0.2.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
+[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Contributing](#-contributing) • [License](#-license)
 
@@ -99,14 +99,15 @@
 
 ## 🔑 Authentication
 
-### Option A: Personal Access Token (Recommended)
+### Option A: Fine-grained Personal Access Token (Recommended)
 
-1. Go to [GitHub Settings → Tokens](https://github.com/settings/tokens)
-2. Click **Generate new token** → **Generate new token (classic)**
-3. Select scopes:
-   - `public_repo` - for public repositories only
-   - `repo` - for private repositories (includes public)
-4. Copy the token and paste it in the extension popup
+1. Go to [GitHub Settings → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new?name=Better+GHub&description=Enhanced+GitHub+PR+workflow&pull_requests=read&contents=read)
+2. Set **Repository access** to **All repositories**
+3. Under **Permissions**, set:
+   - **Pull requests**: Read
+   - **Contents**: Read
+   - **Metadata**: Read (enabled by default)
+4. Click **Generate token**, copy it, and paste it in the extension popup
 
 **Rate Limits:**
 - With token: 5,000 requests/hour

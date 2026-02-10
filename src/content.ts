@@ -101,7 +101,7 @@ async function init(): Promise<void> {
       }
     }
   } catch (error) {
-    console.error('Better GHub: Initialization failed', error);
+    console.error('Better GHub: Initialization failed', error instanceof Error ? error.message : String(error));
   }
 }
 
@@ -157,7 +157,9 @@ const messageHandlers: Record<string, (request: MessageRequest) => Promise<void>
 
 chrome.runtime.onMessage.addListener((request: MessageRequest) => {
   const handler = messageHandlers[request.action];
-  if (handler) Promise.resolve(handler(request)).catch(console.error);
+  if (handler) Promise.resolve(handler(request)).catch((err) => {
+      console.error('Better GHub: Message handler error:', err instanceof Error ? err.message : String(err));
+    });
 });
 
 const setupNavigationWatcher = (): void => {

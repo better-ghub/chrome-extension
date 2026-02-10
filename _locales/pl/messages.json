@@ -41,28 +41,28 @@
     "message": "Instrukcje konfiguracji:"
   },
   "step1": {
-    "message": "Przejdź do GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)"
+    "message": "Przejdź do GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens"
   },
   "step2": {
-    "message": "Kliknij \"Generate new token (classic)\""
+    "message": "Kliknij \"Generate new token\""
   },
   "step3": {
-    "message": "Wybierz uprawnienia w zależności od potrzeb"
+    "message": "Wybierz \"All repositories\" w sekcji Repository access, następnie ustaw uprawnienia Pull requests: Read i Contents: Read"
   },
   "step4": {
     "message": "Skopiuj token i wklej go poniżej"
   },
   "tokenLabel": {
-    "message": "GitHub Personal Access Token:"
+    "message": "GitHub Fine-grained Personal Access Token:"
   },
   "saveToken": {
     "message": "Zapisz Token"
   },
   "createToken": {
-    "message": "→ Utwórz nowy token na GitHubie (publiczne repozytoria)"
+    "message": "→ Utwórz fine-grained token na GitHubie"
   },
   "createTokenPrivate": {
-    "message": "→ Utwórz nowy token na GitHubie (prywatne repozytoria)"
+    "message": "→ Utwórz fine-grained token na GitHubie"
   },
   "authenticated": {
     "message": "Zalogowano"
@@ -92,7 +92,7 @@
     "message": "Proszę wprowadzić token"
   },
   "invalidToken": {
-    "message": "Nieprawidłowy format tokena. Token powinien zaczynać się od ghp_ lub github_pat_"
+    "message": "Nieprawidłowy format tokena. Token powinien zaczynać się od github_pat_"
   },
   "testing": {
     "message": "Testowanie tokena..."
@@ -215,7 +215,10 @@
     "message": "lub użyj tokena"
   },
   "usePersonalToken": {
-    "message": "Użyj Personal Access Token (Ręcznie)"
+    "message": "Użyj Fine-grained Personal Access Token (Ręcznie)"
+  },
+  "repoAccessNote": {
+    "message": "Uwaga: Podczas tworzenia tokena wybierz \"All repositories\" w sekcji Repository access."
   },
   "oauthSuccess": {
     "message": "Pomyślnie uwierzytelniono z GitHubem!"
@@ -242,7 +245,7 @@
     "message": "Uwaga"
   },
   "authNote": {
-    "message": "Bez autoryzacji rozszerzenie działa tylko z publicznymi repozytoriami (limit 60 wywołań API na godzinę)."
+    "message": "Bez autoryzacji rozszerzenie działa tylko z publicznymi repozytoriami (limit 60 wywołań API na godzinę). Użyj fine-grained personal access token dla pełnego dostępu."
   },
   "forBetterExperience": {
     "message": "dla lepszego doświadczenia z GitHub"

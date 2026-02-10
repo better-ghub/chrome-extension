@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>__MSG_extensionName__</title>
-    <link rel="stylesheet" href="https://unpkg.com/@primer/css@21.0.7/dist/primer.css" />
+    <link rel="stylesheet" href="primer.css" />
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
@@ -13,7 +13,7 @@
         <h2 class="h3 m-0" style="background: linear-gradient(180deg, #6e40c9 0%, #3c1e70 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
           Better GHub
         </h2>
-        <span class="Label Label--primary" id="version" style="background: #6e40c9">v0.2.0</span>
+        <span class="Label Label--primary" id="version" style="background: #6e40c9">v0.3.0</span>
       </div>
 
       <div id="auth-section" style="position: relative; min-height: 120px">
@@ -43,19 +43,17 @@
           <!-- Token Input -->
           <div class="form-group">
             <label class="d-block mb-1 f6" for="github-token">__MSG_tokenLabel__</label>
-            <input type="password" id="github-token" class="form-control input-block mb-2" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+            <input type="password" id="github-token" class="form-control input-block mb-2" placeholder="github_pat_xxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
             <button id="save-token" class="btn btn-primary btn-block" style="background: #6e40c9; border-color: #6e40c9">
               __MSG_saveToken__
             </button>
           </div>
 
           <div class="f6 mt-2">
-            <a href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub" target="_blank" rel="noopener noreferrer" class="Link d-block mb-1">
+            <a href="https://github.com/settings/personal-access-tokens/new?name=Better+GHub&description=Enhanced+GitHub+PR+workflow&pull_requests=read&contents=read" target="_blank" rel="noopener noreferrer" class="Link d-block mb-1">
               __MSG_createToken__
             </a>
-            <a href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub" target="_blank" rel="noopener noreferrer" class="Link d-block">
-              __MSG_createTokenPrivate__
-            </a>
+            <p class="color-fg-muted f6 mt-1">__MSG_repoAccessNote__</p>
           </div>
         </div>
 

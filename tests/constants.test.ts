@@ -29,8 +29,8 @@ describe('Constants', () => {
     expect(Constants.BATCH_DELAY).toBeGreaterThan(0);
   });
 
-  test('cache duration should be 5 minutes in milliseconds', () => {
-    expect(Constants.CACHE_DURATION).toBe(5 * 60 * 1000);
+  test('cache duration should be 2 minutes in milliseconds', () => {
+    expect(Constants.CACHE_DURATION).toBe(2 * 60 * 1000);
   });
 
   test('batch delay should be 500ms', () => {

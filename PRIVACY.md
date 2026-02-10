@@ -12,7 +12,7 @@ Better GHub collects and stores minimal data necessary for its functionality:
 
 ### Authentication Information
 
-- **GitHub Personal Access Token (PAT) or OAuth Token**: You provide this token to authenticate with GitHub's API. The token is stored locally in your browser using Chrome's storage API and is never transmitted to any third-party servers.
+- **GitHub Fine-grained Personal Access Token or OAuth Token**: You provide this token to authenticate with GitHub's API. The token is stored locally in your browser using Chrome's storage API and is never transmitted to any third-party servers.
 - **Storage Location**: All tokens are stored locally in your browser's secure storage (`chrome.storage.local`).
 
 ### User Preferences
@@ -23,7 +23,7 @@ Better GHub collects and stores minimal data necessary for its functionality:
 
 ## How We Use Data
 
-- **GitHub Token**: Used exclusively to authenticate API requests to GitHub's official REST and GraphQL APIs to fetch Pull Request data, commit information, and review thread counts.
+- **GitHub Fine-grained Token**: Used exclusively to authenticate API requests to GitHub's official REST and GraphQL APIs to fetch Pull Request data, commit information, and review thread counts.
 - **User Preferences**: Used to customize the extension's behavior according to your settings.
 
 ## Data Storage

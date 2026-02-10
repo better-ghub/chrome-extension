@@ -86,7 +86,7 @@ export const TokenManager = {
   async getToken(): Promise<{ token: string }> {
     return new Promise((resolve) => {
       chrome.storage.local.get(['githubToken'], (result) => {
-        resolve({ token: result.githubToken || '' });
+        resolve({ token: typeof result.githubToken === 'string' ? result.githubToken : '' });
       });
     });
   },
@@ -107,7 +107,7 @@ export const TokenManager = {
 
   validateTokenFormat(token: string): boolean {
     if (!token || token.length < 40) return false;
-    return token.startsWith('ghp_') || token.startsWith('github_pat_');
+    return token.startsWith('github_pat_');
   },
 
   async testToken(token: string): Promise<TokenTestResult> {
@@ -138,7 +138,7 @@ export const TokenManager = {
         return data.rate as RateLimitInfo;
       }
     } catch (error) {
-      console.error('Failed to get rate limit:', error);
+      console.error('Failed to get rate limit:', error instanceof Error ? error.message : String(error));
     }
     return null;
   },
@@ -210,9 +210,15 @@ export class CacheManager {
 
 export const DOMHelpers = {
   parsePRUrl(url: string): PRInfo | null {
-    const match = url.match(/github\.com\/([^/]+)\/([^/]+)\/pull\/(\d+)/);
-    if (match) {
-      return { owner: match[1], repo: match[2], number: parseInt(match[3], 10) };
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname !== 'github.com') return null;
+      const match = parsed.pathname.match(/^\/([^/]+)\/([^/]+)\/pull\/(\d+)/);
+      if (match) {
+        return { owner: match[1], repo: match[2], number: parseInt(match[3], 10) };
+      }
+    } catch {
+      // Invalid URL
     }
     return null;
   },
