@@ -4,13 +4,13 @@
 
 ## Overview
 
-This document describes the security architecture of Better GHub, a Chrome Extension (Manifest V3) that enhances GitHub Pull Request workflows. The primary sensitive data handled by the extension is the **GitHub Personal Access Token (PAT)**.
+This document describes the security architecture of Better GHub, a Chrome Extension (Manifest V3) that enhances GitHub Pull Request workflows. The primary sensitive data handled by the extension is the **GitHub Fine-grained Personal Access Token**.
 
 ## Token Storage
 
 - The token is stored in `chrome.storage.local` under the key `githubToken`.
 - `chrome.storage.local` is isolated per extension — other extensions cannot access this data.
-- Token format is validated before storage (`ghp_` or `github_pat_` prefix, minimum 40 characters).
+- Token format is validated before storage (`github_pat_` prefix, minimum 40 characters). Classic tokens (`ghp_`) are no longer accepted.
 - Token is tested against the GitHub API before being accepted.
 - Every `chrome.storage` read includes a `typeof === 'string'` guard before use.
 - **Note:** `chrome.storage.local` is not encrypted on disk. Anyone with physical access to the machine or the browser profile can read the stored token. There is no better alternative available in Manifest V3.
@@ -82,7 +82,7 @@ Content scripts are loaded only on the pages they need:
 
 - **No external CDN, scripts, or stylesheets** are loaded. Primer CSS is bundled locally from `node_modules` into the extension.
 - All `fetch()` calls target either `https://api.github.com/*` or local extension resources via `chrome.runtime.getURL()`.
-- External links to `github.com/settings/tokens/new` in popup/options pages open in new tabs with `rel="noopener noreferrer"`.
+- External links to `github.com/settings/personal-access-tokens/new` in popup/options pages open in new tabs with `rel="noopener noreferrer"`.
 
 ## DOM Security
 
@@ -158,4 +158,4 @@ No user-controlled URLs are ever passed to `fetch()`.
 
 ## Conclusion
 
-The GitHub Personal Access Token **will not leak** under normal usage conditions. It is not logged, not sent via `postMessage`, not accessible to page JavaScript, and is transmitted exclusively over HTTPS to GitHub's official API. All resources (CSS, scripts) are bundled locally with no external dependencies at runtime. All user input and API data is validated, type-checked, and sanitized before use. No actionable security issues were found during the audit.
+The GitHub Fine-grained Personal Access Token **will not leak** under normal usage conditions. It is not logged, not sent via `postMessage`, not accessible to page JavaScript, and is transmitted exclusively over HTTPS to GitHub's official API. All resources (CSS, scripts) are bundled locally with no external dependencies at runtime. All user input and API data is validated, type-checked, and sanitized before use. No actionable security issues were found during the audit.

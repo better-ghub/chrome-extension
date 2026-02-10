@@ -107,7 +107,7 @@ export const TokenManager = {
 
   validateTokenFormat(token: string): boolean {
     if (!token || token.length < 40) return false;
-    return token.startsWith('ghp_') || token.startsWith('github_pat_');
+    return token.startsWith('github_pat_');
   },
 
   async testToken(token: string): Promise<TokenTestResult> {

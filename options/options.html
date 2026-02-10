@@ -30,7 +30,7 @@
           class="Label Label--large"
           id="version"
           style="background: #6e40c9; color: white"
-          >v0.2.0</span
+          >v0.3.0</span
         >
       </div>
 
@@ -93,7 +93,7 @@
                     type="password"
                     id="github-token"
                     class="form-control input-block mb-2"
-                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                    placeholder="github_pat_xxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                   />
                   <button
                     id="save-token"
@@ -107,21 +107,14 @@
 
               <div class="text-center mt-3">
                 <a
-                  href="https://github.com/settings/tokens/new?scopes=public_repo&description=Better%20GHub"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn-link mr-2"
-                >
-                  __MSG_createToken__
-                </a>
-                <a
-                  href="https://github.com/settings/tokens/new?scopes=repo&description=Better%20GHub"
+                  href="https://github.com/settings/personal-access-tokens/new?name=Better+GHub&description=Enhanced+GitHub+PR+workflow&pull_requests=read&contents=read"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="btn-link"
                 >
-                  __MSG_createTokenPrivate__
+                  __MSG_createToken__
                 </a>
+                <p class="color-fg-muted f6 mt-2">__MSG_repoAccessNote__</p>
               </div>
             </div>
           </div>
