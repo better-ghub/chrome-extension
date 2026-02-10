@@ -1,7 +1,7 @@
 // Application Constants
 
 export const Constants = {
-  VERSION: '0.2.0',
+  VERSION: '0.3.0',
   ACTIVITY_CLASS: 'better-ghub-activity',
   PROCESSED_ATTR: 'data-better-ghub-processed',
   CACHE_DURATION: 2 * 60 * 1000, // 2 minutes

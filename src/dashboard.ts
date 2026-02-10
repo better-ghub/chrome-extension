@@ -85,7 +85,7 @@ const Dashboard = {
       console.log(`Better GHub: Found ${data.total_count} open PRs for user ${user.login}`);
       return data.items || [];
     } catch (error) {
-      console.error('Better GHub: Error fetching user PRs:', error);
+      console.error('Better GHub: Error fetching user PRs:', error instanceof Error ? error.message : String(error));
       return [];
     }
   },
@@ -211,14 +211,14 @@ const Dashboard = {
 
           // Enhance with activity data asynchronously
           this.enhancePRWithActivity(item, pr).catch((error) => {
-            console.error('Better GHub: Error enhancing PR with activity:', error);
+            console.error('Better GHub: Error enhancing PR with activity:', error instanceof Error ? error.message : String(error));
           });
         } catch (error) {
-          console.error('Better GHub: Error creating PR item:', error);
+          console.error('Better GHub: Error creating PR item:', error instanceof Error ? error.message : String(error));
         }
       }
     } catch (error) {
-      console.error('Better GHub: Error loading PRs:', error);
+      console.error('Better GHub: Error loading PRs:', error instanceof Error ? error.message : String(error));
       listContainer.innerHTML = `
         <div class="Box-body" style="text-align: center; padding: 32px; color: var(--color-danger-fg);">
           <p class="f5">Error loading PRs. Please check your token.</p>
@@ -243,7 +243,7 @@ const Dashboard = {
         repoName = `${urlParts[urlParts.length - 2]}/${urlParts[urlParts.length - 1]}`;
       }
     } catch (error) {
-      console.error('Better GHub: Error parsing repo URL:', error);
+      console.error('Better GHub: Error parsing repo URL:', error instanceof Error ? error.message : String(error));
     }
 
     // Format date
@@ -268,7 +268,7 @@ const Dashboard = {
         timeAgo = updatedDate.toLocaleDateString();
       }
     } catch (error) {
-      console.error('Better GHub: Error formatting date:', error);
+      console.error('Better GHub: Error formatting date:', error instanceof Error ? error.message : String(error));
       timeAgo = '';
     }
 
@@ -277,7 +277,8 @@ const Dashboard = {
 
     // Safely get title and URL
     const title = pr.title || 'Untitled PR';
-    const url = pr.html_url || '#';
+    const rawUrl = pr.html_url || '';
+    const url = rawUrl.startsWith('https://github.com/') ? rawUrl : '#';
     const number = pr.number || '?';
     const comments = pr.comments || 0;
 
@@ -335,7 +336,11 @@ const Dashboard = {
     if (comments > 0) {
       const commentsSpan = document.createElement('div');
       commentsSpan.className = 'd-inline-flex flex-items-center f6 color-fg-muted';
-      commentsSpan.innerHTML = `${Octicons.get('comment', 16)} <span class="ml-1">${comments}</span>`;
+      commentsSpan.innerHTML = Octicons.get('comment', 16);
+      const countSpan = document.createElement('span');
+      countSpan.className = 'ml-1';
+      countSpan.textContent = String(comments);
+      commentsSpan.appendChild(countSpan);
       rightSection.appendChild(commentsSpan);
     }
 
@@ -398,7 +403,7 @@ const Dashboard = {
         }
       }
     } catch (error) {
-      console.error(`Better GHub: Error enhancing PR #${number} with activity:`, error);
+      console.error(`Better GHub: Error enhancing PR #${number} with activity:`, error instanceof Error ? error.message : String(error));
     }
   },
 
@@ -498,7 +503,7 @@ chrome.runtime.onMessage.addListener((request: { action: string }) => {
         void Dashboard.createYourPRsSection();
       })
       .catch((error: Error) => {
-        console.error('Better GHub: Error updating token:', error);
+        console.error('Better GHub: Error updating token:', error instanceof Error ? (error as Error).message : String(error));
       });
   } else if (request.action === 'tokenRemoved' || request.action === 'tokenInvalid') {
     console.log(`Better GHub: Token ${request.action === 'tokenInvalid' ? 'invalid' : 'removed'}`);

@@ -41,28 +41,28 @@
     "message": "Setup Instructions:"
   },
   "step1": {
-    "message": "Go to GitHub Settings → Developer settings → Personal access tokens → Tokens (classic)"
+    "message": "Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens"
   },
   "step2": {
-    "message": "Click \"Generate new token (classic)\""
+    "message": "Click \"Generate new token\""
   },
   "step3": {
-    "message": "Select scopes based on your needs"
+    "message": "Select \"All repositories\" under Repository access, then set Pull requests: Read and Contents: Read permissions"
   },
   "step4": {
     "message": "Copy the token and paste it below"
   },
   "tokenLabel": {
-    "message": "GitHub Personal Access Token:"
+    "message": "GitHub Fine-grained Personal Access Token:"
   },
   "saveToken": {
     "message": "Save Token"
   },
   "createToken": {
-    "message": "→ Create a new token on GitHub (public repos)"
+    "message": "→ Create a fine-grained token on GitHub"
   },
   "createTokenPrivate": {
-    "message": "→ Create a new token on GitHub (private repos)"
+    "message": "→ Create a fine-grained token on GitHub"
   },
   "authenticated": {
     "message": "Authenticated"
@@ -92,7 +92,7 @@
     "message": "Please enter a token"
   },
   "invalidToken": {
-    "message": "Invalid token format. Token should start with ghp_ or github_pat_"
+    "message": "Invalid token format. Token should start with github_pat_"
   },
   "testing": {
     "message": "Testing token..."
@@ -215,7 +215,10 @@
     "message": "or use token"
   },
   "usePersonalToken": {
-    "message": "Use Personal Access Token (Manual)"
+    "message": "Use Fine-grained Personal Access Token (Manual)"
+  },
+  "repoAccessNote": {
+    "message": "Note: Select \"All repositories\" under Repository access when creating your token."
   },
   "oauthSuccess": {
     "message": "Successfully authenticated with GitHub!"
@@ -242,7 +245,7 @@
     "message": "Note"
   },
   "authNote": {
-    "message": "Without authentication, the extension works with public repositories only (limited to 60 API calls per hour)."
+    "message": "Without authentication, the extension works with public repositories only (limited to 60 API calls per hour). Use a fine-grained personal access token for full access."
   },
   "forBetterExperience": {
     "message": "for better GitHub experience"

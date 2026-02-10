@@ -162,7 +162,7 @@ export class PRProcessor {
       const activityElement = ActivityElement.createActivityElement(activityData);
       if (activityElement) prContainer.appendChild(activityElement);
     } catch (error) {
-      console.error(`Better GHub: Error processing PR #${number}:`, error);
+      console.error(`Better GHub: Error processing PR #${number}:`, error instanceof Error ? error.message : String(error));
       prContainer.querySelectorAll(`.${Constants.ACTIVITY_CLASS}`).forEach((el) => el.remove());
     }
   }

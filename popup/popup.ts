@@ -53,7 +53,7 @@ async function displayUserInfo(token: string): Promise<boolean> {
 
     if (userName) userName.textContent = user.name || user.login;
     if (userLogin) userLogin.textContent = `@${user.login}`;
-    if (userAvatar) userAvatar.src = user.avatar_url;
+    if (userAvatar && user.avatar_url?.startsWith('https://')) userAvatar.src = user.avatar_url;
 
     // Get rate limit
     const rateLimit = await TokenManager.getRateLimit(token);

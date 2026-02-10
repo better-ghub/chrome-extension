@@ -14,14 +14,15 @@ interface MessagesFile {
 async function validateStoredToken(): Promise<void> {
   try {
     const result = await chrome.storage.local.get(['githubToken']);
+    const token = typeof result.githubToken === 'string' ? result.githubToken : '';
 
-    if (!result.githubToken) {
+    if (!token) {
       return; // No token to validate
     }
 
     const response = await fetch('https://api.github.com/user', {
       headers: {
-        Authorization: `token ${result.githubToken}`,
+        Authorization: `token ${token}`,
         Accept: 'application/vnd.github.v3+json',
       },
     });
@@ -41,7 +42,7 @@ async function validateStoredToken(): Promise<void> {
       });
     }
   } catch (error) {
-    console.error('Better GHub: Error validating token:', error);
+    console.error('Better GHub: Error validating token:', error instanceof Error ? error.message : String(error));
   }
 }
 
@@ -80,7 +81,7 @@ chrome.runtime.onMessage.addListener(
           sendResponse({ success: true, messages: messages });
         })
         .catch((error: Error) => {
-          console.error(`Better GHub: Error loading messages for ${lang}`, error);
+          console.error(`Better GHub: Error loading messages for ${lang}`, error instanceof Error ? error.message : String(error));
           sendResponse({ success: false, error: error.message });
         });
 
@@ -123,11 +124,40 @@ chrome.commands.onCommand.addListener((command) => {
   }
 });
 
+// Migrate classic PAT tokens to fine-grained
+async function migrateClassicToken(): Promise<void> {
+  try {
+    const result = await chrome.storage.local.get(['githubToken', 'classicTokenMigrated']);
+    if (result.classicTokenMigrated) return;
+
+    const token = typeof result.githubToken === 'string' ? result.githubToken : '';
+    if (token && token.startsWith('ghp_')) {
+      console.log('Better GHub: Classic PAT detected, removing for migration to fine-grained token');
+      await chrome.storage.local.remove(['githubToken', 'githubUser']);
+
+      // Notify all GitHub tabs about the invalidated token
+      const tabs = await chrome.tabs.query({ url: 'https://github.com/*' });
+      tabs.forEach((tab) => {
+        if (tab.id) {
+          chrome.tabs.sendMessage(tab.id, { action: 'tokenInvalid' }).catch(() => {
+            // Silently ignore if tab is not ready
+          });
+        }
+      });
+    }
+
+    await chrome.storage.local.set({ classicTokenMigrated: true });
+  } catch (error) {
+    console.error('Better GHub: Error during token migration:', error instanceof Error ? error.message : String(error));
+  }
+}
+
 // Handle extension installation
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     console.log(`Better GHub v${Constants.VERSION}: Installed`);
   } else if (details.reason === 'update') {
     console.log(`Better GHub v${Constants.VERSION}: Updated from ${details.previousVersion}`);
+    void migrateClassicToken();
   }
 });
