@@ -47,8 +47,10 @@ function copyStaticFiles() {
     // HTML files use Chrome's native __MSG_*__ syntax - just copy them
     { src: 'popup/popup.html', dest: 'dist/popup/popup.html' },
     { src: 'popup/popup.css', dest: 'dist/popup/popup.css' },
+    { src: 'node_modules/@primer/css/dist/primer.css', dest: 'dist/popup/primer.css' },
     { src: 'options/options.html', dest: 'dist/options/options.html' },
     { src: 'options/options.css', dest: 'dist/options/options.css' },
+    { src: 'node_modules/@primer/css/dist/primer.css', dest: 'dist/options/primer.css' },
   ];
 
   // Ensure dist directories exist

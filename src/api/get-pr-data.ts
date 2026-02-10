@@ -4,9 +4,11 @@ import { restCall } from './client';
 import type { GitHubPullRequest, GitHubCommit, GitHubPRData } from '../types';
 
 export async function getPRData(owner: string, repo: string, number: number): Promise<GitHubPRData | null> {
-  const pr = await restCall<GitHubPullRequest>(`/repos/${owner}/${repo}/pulls/${number}`);
+  const o = encodeURIComponent(owner);
+  const r = encodeURIComponent(repo);
+  const pr = await restCall<GitHubPullRequest>(`/repos/${o}/${r}/pulls/${number}`);
   if (!pr) return null;
 
-  const commits = await restCall<GitHubCommit[]>(`/repos/${owner}/${repo}/pulls/${number}/commits?per_page=5`);
+  const commits = await restCall<GitHubCommit[]>(`/repos/${o}/${r}/pulls/${number}/commits?per_page=5`);
   return { pr, commits: commits || [] };
 }

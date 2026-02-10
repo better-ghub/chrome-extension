@@ -14,14 +14,15 @@ interface MessagesFile {
 async function validateStoredToken(): Promise<void> {
   try {
     const result = await chrome.storage.local.get(['githubToken']);
+    const token = typeof result.githubToken === 'string' ? result.githubToken : '';
 
-    if (!result.githubToken) {
+    if (!token) {
       return; // No token to validate
     }
 
     const response = await fetch('https://api.github.com/user', {
       headers: {
-        Authorization: `token ${result.githubToken}`,
+        Authorization: `token ${token}`,
         Accept: 'application/vnd.github.v3+json',
       },
     });
@@ -41,7 +42,7 @@ async function validateStoredToken(): Promise<void> {
       });
     }
   } catch (error) {
-    console.error('Better GHub: Error validating token:', error);
+    console.error('Better GHub: Error validating token:', error instanceof Error ? error.message : String(error));
   }
 }
 
@@ -80,7 +81,7 @@ chrome.runtime.onMessage.addListener(
           sendResponse({ success: true, messages: messages });
         })
         .catch((error: Error) => {
-          console.error(`Better GHub: Error loading messages for ${lang}`, error);
+          console.error(`Better GHub: Error loading messages for ${lang}`, error instanceof Error ? error.message : String(error));
           sendResponse({ success: false, error: error.message });
         });
 

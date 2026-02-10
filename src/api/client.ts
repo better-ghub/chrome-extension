@@ -40,13 +40,16 @@ export async function restCall<T>(endpoint: string): Promise<T | null> {
 
     return (await response.json()) as T;
   } catch (error) {
-    console.error(`Better GHub: REST Error:`, error);
+    console.error(`Better GHub: REST Error:`, error instanceof Error ? error.message : String(error));
     return null;
   }
 }
 
 // GraphQL API call
-export async function graphqlCall<T>(query: string): Promise<T | null> {
+export async function graphqlCall<T>(
+  query: string,
+  variables?: Record<string, unknown>
+): Promise<T | null> {
   if (!token) {
     console.warn(`Better GHub: No token for GraphQL`);
     return null;
@@ -56,13 +59,18 @@ export async function graphqlCall<T>(query: string): Promise<T | null> {
     apiMetrics.incrementCall('graphql', 'query');
     console.log(`Better GHub v${Constants.VERSION}: GraphQL Query`);
 
+    const body: { query: string; variables?: Record<string, unknown> } = { query };
+    if (variables) {
+      body.variables = variables;
+    }
+
     const response = await fetch(GRAPHQL_URL, {
       method: 'POST',
       headers: {
         Authorization: `bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -78,7 +86,7 @@ export async function graphqlCall<T>(query: string): Promise<T | null> {
 
     return result.data as T;
   } catch (error) {
-    console.error(`Better GHub: GraphQL Error:`, error);
+    console.error(`Better GHub: GraphQL Error:`, error instanceof Error ? error.message : String(error));
     return null;
   }
 }

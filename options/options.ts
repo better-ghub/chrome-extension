@@ -70,7 +70,7 @@ async function displayUserInfo(token: string): Promise<boolean> {
 
     if (userName) userName.textContent = user.name || user.login;
     if (userLogin) userLogin.textContent = `@${user.login}`;
-    if (userAvatar) userAvatar.src = user.avatar_url;
+    if (userAvatar && user.avatar_url?.startsWith('https://')) userAvatar.src = user.avatar_url;
 
     const rateLimit = await TokenManager.getRateLimit(token);
     if (rateLimit) {
@@ -170,15 +170,16 @@ function initAuthListeners(): void {
 
 function loadSettings(): void {
   chrome.storage.local.get(['language', 'cacheEnabled', 'cacheTime', 'batchDelay'], (result) => {
+    const lang = typeof result.language === 'string' ? result.language : 'system';
     const langSelect = document.getElementById('setting-language') as HTMLSelectElement;
-    if (langSelect) langSelect.value = result.language || 'system';
+    if (langSelect) langSelect.value = lang;
 
-    const cacheEnabled = result.cacheEnabled !== false;
+    const cacheEnabled = typeof result.cacheEnabled === 'boolean' ? result.cacheEnabled : true;
     const cacheEnabledCheckbox = document.getElementById('setting-cache-enabled') as HTMLInputElement;
     if (cacheEnabledCheckbox) cacheEnabledCheckbox.checked = cacheEnabled;
     updateCacheVisibility(cacheEnabled);
 
-    const cacheTime = result.cacheTime || 300000;
+    const cacheTime = typeof result.cacheTime === 'number' && !isNaN(result.cacheTime) ? result.cacheTime : 300000;
     const cacheTimeInput = document.getElementById('setting-cache-time') as HTMLInputElement;
     if (cacheTimeInput) cacheTimeInput.value = String(cacheTime);
     const formatted = formatCacheTime(cacheTime);
@@ -188,7 +189,7 @@ function loadSettings(): void {
     if (cacheTimeUnit) cacheTimeUnit.textContent = formatted.unit;
     updateCacheTimeWarning(cacheTime);
 
-    const batchDelay = result.batchDelay || 500;
+    const batchDelay = typeof result.batchDelay === 'number' && !isNaN(result.batchDelay) ? result.batchDelay : 500;
     const batchDelayInput = document.getElementById('setting-batch-delay') as HTMLInputElement;
     if (batchDelayInput) batchDelayInput.value = String(batchDelay);
     const batchDelayValue = document.getElementById('batch-delay-value');
@@ -246,6 +247,7 @@ function initSettingsListeners(): void {
   // Cache Time
   document.getElementById('setting-cache-time')?.addEventListener('input', (e) => {
     const ms = parseInt((e.target as HTMLInputElement).value);
+    if (isNaN(ms)) return;
     const formatted = formatCacheTime(ms);
     const cacheTimeValue = document.getElementById('cache-time-value');
     const cacheTimeUnit = document.getElementById('cache-time-unit');
@@ -256,6 +258,7 @@ function initSettingsListeners(): void {
 
   document.getElementById('setting-cache-time')?.addEventListener('change', (e) => {
     const ms = parseInt((e.target as HTMLInputElement).value);
+    if (isNaN(ms)) return;
     chrome.storage.local.set({ cacheTime: ms }, () => {
       const formatted = formatCacheTime(ms);
       const statusMsg = msg('cacheTimeSet', 'Cache duration set').replace('$1', `${formatted.value} ${formatted.unit}`);
@@ -273,6 +276,7 @@ function initSettingsListeners(): void {
 
   document.getElementById('setting-batch-delay')?.addEventListener('change', (e) => {
     const value = parseInt((e.target as HTMLInputElement).value);
+    if (isNaN(value)) return;
     chrome.storage.local.set({ batchDelay: value }, () => {
       const statusMsg = msg('batchDelaySet', 'Batch delay set').replace('$1', String(value));
       showStatus(statusMsg, 'success');

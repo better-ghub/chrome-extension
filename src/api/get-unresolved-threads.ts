@@ -15,9 +15,9 @@ export async function getUnresolvedThreads(
   number: number
 ): Promise<UnresolvedThreadsResult> {
   const query = `
-    query {
-      repository(owner: "${owner}", name: "${repo}") {
-        pullRequest(number: ${number}) {
+    query($owner: String!, $repo: String!, $number: Int!) {
+      repository(owner: $owner, name: $repo) {
+        pullRequest(number: $number) {
           reviewThreads(first: 100) {
             nodes {
               isResolved
@@ -32,7 +32,8 @@ export async function getUnresolvedThreads(
     }
   `;
 
-  const data = await graphqlCall<GraphQLResponse>(query);
+  const variables = { owner, repo, number };
+  const data = await graphqlCall<GraphQLResponse>(query, variables);
   if (!data?.repository?.pullRequest?.reviewThreads) {
     return { count: 0, byAuthor: {} };
   }
@@ -57,10 +58,14 @@ export async function getUnresolvedThreadsBatch(
 
   console.log(`Better GHub: Batch fetching ${prList.length} PRs`);
 
+  const varDefs = prList
+    .map((_, i) => `$owner${i}: String!, $repo${i}: String!, $number${i}: Int!`)
+    .join(', ');
+
   const queryParts = prList.map(
-    (pr, i) => `
-    pr${i}: repository(owner: "${pr.owner}", name: "${pr.repo}") {
-      pullRequest(number: ${pr.number}) {
+    (_, i) => `
+    pr${i}: repository(owner: $owner${i}, name: $repo${i}) {
+      pullRequest(number: $number${i}) {
         reviewThreads(first: 100) {
           nodes {
             isResolved
@@ -75,7 +80,17 @@ export async function getUnresolvedThreadsBatch(
   `
   );
 
-  const data = await graphqlCall<GraphQLResponse>(`query { ${queryParts.join('\n')} }`);
+  const variables: Record<string, string | number> = {};
+  prList.forEach((pr, i) => {
+    variables[`owner${i}`] = pr.owner;
+    variables[`repo${i}`] = pr.repo;
+    variables[`number${i}`] = pr.number;
+  });
+
+  const data = await graphqlCall<GraphQLResponse>(
+    `query(${varDefs}) { ${queryParts.join('\n')} }`,
+    variables
+  );
   if (!data) return {};
 
   const results: Record<string, UnresolvedThreadsResult> = {};
