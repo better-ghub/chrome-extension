@@ -1,16 +1,17 @@
 #!/usr/bin/env node
-// Uploads a package to the Chrome Web Store (API v2) and submits it for review.
+// Uploads a package to the Chrome Web Store and submits it for review
+// (API v2 with a publisher ID, otherwise API v1.1).
 //
 //   node scripts/cws-publish.js <zip> [--upload-only] [--staged]
 //
 // Environment:
 //   CWS_SERVICE_ACCOUNT_KEY       service account JSON key (contents), or
 //   CWS_SERVICE_ACCOUNT_KEY_FILE  path to that JSON file
-//   CWS_PUBLISHER_ID              Developer Dashboard > Publisher > Settings
+//   CWS_PUBLISHER_ID              optional: Publisher > Settings (API v2; without it API v1.1)
 //   CWS_ITEM_ID                   the 32-character extension ID
 //
 // The service account's e-mail must be added in the Developer Dashboard
-// (Account section). The API cannot create items or edit the listing: the
+// (Publisher > Settings > Service account). The API cannot create items or edit the listing: the
 // first version and all listing text/images are managed in the dashboard.
 // Secrets are never printed.
 const crypto = require('crypto');
@@ -67,6 +68,36 @@ async function accessToken(key) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// API v1.1: used when no publisher ID is configured (it addresses items by ID only).
+const V1 = 'https://www.googleapis.com/chromewebstore/v1.1/items';
+const V1_UPLOAD = 'https://www.googleapis.com/upload/chromewebstore/v1.1/items';
+const V1_PUBLISHED = new Set(['OK', 'ITEM_PENDING_REVIEW']);
+
+async function publishV1(zip, item, auth, uploadOnly) {
+  const headers = { ...auth, 'x-goog-api-version': '2' };
+  console.log(`Uploading ${zip} (${(fs.statSync(zip).size / 1024).toFixed(1)} KB) via API v1.1…`);
+  const upload = await call(`${V1_UPLOAD}/${item}?uploadType=media`, { method: 'PUT', headers: { ...headers, 'Content-Type': 'application/zip' }, body: fs.readFileSync(zip) }, 'Upload');
+  let state = upload.uploadState;
+  let details = upload.itemError;
+  for (let i = 0; state === 'IN_PROGRESS' && i < 30; i++) {
+    await sleep(5000);
+    const status = await call(`${V1}/${item}?projection=DRAFT`, { headers }, 'Checking the upload');
+    state = status.uploadState;
+    details = status.itemError || details;
+  }
+  if (state !== 'SUCCESS') {
+    const why = (details || []).map((e) => e.error_detail || e.error_code).join('; ');
+    throw new Error(`Upload did not succeed (state: ${state || 'unknown'})${why ? `: ${why}` : ''}. Is the manifest version higher than the published one?`);
+  }
+  console.log(`Uploaded${upload.crxVersion ? ` version ${upload.crxVersion}` : ''}.`);
+  if (uploadOnly) return;
+
+  const published = await call(`${V1}/${item}/publish`, { method: 'POST', headers: { ...headers, 'Content-Length': '0' } }, 'Publish');
+  const status = published.status || [];
+  if (!status.every((s) => V1_PUBLISHED.has(s))) throw new Error(`Publish failed: ${[...status, ...(published.statusDetail || [])].join('; ')}`);
+  console.log(`Submitted: ${status.join(', ') || 'OK'}.`);
+}
+
 async function main(argv, env) {
   const args = argv.filter((a) => !a.startsWith('--'));
   const zip = args[0] || 'better-ghub.zip';
@@ -74,12 +105,14 @@ async function main(argv, env) {
   const staged = argv.includes('--staged');
   const publisher = env.CWS_PUBLISHER_ID;
   const item = env.CWS_ITEM_ID;
-  if (!publisher || !item) throw new Error('Set CWS_PUBLISHER_ID and CWS_ITEM_ID.');
+  if (!item) throw new Error('Set CWS_ITEM_ID.');
   if (!/^[a-p]{32}$/.test(item)) throw new Error('CWS_ITEM_ID should be the 32-character extension ID (letters a–p).');
   if (!fs.existsSync(zip)) throw new Error(`Package not found: ${zip}`);
+  if (!publisher && staged) throw new Error('--staged needs CWS_PUBLISHER_ID (API v2).');
 
-  const name = `publishers/${encodeURIComponent(publisher)}/items/${item}`;
   const auth = { Authorization: `Bearer ${await accessToken(readKey(env))}` };
+  if (!publisher) return publishV1(zip, item, auth, uploadOnly);
+  const name = `publishers/${encodeURIComponent(publisher)}/items/${item}`;
 
   console.log(`Uploading ${zip} (${(fs.statSync(zip).size / 1024).toFixed(1)} KB)…`);
   const upload = await call(`${API}/upload/v2/${name}:upload`, { method: 'POST', headers: { ...auth, 'Content-Type': 'application/zip' }, body: fs.readFileSync(zip) }, 'Upload');

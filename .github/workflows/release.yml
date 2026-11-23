@@ -101,7 +101,7 @@ jobs:
           CWS_PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
           CWS_ITEM_ID: ${{ secrets.CWS_ITEM_ID }}
         run: |
-          if [ -z "$CWS_SERVICE_ACCOUNT_KEY" ] || [ -z "$CWS_PUBLISHER_ID" ] || [ -z "$CWS_ITEM_ID" ]; then
+          if [ -z "$CWS_SERVICE_ACCOUNT_KEY" ] || [ -z "$CWS_ITEM_ID" ]; then
             echo "::warning::Chrome Web Store secrets are not set; skipping the store upload."
             exit 0
           fi
