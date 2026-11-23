@@ -20,7 +20,8 @@
     "store:assets": "node scripts/store-assets.js",
     "e2e": "npm run build && node e2e/run.js",
     "e2e:install": "playwright-core install chromium",
-    "icons:app": "node scripts/app-icons.js"
+    "icons:app": "node scripts/app-icons.js",
+    "store:publish": "node scripts/cws-publish.js better-ghub.zip"
   },
   "keywords": [
     "chrome-extension",

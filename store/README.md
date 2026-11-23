@@ -59,3 +59,27 @@ The extension name and description inside the package come from `_locales/*/mess
 - [ ] Single purpose, permission justifications and data-usage answers pasted
 - [ ] Test instructions (reviewers): the extension works without a token on any pull request page (press Alt+/); list details and inbox need a GitHub token, which reviewers can create read-only at github.com/settings/personal-access-tokens
 - [ ] Submit for review and choose staged or immediate publishing
+
+## 6. Automated releases (GitHub Actions)
+
+`.github/workflows/release.yml` runs on every pushed tag `v*`: it checks that the tag matches `manifest.json` and `package.json`, runs `npm run check`, builds `better-ghub-<version>.zip`, attaches it to a GitHub release and, in the `chrome-web-store` job, uploads it to the store and submits it for review (`scripts/cws-publish.js`, Chrome Web Store API v2).
+
+One-time setup:
+
+1. The item must already exist in the store: the API cannot create items or edit the listing, so the first version and every listing change go through the dashboard.
+2. Google Cloud: create a project, enable the **Chrome Web Store API**, create a service account and download a JSON key.
+3. Developer Dashboard > **Account**: add the service account's e-mail (one per publisher).
+4. GitHub > Settings > Secrets and variables > Actions, add:
+   - `CWS_SERVICE_ACCOUNT_KEY`: the whole JSON key
+   - `CWS_PUBLISHER_ID`: Developer Dashboard > Publisher > Settings
+   - `CWS_ITEM_ID`: the 32-character extension ID
+5. Optional but recommended: Settings > Environments > `chrome-web-store` > Required reviewers, so every store submission waits for your approval.
+
+Release a new version:
+
+```bash
+# bump "version" in manifest.json and package.json (and SECURITY.md), merge to main, then
+git tag v0.4.1 && git push origin v0.4.1
+```
+
+Without the secrets the workflow still builds the release and skips the store step with a warning. Locally, `CWS_SERVICE_ACCOUNT_KEY_FILE=… CWS_PUBLISHER_ID=… CWS_ITEM_ID=… npm run store:publish` does the same upload.

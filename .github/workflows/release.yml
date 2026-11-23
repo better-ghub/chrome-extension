@@ -1,0 +1,112 @@
+name: Release
+
+# Push a tag like v0.4.1 (matching manifest.json and package.json) to build,
+# attach the zip to a GitHub release and submit it to the Chrome Web Store.
+# Run it by hand (Actions > Release > Run workflow) to build a package, and
+# optionally submit it, without a tag.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      submit:
+        description: Upload to the Chrome Web Store and submit for review
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Read version
+        id: version
+        run: |
+          version=$(node -p "require('./manifest.json').version")
+          pkg=$(node -p "require('./package.json').version")
+          if [ "$version" != "$pkg" ]; then
+            echo "::error::manifest.json ($version) and package.json ($pkg) disagree"; exit 1
+          fi
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "${GITHUB_REF_NAME}" != "v$version" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match manifest version $version"; exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Check (typecheck, lint, tests, build)
+        run: npm run check
+
+      - name: Validate manifest and size
+        run: npm run validate-manifest && npm run check-size
+
+      - name: Package
+        run: |
+          npm run package
+          mv better-ghub.zip "better-ghub-${{ steps.version.outputs.version }}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: better-ghub-${{ steps.version.outputs.version }}
+          path: better-ghub-${{ steps.version.outputs.version }}.zip
+          retention-days: 90
+
+      - name: GitHub release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ZIP: better-ghub-${{ steps.version.outputs.version }}.zip
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "$ZIP" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "$ZIP" --title "Better GHub ${GITHUB_REF_NAME#v}" --generate-notes --verify-tag
+          fi
+
+  chrome-web-store:
+    needs: build
+    if: github.ref_type == 'tag' || inputs.submit
+    runs-on: ubuntu-latest
+    # Add required reviewers to this environment (Settings > Environments) to
+    # approve every store submission before it runs.
+    environment: chrome-web-store
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: better-ghub-${{ needs.build.outputs.version }}
+
+      - name: Upload and submit for review
+        env:
+          CWS_SERVICE_ACCOUNT_KEY: ${{ secrets.CWS_SERVICE_ACCOUNT_KEY }}
+          CWS_PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+          CWS_ITEM_ID: ${{ secrets.CWS_ITEM_ID }}
+        run: |
+          if [ -z "$CWS_SERVICE_ACCOUNT_KEY" ] || [ -z "$CWS_PUBLISHER_ID" ] || [ -z "$CWS_ITEM_ID" ]; then
+            echo "::warning::Chrome Web Store secrets are not set; skipping the store upload."
+            exit 0
+          fi
+          node scripts/cws-publish.js "better-ghub-${{ needs.build.outputs.version }}.zip"
