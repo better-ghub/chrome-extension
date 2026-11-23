@@ -1,3 +1,8 @@
+// Pin the time zone for every test worker: snooze and DST tests compute local
+// wall-clock times, and CI runners default to UTC. Set here (not inside a test)
+// because jest gives each test file its own copy of process.env.
+process.env.TZ = 'Europe/Warsaw';
+
 /** @type {import('jest').Config} */
 module.exports = {
   preset: 'ts-jest',

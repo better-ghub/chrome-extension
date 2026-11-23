@@ -1,6 +1,6 @@
-// Snooze moments are computed with local Date setters: pin a DST-observing
-// zone so the daylight-saving cases below really cross a transition.
-process.env.TZ = 'Europe/Warsaw';
+// Snooze moments are computed with local Date setters. jest.config.js pins
+// TZ=Europe/Warsaw (a DST-observing zone) so the daylight-saving cases below
+// really cross a transition on any machine.
 
 import {
   formatSnoozeMoment,
