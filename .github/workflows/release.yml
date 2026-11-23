@@ -2,17 +2,12 @@ name: Release
 
 # Push a tag like v0.4.1 (matching manifest.json and package.json) to build,
 # attach the zip to a GitHub release and submit it to the Chrome Web Store.
-# Run it by hand (Actions > Release > Run workflow) to build a package, and
-# optionally submit it, without a tag.
+# Run it by hand (Actions > Release > Run workflow) on a branch to only build
+# the package, or on an existing v* tag to repeat the release and submission.
 on:
   push:
     tags: ['v*']
   workflow_dispatch:
-    inputs:
-      submit:
-        description: Upload to the Chrome Web Store and submit for review
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -83,10 +78,11 @@ jobs:
 
   chrome-web-store:
     needs: build
-    if: github.ref_type == 'tag' || inputs.submit
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
-    # Add required reviewers to this environment (Settings > Environments) to
-    # approve every store submission before it runs.
+    # The store secrets live only in this environment, which accepts v* tags
+    # and waits for a required reviewer (Settings > Environments). This job
+    # installs nothing from npm, so no third-party code runs next to the key.
     environment: chrome-web-store
     steps:
       - uses: actions/checkout@v4

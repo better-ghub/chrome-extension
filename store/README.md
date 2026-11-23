@@ -69,11 +69,11 @@ One-time setup:
 1. The item must already exist in the store: the API cannot create items or edit the listing, so the first version and every listing change go through the dashboard.
 2. Google Cloud: create a project, enable the **Chrome Web Store API**, create a service account and download a JSON key.
 3. Developer Dashboard > **Account**: add the service account's e-mail (one per publisher).
-4. GitHub > Settings > Secrets and variables > Actions, add:
+4. GitHub > Settings > Environments > `chrome-web-store`: deployments are limited to `v*` tags and need a required reviewer's approval. Add these as **environment** secrets there (never as repository secrets, which every workflow on any branch could read):
    - `CWS_SERVICE_ACCOUNT_KEY`: the whole JSON key
    - `CWS_PUBLISHER_ID`: Developer Dashboard > Publisher > Settings
    - `CWS_ITEM_ID`: the 32-character extension ID
-5. Optional but recommended: Settings > Environments > `chrome-web-store` > Required reviewers, so every store submission waits for your approval.
+5. Keep secret scanning and push protection on (Settings > Code security) so a key can't be pushed to this public repository by accident.
 
 Release a new version:
 
