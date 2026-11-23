@@ -1,6 +1,6 @@
 {
   "name": "better-ghub",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Chrome extension that enhances GitHub Pull Request workflow",
   "scripts": {
     "build": "node esbuild.config.js",
@@ -12,7 +12,15 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "validate-manifest": "node scripts/validate-manifest.js",
-    "check-size": "node scripts/check-size.js"
+    "check-size": "node scripts/check-size.js",
+    "gen:icons": "node scripts/gen-icons.js",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build",
+    "build:dev": "node esbuild.config.js --dev",
+    "package": "npm run build && cd dist && zip -qr ../better-ghub.zip .",
+    "store:assets": "node scripts/store-assets.js",
+    "e2e": "npm run build && node e2e/run.js",
+    "e2e:install": "playwright-core install chromium",
+    "icons:app": "node scripts/app-icons.js"
   },
   "keywords": [
     "chrome-extension",
@@ -29,7 +37,7 @@
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.23.0",
-    "@primer/css": "^21.0.7",
+    "@primer/octicons": "^19.15.1",
     "@types/chrome": "^0.0.268",
     "@types/jest": "^29.5.0",
     "@types/node": "^25.1.0",
@@ -39,6 +47,7 @@
     "eslint": "^8.54.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "playwright-core": "^1.57.0",
     "ts-jest": "^29.1.2",
     "typescript": "^5.3.0"
   }

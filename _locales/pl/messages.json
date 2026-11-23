@@ -3,72 +3,7 @@
     "message": "Better GHub"
   },
   "extensionDescription": {
-    "message": "Pokazuje ostatnią aktywność i nierozwiązane sugestie na liście pull requestów GitHub"
-  },
-  "lastComment": {
-    "message": "Ostatni komentarz"
-  },
-  "lastCommit": {
-    "message": "Ostatni commit"
-  },
-  "unresolvedSuggestions": {
-    "message": "Nierozwiązane sugestie"
-  },
-  "reviewComments": {
-    "message": "Komentarze review"
-  },
-  "unresolvedTooltip": {
-    "message": "Nierozwiązane wątki review (pobrane przez GraphQL API)"
-  },
-  "by": {
-    "message": "przez"
-  },
-  "unresolvedSuggestionsCount": {
-    "message": "$COUNT$ nierozwiązanych",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "authRequired": {
-    "message": "Wymagana autoryzacja"
-  },
-  "authDescription": {
-    "message": "Połącz swoje konto GitHub, aby zobaczyć szczegółowe informacje o aktywności PR."
-  },
-  "setupInstructions": {
-    "message": "Instrukcje konfiguracji:"
-  },
-  "step1": {
-    "message": "Przejdź do GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens"
-  },
-  "step2": {
-    "message": "Kliknij \"Generate new token\""
-  },
-  "step3": {
-    "message": "Wybierz \"All repositories\" w sekcji Repository access, następnie ustaw uprawnienia Pull requests: Read i Contents: Read"
-  },
-  "step4": {
-    "message": "Skopiuj token i wklej go poniżej"
-  },
-  "tokenLabel": {
-    "message": "GitHub Fine-grained Personal Access Token:"
-  },
-  "saveToken": {
-    "message": "Zapisz Token"
-  },
-  "createToken": {
-    "message": "→ Utwórz fine-grained token na GitHubie"
-  },
-  "createTokenPrivate": {
-    "message": "→ Utwórz fine-grained token na GitHubie"
-  },
-  "authenticated": {
-    "message": "Zalogowano"
-  },
-  "apiCalls": {
-    "message": "Wywołania API dzisiaj:"
+    "message": "Szybsze recenzje PR-ów na GitHubie: skrzynka w pasku, chipy na liście, skróty i wyszukiwarka plików. Bez serwerów i śledzenia."
   },
   "rateLimit": {
     "message": "Limit wywołań:"
@@ -76,191 +11,2083 @@
   "logout": {
     "message": "Wyloguj"
   },
-  "madeWith": {
-    "message": "Stworzone z"
-  },
   "loading": {
     "message": "Ładowanie aktywności..."
-  },
-  "unresolvedBreakdown": {
-    "message": "Nierozwiązane wg autora:"
-  },
-  "noUnresolved": {
-    "message": "Brak nierozwiązanych wątków"
-  },
-  "pleaseEnterToken": {
-    "message": "Proszę wprowadzić token"
-  },
-  "invalidToken": {
-    "message": "Nieprawidłowy format tokena. Token powinien zaczynać się od github_pat_"
-  },
-  "testing": {
-    "message": "Testowanie tokena..."
-  },
-  "tokenSaved": {
-    "message": "Token zapisany pomyślnie!"
-  },
-  "tokenValidationFailed": {
-    "message": "Walidacja tokena nie powiodła się"
-  },
-  "confirmLogout": {
-    "message": "Czy na pewno chcesz się wylogować?"
-  },
-  "loggedOut": {
-    "message": "Wylogowano pomyślnie"
-  },
-  "languageSaved": {
-    "message": "Język zapisany. Przeładowanie..."
-  },
-  "cacheTimeSet": {
-    "message": "Czas cache ustawiony na $1"
-  },
-  "batchDelaySet": {
-    "message": "Opóźnienie wsadowe ustawione na $1ms"
-  },
-  "cacheCleared": {
-    "message": "Cache wyczyszczony pomyślnie!"
-  },
-  "tabAuthorization": {
-    "message": "Autoryzacja"
-  },
-  "tabSettings": {
-    "message": "Ustawienia"
-  },
-  "githubAuth": {
-    "message": "Autoryzacja GitHub"
-  },
-  "checkingAuth": {
-    "message": "Sprawdzanie autoryzacji..."
-  },
-  "notAuthenticated": {
-    "message": "Nie zalogowano"
-  },
-  "accountConnected": {
-    "message": "Twoje konto GitHub jest połączone."
-  },
-  "extensionSettings": {
-    "message": "Ustawienia rozszerzenia"
-  },
-  "languageSetting": {
-    "message": "Język / Language"
-  },
-  "languageDesc": {
-    "message": "Wybierz język wyświetlania rozszerzenia"
   },
   "cacheEnabled": {
     "message": "Włącz cache"
   },
-  "cacheEnabledDesc": {
-    "message": "Przechowuj dane PR w pamięci, aby ograniczyć wywołania API"
-  },
-  "cacheEnabledLabel": {
-    "message": "Włącz cache"
-  },
-  "cacheDisabledWarning": {
-    "message": "Ostrzeżenie: Wyłączenie cache może prowadzić do nadmiernej liczby wywołań API przy odwiedzaniu wielu repozytoriów. Może to szybko wyczerpać limit wywołań API."
-  },
-  "cacheDisabled": {
-    "message": "Cache wyłączony"
-  },
   "cacheDuration": {
     "message": "Czas cache"
-  },
-  "cacheDurationDesc": {
-    "message": "Jak długo trzymać dane PR w pamięci podręcznej"
-  },
-  "cacheTimeRecommendation": {
-    "message": "Dla optymalnego wykorzystania tokenów, zalecany czas cache to 5 minut."
-  },
-  "clearCache": {
-    "message": "Wyczyść cache"
-  },
-  "clearCacheDesc": {
-    "message": "Wyczyść wszystkie zapisane dane PR"
   },
   "batchDelay": {
     "message": "Opóźnienie wsadowe"
   },
-  "batchDelayDesc": {
-    "message": "Opóźnienie przed wsadowym zapytaniem GraphQL (w milisekundach)"
-  },
-  "autoSave": {
-    "message": "Ustawienia są zapisywane automatycznie"
-  },
-  "openSettings": {
-    "message": "Ustawienia"
-  },
-  "signInWithGitHub": {
-    "message": "Zaloguj się przez GitHub (OAuth)"
-  },
-  "recommendedMethod": {
-    "message": "✓ Zalecane - Bezpieczniejsze"
-  },
-  "waitingForAuth": {
-    "message": "Oczekiwanie na autoryzację..."
-  },
-  "enterCode": {
-    "message": "Wpisz ten kod na GitHubie:"
-  },
-  "openGitHub": {
-    "message": "Otwórz GitHub aby autoryzować"
-  },
-  "codeExpires": {
-    "message": "Kod wygasa za: "
-  },
   "cancel": {
     "message": "Anuluj"
-  },
-  "orUseToken": {
-    "message": "lub użyj tokena"
-  },
-  "usePersonalToken": {
-    "message": "Użyj Fine-grained Personal Access Token (Ręcznie)"
-  },
-  "repoAccessNote": {
-    "message": "Uwaga: Podczas tworzenia tokena wybierz \"All repositories\" w sekcji Repository access."
-  },
-  "oauthSuccess": {
-    "message": "Pomyślnie uwierzytelniono z GitHubem!"
-  },
-  "oauthFailed": {
-    "message": "OAuth nie powiódł się"
-  },
-  "oauthError": {
-    "message": "Nie udało się uruchomić OAuth"
-  },
-  "codeExpired": {
-    "message": "Kod autoryzacji wygasł"
-  },
-  "yourPRs": {
-    "message": "Twoje PR-y"
-  },
-  "noOpenPRs": {
-    "message": "Brak otwartych pull requestów"
-  },
-  "noOpenPRsDescription": {
-    "message": "Nie masz obecnie żadnych otwartych pull requestów."
   },
   "note": {
     "message": "Uwaga"
   },
-  "authNote": {
-    "message": "Bez autoryzacji rozszerzenie działa tylko z publicznymi repozytoriami (limit 60 wywołań API na godzinę). Użyj fine-grained personal access token dla pełnego dostępu."
-  },
-  "forBetterExperience": {
-    "message": "dla lepszego doświadczenia z GitHub"
-  },
-  "keyboardShortcuts": {
-    "message": "Skróty klawiszowe"
-  },
   "shortcutToggleComments": {
-    "message": "Przełącz komentarze"
+    "message": "Zwiń / rozwiń wszystkie wątki recenzji"
   },
   "shortcutToggleFiles": {
-    "message": "Przełącz pliki"
+    "message": "Zwiń / rozwiń wszystkie pliki"
   },
-  "shortcutFilesViewOnly": {
-    "message": "Tylko widok plików"
+  "needsTests": {
+    "message": "brak testów"
+  },
+  "styling": {
+    "message": "stylowanie"
+  },
+  "database": {
+    "message": "baza danych"
+  },
+  "documentation": {
+    "message": "dokumentacja"
+  },
+  "infrastructure": {
+    "message": "infrastruktura"
+  },
+  "ci": {
+    "message": "CI"
+  },
+  "dependencies": {
+    "message": "zależności"
+  },
+  "i18n": {
+    "message": "tłumaczenia"
+  },
+  "config": {
+    "message": "konfiguracja"
+  },
+  "api": {
+    "message": "API"
+  },
+  "media": {
+    "message": "media"
+  },
+  "build": {
+    "message": "build"
+  },
+  "security": {
+    "message": "bezpieczeństwo"
+  },
+  "notificationsEnabled": {
+    "message": "Powiadomienia"
+  },
+  "shortcutNextUnresolved": {
+    "message": "Przejdź do następnego nierozwiązanego wątku"
+  },
+  "shortcutPrevUnresolved": {
+    "message": "Przejdź do poprzedniego nierozwiązanego wątku"
+  },
+  "shortcutGotoConversation": {
+    "message": "Przejdź do karty Conversation"
+  },
+  "shortcutGotoCommits": {
+    "message": "Przejdź do karty Commits"
+  },
+  "shortcutGotoChecks": {
+    "message": "Przejdź do karty Checks"
+  },
+  "shortcutGotoFiles": {
+    "message": "Przejdź do karty Files changed"
+  },
+  "shortcutCopyBranch": {
+    "message": "Kopiuj nazwę gałęzi źródłowej"
+  },
+  "shortcutCopyMarkdownLink": {
+    "message": "Kopiuj PR jako link Markdown"
+  },
+  "shortcutShowHelp": {
+    "message": "Pokaż skróty klawiszowe"
+  },
+  "prPageCheatsheetTitle": {
+    "message": "Skróty klawiszowe"
+  },
+  "prPageClose": {
+    "message": "Zamknij"
+  },
+  "prPageCustomize": {
+    "message": "Dostosuj"
+  },
+  "prPageHideHint": {
+    "message": "Ukryj pływający przycisk"
+  },
+  "prPageHintHidden": {
+    "message": "Ukryto pływający przycisk. Naciśnij $1, aby zobaczyć skróty."
+  },
+  "prPageHintHiddenNoKey": {
+    "message": "Ukryto pływający przycisk. Możesz go przywrócić w opcjach."
+  },
+  "prPageHintLabel": {
+    "message": "Skróty klawiszowe ($1)"
+  },
+  "prPageTypingNote": {
+    "message": "Skróty nie działają podczas pisania."
+  },
+  "prPageNotSet": {
+    "message": "Nie ustawiono"
+  },
+  "prPageOptionsFailed": {
+    "message": "Nie udało się otworzyć opcji rozszerzenia"
+  },
+  "prPageGroupView": {
+    "message": "Widok"
+  },
+  "prPageGroupNavigate": {
+    "message": "Nawigacja"
+  },
+  "prPageGroupCopy": {
+    "message": "Kopiowanie"
+  },
+  "prPageGroupHelp": {
+    "message": "Pomoc"
+  },
+  "prPageScopeConversation": {
+    "message": "Zakładka Conversation"
+  },
+  "prPageScopeFiles": {
+    "message": "Zakładka Files changed"
+  },
+  "prPageScopeThreads": {
+    "message": "Conversation i Files changed"
+  },
+  "prPageTabConversation": {
+    "message": "Conversation"
+  },
+  "prPageTabCommits": {
+    "message": "Commits"
+  },
+  "prPageTabChecks": {
+    "message": "Checks"
+  },
+  "prPageTabFiles": {
+    "message": "Files changed"
+  },
+  "prPageAlreadyOnTab": {
+    "message": "Jesteś już na zakładce $1"
+  },
+  "prPageWorksOnFiles": {
+    "message": "„$1” działa na zakładce Files changed"
+  },
+  "prPageWorksOnThreads": {
+    "message": "„$1” działa na zakładkach Conversation i Files changed"
+  },
+  "prPageNoThreads": {
+    "message": "Brak wątków recenzji na tej stronie"
+  },
+  "prPageThreadsCollapsed": {
+    "message": "Zwinięto wątki recenzji ($1)"
+  },
+  "prPageThreadsExpanded": {
+    "message": "Rozwinięto wątki recenzji ($1)"
+  },
+  "prPageCommentsHidden": {
+    "message": "Ukryto komentarze w plikach ($1)"
+  },
+  "prPageCommentsShown": {
+    "message": "Pokazano komentarze w plikach ($1)"
+  },
+  "prPageNoFiles": {
+    "message": "Nie znaleziono jeszcze żadnych plików"
+  },
+  "prPageFilesCollapsed": {
+    "message": "Zwinięto pliki ($1)"
+  },
+  "prPageFilesExpanded": {
+    "message": "Rozwinięto pliki ($1)"
+  },
+  "prPageThreadPosition": {
+    "message": "Nierozwiązany wątek $1 z $2"
+  },
+  "prPageNoUnresolved": {
+    "message": "Brak nierozwiązanych wątków. Dobra robota!"
+  },
+  "prPageCopiedBranch": {
+    "message": "Skopiowano gałąź"
+  },
+  "prPageCopiedLink": {
+    "message": "Skopiowano link Markdown do #$1"
+  },
+  "prPageCopyFailed": {
+    "message": "Nie udało się skopiować do schowka"
+  },
+  "prPageBranchNotFound": {
+    "message": "Nie udało się ustalić gałęzi źródłowej"
+  },
+  "prlNoticeText": {
+    "message": "Połącz token GitHub, aby widzieć tutaj aktywność w recenzjach."
+  },
+  "prlNoticeConnect": {
+    "message": "Połącz"
+  },
+  "prlDismiss": {
+    "message": "Zamknij"
+  },
+  "prlLoading": {
+    "message": "Wczytywanie aktywności recenzji…"
+  },
+  "prlLoaded": {
+    "message": "Wczytano aktywność recenzji."
+  },
+  "prlSizeLabel": {
+    "message": "Rozmiar $1: dodane linie $2, usunięte linie $3"
+  },
+  "prlSizeTooltip": {
+    "message": "Rozmiar $1 · zmienione linie: $2"
+  },
+  "prlFilesChanged_one": {
+    "message": "$1 zmieniony plik"
+  },
+  "prlFilesChanged_few": {
+    "message": "$1 zmienione pliki"
+  },
+  "prlFilesChanged_many": {
+    "message": "$1 zmienionych plików"
+  },
+  "prlFilesChanged_other": {
+    "message": "$1 zmienionego pliku"
+  },
+  "prlConflicts": {
+    "message": "Konflikty"
+  },
+  "prlUnresolved_one": {
+    "message": "$1 nierozwiązany wątek"
+  },
+  "prlUnresolved_few": {
+    "message": "$1 nierozwiązane wątki"
+  },
+  "prlUnresolved_many": {
+    "message": "$1 nierozwiązanych wątków"
+  },
+  "prlUnresolved_other": {
+    "message": "$1 nierozwiązanego wątku"
+  },
+  "prlThreadsStartedBy": {
+    "message": "Rozpoczęte przez"
+  },
+  "prlOutdatedCount": {
+    "message": "(nieaktualne: $1)"
+  },
+  "prlOutdatedNote": {
+    "message": "Na nieaktualnym kodzie: $1"
+  },
+  "prlYourReview": {
+    "message": "Twoja recenzja"
+  },
+  "prlYourReviewTooltip": {
+    "message": "Prośba o Twoją recenzję: $1"
+  },
+  "prlReviewRequested": {
+    "message": "Prośba o recenzję · $1"
+  },
+  "prlReviewRequestedNoTime": {
+    "message": "Prośba o recenzję"
+  },
+  "prlReviewersTitle": {
+    "message": "Poproszeni recenzenci"
+  },
+  "prlActCommit": {
+    "message": "Commit od $1 · $2"
+  },
+  "prlActComment": {
+    "message": "Komentarz od $1 · $2"
+  },
+  "prlActApproved": {
+    "message": "Akceptacja od $1 · $2"
+  },
+  "prlActChanges": {
+    "message": "Prośba o zmiany od $1 · $2"
+  },
+  "prlActReviewed": {
+    "message": "Recenzja od $1 · $2"
+  },
+  "prlSomeone": {
+    "message": "nieznanej osoby"
+  },
+  "prlSuggestedLabel": {
+    "message": "Sugerowana etykieta:"
+  },
+  "prlLabelNeedsTests": {
+    "message": "brak testów"
+  },
+  "prlLabelHasTests": {
+    "message": "z testami"
+  },
+  "prlLabelStyling": {
+    "message": "style"
+  },
+  "prlLabelDatabase": {
+    "message": "baza danych"
+  },
+  "prlLabelDocs": {
+    "message": "dokumentacja"
+  },
+  "prlLabelInfra": {
+    "message": "infrastruktura"
+  },
+  "prlLabelCi": {
+    "message": "CI"
+  },
+  "prlLabelDeps": {
+    "message": "zależności"
+  },
+  "prlLabelI18n": {
+    "message": "i18n"
+  },
+  "prlLabelConfig": {
+    "message": "konfiguracja"
+  },
+  "prlLabelApi": {
+    "message": "API"
+  },
+  "prlLabelMedia": {
+    "message": "multimedia"
+  },
+  "prlLabelBuild": {
+    "message": "build"
+  },
+  "prlLabelSecurity": {
+    "message": "bezpieczeństwo"
+  },
+  "prlSummaryLabel": {
+    "message": "Podsumowanie aktywności pull requestów"
+  },
+  "prlSumReview_one": {
+    "message": "$1 PR czeka na Twoją recenzję"
+  },
+  "prlSumReview_few": {
+    "message": "$1 PR-y czekają na Twoją recenzję"
+  },
+  "prlSumReview_many": {
+    "message": "$1 PR-ów czeka na Twoją recenzję"
+  },
+  "prlSumReview_other": {
+    "message": "$1 PR-a czeka na Twoją recenzję"
+  },
+  "prlSumConflicts_one": {
+    "message": "$1 PR ma konflikty"
+  },
+  "prlSumConflicts_few": {
+    "message": "$1 PR-y mają konflikty"
+  },
+  "prlSumConflicts_many": {
+    "message": "$1 PR-ów ma konflikty"
+  },
+  "prlSumConflicts_other": {
+    "message": "$1 PR-a ma konflikty"
+  },
+  "prlSumThreads_one": {
+    "message": "$1 nierozwiązany wątek"
+  },
+  "prlSumThreads_few": {
+    "message": "$1 nierozwiązane wątki"
+  },
+  "prlSumThreads_many": {
+    "message": "$1 nierozwiązanych wątków"
+  },
+  "prlSumThreads_other": {
+    "message": "$1 nierozwiązanego wątku"
+  },
+  "prlRateLimited": {
+    "message": "Osiągnięto limit zapytań API GitHuba — aktywność wstrzymana do $1."
+  },
+  "prlNoAccess": {
+    "message": "Twój token GitHub nie ma dostępu do pull requestów w tym repozytorium."
+  },
+  "prlOpenSettings": {
+    "message": "Ustawienia"
+  },
+  "prlNeedsToken": {
+    "message": "Prywatne pull requesty z $1 wymagają tokena dla $1."
+  },
+  "prlAddToken": {
+    "message": "Dodaj token"
+  },
+  "prlAuthorizeSso": {
+    "message": "Autoryzuj token dla $1 (SSO)"
+  },
+  "prlReady": {
+    "message": "Gotowy do scalenia"
+  },
+  "prlStale": {
+    "message": "Nieaktywny · $1 d"
+  },
+  "prlStaleTooltip_one": {
+    "message": "Brak aktywności od $1 dnia"
+  },
+  "prlStaleTooltip_few": {
+    "message": "Brak aktywności od $1 dni"
+  },
+  "prlStaleTooltip_many": {
+    "message": "Brak aktywności od $1 dni"
+  },
+  "prlStaleTooltip_other": {
+    "message": "Brak aktywności od $1 dnia"
+  },
+  "prlSumReady_one": {
+    "message": "$1 gotowy do scalenia"
+  },
+  "prlSumReady_few": {
+    "message": "$1 gotowe do scalenia"
+  },
+  "prlSumReady_many": {
+    "message": "$1 gotowych do scalenia"
+  },
+  "prlSumReady_other": {
+    "message": "$1 gotowego do scalenia"
+  },
+  "prlFiltersLabel": {
+    "message": "Szybkie filtry dla tej strony"
+  },
+  "prlFilterReview": {
+    "message": "Czeka na moją recenzję"
+  },
+  "prlFilterReviewTip": {
+    "message": "Tylko pull requesty z tej strony, które czekają na Twoją recenzję"
+  },
+  "prlFilterReady": {
+    "message": "Gotowe do scalenia"
+  },
+  "prlFilterReadyTip": {
+    "message": "Tylko pull requesty z tej strony: zatwierdzone, z zielonymi sprawdzeniami i bez konfliktów"
+  },
+  "prlFilterConflicts": {
+    "message": "Konflikty"
+  },
+  "prlFilterConflictsTip": {
+    "message": "Tylko pull requesty z tej strony z konfliktami scalania"
+  },
+  "prlFilterStale": {
+    "message": "Nieaktywne"
+  },
+  "prlFilterStaleTip": {
+    "message": "Tylko pull requesty z tej strony bez niedawnej aktywności"
+  },
+  "prlFilterHideDrafts": {
+    "message": "Ukryj wersje robocze"
+  },
+  "prlFilterHideDraftsTip": {
+    "message": "Ukrywa robocze pull requesty na tej stronie"
+  },
+  "prlFilterOnPage": {
+    "message": "na tej stronie"
+  },
+  "prlFilterSearchAll": {
+    "message": "szukaj wszędzie"
+  },
+  "prlFilterSearchAllLabel": {
+    "message": "Wyszukaj wszystkie pull requesty czekające na Twoją recenzję"
+  },
+  "prlFilterResult": {
+    "message": "Widoczne: $1 z $2"
+  },
+  "prlFiltersCleared": {
+    "message": "Wyczyszczono filtry"
+  },
+  "prlFilterEmpty": {
+    "message": "Żaden pull request na tej stronie nie pasuje"
+  },
+  "prlFilterClear": {
+    "message": "Wyczyść filtry"
+  },
+  "dashTitle": {
+    "message": "Twoje pull requesty"
+  },
+  "dashViewAll": {
+    "message": "Zobacz wszystkie"
+  },
+  "dashLoading": {
+    "message": "Wczytywanie pull requestów…"
+  },
+  "dashEmptyTitle": {
+    "message": "Brak otwartych pull requestów"
+  },
+  "dashEmptyBody": {
+    "message": "Tutaj pojawią się Twoje pull requesty i te, które czekają na Twoją recenzję."
+  },
+  "dashErrorTitle": {
+    "message": "Nie udało się wczytać pull requestów"
+  },
+  "dashErrorRateLimited": {
+    "message": "Osiągnięto limit zapytań API GitHuba. Spróbuj ponownie za kilka minut."
+  },
+  "dashErrorNetwork": {
+    "message": "Nie można połączyć się z GitHubem. Sprawdź połączenie."
+  },
+  "dashErrorGeneric": {
+    "message": "Sprawdź połączenie lub token w ustawieniach rozszerzenia."
+  },
+  "dashRetry": {
+    "message": "Spróbuj ponownie"
+  },
+  "dashOpenSettings": {
+    "message": "Otwórz ustawienia"
+  },
+  "dashReviewRequested": {
+    "message": "Prośba o recenzję"
+  },
+  "dashDraft": {
+    "message": "Szkic pull requesta"
+  },
+  "dashOpenPR": {
+    "message": "Otwarty pull request"
+  },
+  "dashNew": {
+    "message": "Nowa aktywność"
+  },
+  "dashChecksSuccess": {
+    "message": "Kontrole CI przechodzą"
+  },
+  "dashChecksFailure": {
+    "message": "Kontrole CI nie przechodzą"
+  },
+  "dashChecksPending": {
+    "message": "Kontrole CI w toku"
+  },
+  "dashApproved": {
+    "message": "Zatwierdzony"
+  },
+  "dashChangesRequested": {
+    "message": "Poproszono o zmiany"
+  },
+  "dashReviewRequired": {
+    "message": "Wymaga recenzji"
+  },
+  "dashConflicts": {
+    "message": "Konflikty scalania"
+  },
+  "commonSaved": {
+    "message": "Zapisano"
+  },
+  "commonCancel": {
+    "message": "Anuluj"
+  },
+  "commonRetry": {
+    "message": "Spróbuj ponownie"
+  },
+  "commonSaveFailed": {
+    "message": "Nie udało się zapisać"
+  },
+  "commonQuoted": {
+    "message": "„$1”"
+  },
+  "inboxChecksPassed": {
+    "message": "Wszystkie sprawdzenia zakończone powodzeniem"
+  },
+  "inboxChecksFailed": {
+    "message": "Część sprawdzeń zakończyła się błędem"
+  },
+  "inboxChecksPending": {
+    "message": "Sprawdzenia w toku"
+  },
+  "inboxApproved": {
+    "message": "Zatwierdzony"
+  },
+  "inboxChangesRequested": {
+    "message": "Wymaga zmian"
+  },
+  "inboxReviewRequired": {
+    "message": "Wymaga recenzji"
+  },
+  "inboxDraft": {
+    "message": "Szkic"
+  },
+  "inboxConflicts": {
+    "message": "Konflikty scalania"
+  },
+  "inboxUnresolvedThreads_one": {
+    "message": "$1 nierozwiązany wątek"
+  },
+  "inboxUnresolvedThreads_few": {
+    "message": "$1 nierozwiązane wątki"
+  },
+  "inboxUnresolvedThreads_many": {
+    "message": "$1 nierozwiązanych wątków"
+  },
+  "inboxUnresolvedThreads_other": {
+    "message": "$1 nierozwiązanego wątku"
+  },
+  "inboxLinesAdded_one": {
+    "message": "$1 linia dodana"
+  },
+  "inboxLinesAdded_few": {
+    "message": "$1 linie dodane"
+  },
+  "inboxLinesAdded_many": {
+    "message": "$1 linii dodanych"
+  },
+  "inboxLinesAdded_other": {
+    "message": "$1 linii dodanych"
+  },
+  "inboxLinesRemoved_one": {
+    "message": "$1 linia usunięta"
+  },
+  "inboxLinesRemoved_few": {
+    "message": "$1 linie usunięte"
+  },
+  "inboxLinesRemoved_many": {
+    "message": "$1 linii usuniętych"
+  },
+  "inboxLinesRemoved_other": {
+    "message": "$1 linii usuniętych"
+  },
+  "authErrorEmpty": {
+    "message": "Najpierw wklej swój osobisty token dostępu."
+  },
+  "authErrorWhitespace": {
+    "message": "Token zawiera spacje lub znaki nowego wiersza. Skopiuj go ponownie z GitHuba."
+  },
+  "authErrorNotPat": {
+    "message": "To token aplikacji lub OAuth. Utwórz osobisty token dostępu (personal access token)."
+  },
+  "authErrorPrefix": {
+    "message": "To nie wygląda na token GitHuba. Powinien zaczynać się od github_pat_ lub ghp_."
+  },
+  "authErrorCharacters": {
+    "message": "Token zawiera znaki, których GitHub nie używa. Skopiuj go ponownie z GitHuba."
+  },
+  "authErrorLength": {
+    "message": "Token wygląda na niekompletny. Upewnij się, że skopiowano go w całości."
+  },
+  "authErrorInvalid": {
+    "message": "GitHub nie zaakceptował tego tokena. Mógł wygasnąć lub zostać unieważniony."
+  },
+  "authErrorNetwork": {
+    "message": "Nie można połączyć się z GitHubem. Sprawdź połączenie i spróbuj ponownie."
+  },
+  "authErrorRateLimited": {
+    "message": "Wyczerpano limit zapytań GitHuba. Spróbuj ponownie za kilka minut."
+  },
+  "authErrorPermissions": {
+    "message": "GitHub odmówił dostępu. Sprawdź uprawnienia tokena i jego zatwierdzenie w organizacji (SSO)."
+  },
+  "authErrorUnavailable": {
+    "message": "Usługa Better GHub działająca w tle nie odpowiada. Przeładuj rozszerzenie i spróbuj ponownie."
+  },
+  "authErrorUnknown": {
+    "message": "Nie udało się zweryfikować tokena: $1"
+  },
+  "authErrorGeneric": {
+    "message": "Nie udało się zweryfikować tokena. Spróbuj ponownie."
+  },
+  "authErrorDuplicate": {
+    "message": "Ten token jest już dodany."
+  },
+  "authErrorDifferentAccount": {
+    "message": "Ten token należy do @$1, a nie do @$2."
+  },
+  "authErrorDifferentAccountYou": {
+    "message": "Ten token należy do innego konta GitHub. Użyj tokena utworzonego przez @$1."
+  },
+  "authErrorDifferentAccountGeneric": {
+    "message": "Ten token należy do innego konta GitHub."
+  },
+  "authPermissionsHint": {
+    "message": "Nadaj dostęp do repozytoriów, w których pracujesz, z uprawnieniami Pull requests: Read i Metadata: Read. Contents: Read jest opcjonalne."
+  },
+  "authMoreOptions": {
+    "message": "Tokeny klasyczne i bezpieczeństwo"
+  },
+  "authClassicTitle": {
+    "message": "Token klasyczny"
+  },
+  "authClassicBody": {
+    "message": "Jeden token klasyczny obejmuje wszystkie Twoje organizacje, więc nie potrzebujesz osobnego tokena dla każdej z nich. Jego zakres repo jest jednak znacznie szerszy: daje prawo zapisu do wszystkich Twoich repozytoriów."
+  },
+  "authCreateClassic": {
+    "message": "Utwórz token klasyczny"
+  },
+  "authSecurityTitle": {
+    "message": "Bezpieczeństwo"
+  },
+  "authSecurityBody": {
+    "message": "Token jest przechowywany tylko w tej przeglądarce i wysyłany wyłącznie do api.github.com. Wylogowanie usuwa go stąd; aby wyłączyć go wszędzie, unieważnij go na GitHubie."
+  },
+  "authShowToken": {
+    "message": "Pokaż token"
+  },
+  "authHideToken": {
+    "message": "Ukryj token"
+  },
+  "authConnect": {
+    "message": "Połącz"
+  },
+  "authTokenLabel": {
+    "message": "Osobisty token dostępu"
+  },
+  "authTokenHint": {
+    "message": "Zaczyna się od github_pat_ (fine-grained) lub ghp_ (klasyczny)."
+  },
+  "authConnecting": {
+    "message": "Łączenie…"
+  },
+  "authConnectTitle": {
+    "message": "Połącz konto GitHub"
+  },
+  "authConnectLead": {
+    "message": "Prośby o recenzję i Twoje pull requesty w jednym miejscu, ze statusem sprawdzeń, recenzji i nierozwiązanych wątków."
+  },
+  "authCreateToken": {
+    "message": "Utwórz token na GitHubie"
+  },
+  "authCreateFineGrained": {
+    "message": "Utwórz token fine-grained"
+  },
+  "apiRemaining": {
+    "message": "$1 / $2"
+  },
+  "apiBudget": {
+    "message": "Limit API"
+  },
+  "apiResets": {
+    "message": "odnowienie $1"
+  },
+  "apiMeterText": {
+    "message": "Pozostało $1 z $2 zapytań w tej godzinie"
+  },
+  "authKindFineGrained": {
+    "message": "Token fine-grained"
+  },
+  "authKindClassic": {
+    "message": "Token klasyczny"
+  },
+  "authSignOut": {
+    "message": "Wyloguj"
+  },
+  "authSignOutQuestion": {
+    "message": "Wylogować z Better GHub?"
+  },
+  "authSigningOut": {
+    "message": "Wylogowywanie…"
+  },
+  "authSignOutFailed": {
+    "message": "Nie udało się wylogować. Spróbuj ponownie."
+  },
+  "authSignedOut": {
+    "message": "Wylogowano"
+  },
+  "authRevokeHint": {
+    "message": "Wylogowanie usuwa wszystkie tokeny z tej przeglądarki. Aby wyłączyć token wszędzie, unieważnij go na GitHubie."
+  },
+  "authRevoke": {
+    "message": "Unieważnij na GitHubie"
+  },
+  "authConnectedAs": {
+    "message": "Połączono jako @$1"
+  },
+  "authSessionExpired": {
+    "message": "GitHub nie akceptuje już zapisanego tokena. Połącz się ponownie, aby kontynuować."
+  },
+  "authStoredTokenFailed": {
+    "message": "Zapisany token przestał działać."
+  },
+  "tokensTitle": {
+    "message": "Tokeny"
+  },
+  "tokensKindFineGrained": {
+    "message": "Fine-grained"
+  },
+  "tokensKindClassic": {
+    "message": "Klasyczny"
+  },
+  "tokensKindOther": {
+    "message": "Inny"
+  },
+  "tokensCoveragePrivate": {
+    "message": "Prywatne repozytoria: $1"
+  },
+  "tokensCoveragePublicOnly": {
+    "message": "Tylko publiczne repozytoria — czeka na zatwierdzenie przez organizację?"
+  },
+  "tokensCoverageAll": {
+    "message": "Wszystkie Twoje organizacje"
+  },
+  "tokensExpiresIn": {
+    "message": "Wygasa $1"
+  },
+  "tokensExpired": {
+    "message": "Wygasł"
+  },
+  "tokensNoExpiry": {
+    "message": "Bez daty wygaśnięcia"
+  },
+  "tokensExpiryDate": {
+    "message": "Data wygaśnięcia: $1"
+  },
+  "tokensProblemInvalid": {
+    "message": "Unieważniony lub wygasły — usuń go"
+  },
+  "tokensProblemSso": {
+    "message": "Autoryzuj SSO"
+  },
+  "tokensRemove": {
+    "message": "Usuń"
+  },
+  "tokensRemoveLabel": {
+    "message": "Usuń token $1"
+  },
+  "tokensRemoveQuestion": {
+    "message": "Usunąć ten token?"
+  },
+  "tokensRemoveLastQuestion": {
+    "message": "To Twój jedyny token. Usunąć go i wylogować się?"
+  },
+  "tokensRemoveAndSignOut": {
+    "message": "Usuń i wyloguj"
+  },
+  "tokensRemoving": {
+    "message": "Usuwanie…"
+  },
+  "tokensRemoved": {
+    "message": "Token usunięty"
+  },
+  "tokensRemoveFailed": {
+    "message": "Nie udało się usunąć tokena. Spróbuj ponownie."
+  },
+  "tokensAddToggle": {
+    "message": "Dodaj token dla innej organizacji"
+  },
+  "tokensAddTitle": {
+    "message": "Dodaj token"
+  },
+  "tokensAddWhy": {
+    "message": "Token fine-grained ma dostęp do prywatnych repozytoriów tylko jednego właściciela: Ciebie albo jednej organizacji. Dodaj osobny token dla każdej organizacji, a Better GHub sam wybierze właściwy dla danego repozytorium."
+  },
+  "tokensOrgLabel": {
+    "message": "Organizacja"
+  },
+  "tokensOptional": {
+    "message": "(opcjonalnie)"
+  },
+  "tokensOrgHint": {
+    "message": "Uzupełni formularz nowego tokena na GitHubie. Zostaw puste, aby objąć własne repozytoria."
+  },
+  "tokensOrgInvalid": {
+    "message": "Wpisz nazwę organizacji na GitHubie, np. acme."
+  },
+  "tokensCreateFor": {
+    "message": "Utwórz token dla $1"
+  },
+  "tokensPrefillDescription": {
+    "message": "Podgląd pull requestów na github.com (tylko odczyt)"
+  },
+  "tokensAddSubmit": {
+    "message": "Dodaj token"
+  },
+  "tokensAdding": {
+    "message": "Dodawanie…"
+  },
+  "tokensAdded": {
+    "message": "Dodano token"
+  },
+  "tokensAddedCoverage": {
+    "message": "Dodano token. $1"
+  },
+  "tokensOwnerMismatch": {
+    "message": "Nowy token nie ma jeszcze dostępu do prywatnych repozytoriów $1. Jeśli $1 wymaga zatwierdzania tokenów fine-grained, musi go zatwierdzić właściciel organizacji."
+  },
+  "tokensCount_one": {
+    "message": "$1 token"
+  },
+  "tokensCount_few": {
+    "message": "$1 tokeny"
+  },
+  "tokensCount_many": {
+    "message": "$1 tokenów"
+  },
+  "tokensCount_other": {
+    "message": "$1 tokena"
+  },
+  "tokensSummaryAll": {
+    "message": "wszystkie organizacje"
+  },
+  "tokensSummaryPublic": {
+    "message": "tylko publiczne repozytoria"
+  },
+  "tokensSummaryMore": {
+    "message": "+$1"
+  },
+  "tokensSummaryLine": {
+    "message": "$1 · $2"
+  },
+  "tokensAttention": {
+    "message": "Token wymaga uwagi"
+  },
+  "tokensManage": {
+    "message": "Zarządzaj"
+  },
+  "tokensManageLabel": {
+    "message": "Zarządzaj tokenami"
+  },
+  "inboxTabReview": {
+    "message": "Do recenzji"
+  },
+  "inboxTabAuthored": {
+    "message": "Twoje PR-y"
+  },
+  "inboxTabAssigned": {
+    "message": "Przypisane"
+  },
+  "inboxEmptyReviewTitle": {
+    "message": "Wszystko przejrzane"
+  },
+  "inboxEmptyReviewBody": {
+    "message": "Nikt nie czeka na Twoją recenzję. Nowe prośby pojawią się tutaj."
+  },
+  "inboxEmptyAuthoredTitle": {
+    "message": "Brak otwartych pull requestów"
+  },
+  "inboxEmptyAuthoredBody": {
+    "message": "Pull requesty, które otworzysz, pojawią się tutaj ze statusem sprawdzeń, recenzji i wątków."
+  },
+  "inboxEmptyAssignedTitle": {
+    "message": "Nic nie jest do Ciebie przypisane"
+  },
+  "inboxEmptyAssignedBody": {
+    "message": "Pull requesty przypisane do Ciebie pojawią się tutaj."
+  },
+  "inboxActivityCommit": {
+    "message": "commit od $1"
+  },
+  "inboxActivityReview": {
+    "message": "recenzja od $1"
+  },
+  "inboxActivityComment": {
+    "message": "komentarz od $1"
+  },
+  "inboxByAuthor": {
+    "message": "od $1"
+  },
+  "inboxTabsLabel": {
+    "message": "Skrzynka pull requestów"
+  },
+  "inboxMarkAllRead": {
+    "message": "Oznacz jako przeczytane"
+  },
+  "inboxTitle": {
+    "message": "Skrzynka"
+  },
+  "inboxLoading": {
+    "message": "Wczytywanie pull requestów…"
+  },
+  "inboxRefreshing": {
+    "message": "Odświeżanie…"
+  },
+  "inboxErrorTitle": {
+    "message": "Nie udało się wczytać skrzynki"
+  },
+  "inboxTabUnseen": {
+    "message": "nowe: $1"
+  },
+  "inboxViewAll": {
+    "message": "Zobacz wszystkie na GitHubie"
+  },
+  "inboxNew": {
+    "message": "Nowe"
+  },
+  "inboxUpdated": {
+    "message": "Zaktualizowano $1"
+  },
+  "inboxErrorTimeout": {
+    "message": "GitHub odpowiada zbyt długo. Spróbuj ponownie za chwilę."
+  },
+  "inboxUpdatedAnnouncement": {
+    "message": "Skrzynka zaktualizowana"
+  },
+  "inboxErrorGeneric": {
+    "message": "Nie udało się wczytać części pull requestów: $1"
+  },
+  "inboxAllRead": {
+    "message": "Wszystkie pull requesty oznaczono jako przeczytane"
+  },
+  "inboxMarkReadFailed": {
+    "message": "Nie udało się oznaczyć pull requestów jako przeczytanych"
+  },
+  "inboxSnoozeHour": {
+    "message": "Odłóż na godzinę"
+  },
+  "inboxSnoozeTomorrow": {
+    "message": "Odłóż do jutra, 9:00"
+  },
+  "inboxSnoozeMonday": {
+    "message": "Odłóż do poniedziałku, 9:00"
+  },
+  "inboxSnoozedUntil": {
+    "message": "do $1"
+  },
+  "inboxReady": {
+    "message": "Gotowy do scalenia"
+  },
+  "inboxStale": {
+    "message": "Nieaktywny $1 d"
+  },
+  "inboxStaleFor_one": {
+    "message": "Brak aktywności od $1 dnia"
+  },
+  "inboxStaleFor_few": {
+    "message": "Brak aktywności od $1 dni"
+  },
+  "inboxStaleFor_many": {
+    "message": "Brak aktywności od $1 dni"
+  },
+  "inboxStaleFor_other": {
+    "message": "Brak aktywności od $1 dnia"
+  },
+  "inboxPin": {
+    "message": "Przypnij na górze"
+  },
+  "inboxUnpin": {
+    "message": "Odepnij"
+  },
+  "inboxPinnedLabel": {
+    "message": "Przypięty"
+  },
+  "inboxPinnedAnnounce": {
+    "message": "Przypięto na górze"
+  },
+  "inboxUnpinnedAnnounce": {
+    "message": "Odpięto"
+  },
+  "inboxPinFailed": {
+    "message": "Nie udało się zmienić przypięcia. Spróbuj ponownie."
+  },
+  "inboxSnoozedAnnounce": {
+    "message": "Odłożono $1"
+  },
+  "inboxUnsnoozedAnnounce": {
+    "message": "Z powrotem w skrzynce"
+  },
+  "inboxSnoozeFailed": {
+    "message": "Nie udało się odłożyć pull requesta. Spróbuj ponownie."
+  },
+  "inboxUnsnoozeFailed": {
+    "message": "Nie udało się przywrócić pull requesta. Spróbuj ponownie."
+  },
+  "inboxActionsLabel": {
+    "message": "Akcje dla $1"
+  },
+  "inboxActionsMenu": {
+    "message": "Akcje dla $1"
+  },
+  "inboxSnoozedTitle": {
+    "message": "Odłożone ($1)"
+  },
+  "inboxUnsnooze": {
+    "message": "Przywróć"
+  },
+  "inboxUnsnoozeLabel": {
+    "message": "Przywróć $1"
+  },
+  "popupUnavailableTitle": {
+    "message": "Better GHub nie odpowiada"
+  },
+  "popupOfflineTitle": {
+    "message": "Brak połączenia z GitHubem"
+  },
+  "popupUnavailableBody": {
+    "message": "Usługa rozszerzenia działająca w tle nie odpowiedziała. Spróbuj ponownie lub przeładuj rozszerzenie."
+  },
+  "popupAccount": {
+    "message": "Konto"
+  },
+  "popupShortcutHint": {
+    "message": "Naciśnij $1 w dowolnym pull requeście, aby zobaczyć skróty"
+  },
+  "popupToggleShortcuts": {
+    "message": "Skróty"
+  },
+  "popupToggleBadge": {
+    "message": "Licznik"
+  },
+  "popupRefresh": {
+    "message": "Odśwież skrzynkę"
+  },
+  "popupSettings": {
+    "message": "Ustawienia"
+  },
+  "optRecommended": {
+    "message": "$1 (zalecane)"
+  },
+  "scGroupView": {
+    "message": "Widok"
+  },
+  "scGroupNavigate": {
+    "message": "Nawigacja"
+  },
+  "scGroupCopy": {
+    "message": "Kopiowanie"
+  },
+  "scGroupHelp": {
+    "message": "Pomoc"
+  },
+  "scScopeConversation": {
+    "message": "Conversation"
+  },
+  "scScopeFiles": {
+    "message": "Files changed"
+  },
+  "scScopePr": {
+    "message": "Dowolna karta PR"
+  },
+  "scResetAll": {
+    "message": "Przywróć wszystkie domyślne"
+  },
+  "scResetAllQuestion": {
+    "message": "Przywrócić wszystkie skróty?"
+  },
+  "scResetAllConfirm": {
+    "message": "Przywróć wszystkie"
+  },
+  "scResetAllDone": {
+    "message": "Przywrócono wszystkie skróty"
+  },
+  "scHint": {
+    "message": "Kliknij skrót, aby go zmienić. Kombinacje wymagają Ctrl, Alt lub ⌘, więc nigdy nie zadziałają podczas pisania."
+  },
+  "scOffNote": {
+    "message": "Skróty są wyłączone. Zmiany zaczną działać po ich ponownym włączeniu."
+  },
+  "scCancelled": {
+    "message": "Anulowano nagrywanie"
+  },
+  "scRecordingHelp": {
+    "message": "Naciśnij kombinację · Esc anuluje · Backspace czyści"
+  },
+  "scRecordingAnnouncement": {
+    "message": "Nagrywanie skrótu dla: $1. Naciśnij kombinację klawiszy, Escape, aby anulować, lub Backspace, aby wyczyścić."
+  },
+  "scNeedsModifier": {
+    "message": "Dodaj Ctrl, Alt lub ⌘. Pojedyncze klawisze działałyby podczas pisania i kolidowały ze skrótami GitHuba."
+  },
+  "scRemoved": {
+    "message": "Usunięto"
+  },
+  "scDuplicate": {
+    "message": "$1 jest już przypisany do: $2."
+  },
+  "scSavedAnnouncement": {
+    "message": "$1: teraz $2"
+  },
+  "scClearedAnnouncement": {
+    "message": "$1: brak skrótu"
+  },
+  "scResetDone": {
+    "message": "Przywrócono"
+  },
+  "scAlsoUsedBy": {
+    "message": "Ten sam skrót ma też: $1. Zadziała tylko jeden z nich."
+  },
+  "scBrowserConflict": {
+    "message": "Ta kombinacja może być już zajęta przez przeglądarkę."
+  },
+  "scTypingConflict": {
+    "message": "Bez Ctrl, Alt lub ⌘ ten skrót może kolidować ze skrótami GitHuba."
+  },
+  "scPressKeys": {
+    "message": "Naciśnij klawisze…"
+  },
+  "scRecordingLabel": {
+    "message": "Nagrywanie skrótu dla: $1"
+  },
+  "scKeyLabel": {
+    "message": "$1: $2"
+  },
+  "scNotSet": {
+    "message": "Brak"
+  },
+  "scKeyLabelUnset": {
+    "message": "$1: brak skrótu"
+  },
+  "scResetRow": {
+    "message": "Przywróć $1"
+  },
+  "scReplace": {
+    "message": "Użyj tutaj"
+  },
+  "welcomeFeatureListTitle": {
+    "message": "Aktywność w skrócie"
+  },
+  "welcomeFeatureListBody": {
+    "message": "Ostatni komentarz, ostatni commit i nierozwiązane wątki pod każdym pull requestem na listach."
+  },
+  "welcomeFeatureShortcutsTitle": {
+    "message": "Skróty w pull requestach"
+  },
+  "welcomeFeatureShortcutsBody": {
+    "message": "Zwijaj wątki, przeskakuj między nierozwiązanymi komentarzami i kopiuj nazwy gałęzi."
+  },
+  "welcomeFeatureInboxTitle": {
+    "message": "Skrzynka i licznik"
+  },
+  "welcomeFeatureInboxBody": {
+    "message": "Prośby o recenzję i Twoje pull requesty na pasku narzędzi, z licznikiem, gdy coś się zmieni."
+  },
+  "welcomeFeatureDashboardTitle": {
+    "message": "Karta na pulpicie"
+  },
+  "welcomeFeatureDashboardBody": {
+    "message": "Twoje otwarte pull requesty i ich status recenzji na górze strony głównej GitHuba."
+  },
+  "welcomeStepDone": {
+    "message": "Gotowe"
+  },
+  "welcomeDoneTitle": {
+    "message": "Wszystko gotowe"
+  },
+  "welcomeTitle": {
+    "message": "Witaj w Better GHub"
+  },
+  "welcomeDoneLead": {
+    "message": "Otwórz dowolny pull request na GitHubie, aby zobaczyć rozszerzenie w akcji. Skrzynka czeka na pasku narzędzi."
+  },
+  "welcomeLead": {
+    "message": "Pull requesty na github.com z kontekstem, którego zwykle trzeba szukać. Połącz token, aby zacząć."
+  },
+  "welcomeStepsLabel": {
+    "message": "Pierwsze kroki"
+  },
+  "welcomeStep1": {
+    "message": "Utwórz token na GitHubie"
+  },
+  "welcomeStep2": {
+    "message": "Wklej go poniżej i połącz"
+  },
+  "welcomeStep3Done": {
+    "message": "Otwórz swoje pull requesty"
+  },
+  "welcomeStep3": {
+    "message": "Gotowe"
+  },
+  "optAboutVersion": {
+    "message": "Wersja $1"
+  },
+  "optClearing": {
+    "message": "Czyszczenie…"
+  },
+  "optCleared": {
+    "message": "Wyczyszczono pamięć podręczną"
+  },
+  "optClearFailed": {
+    "message": "Nie udało się wyczyścić pamięci podręcznej"
+  },
+  "optPageTitle": {
+    "message": "Ustawienia Better GHub"
+  },
+  "optSkipToContent": {
+    "message": "Przejdź do treści"
+  },
+  "optAutosave": {
+    "message": "Zmiany zapisują się automatycznie"
+  },
+  "optNavLabel": {
+    "message": "Sekcje ustawień"
+  },
+  "optNavAccount": {
+    "message": "Konto"
+  },
+  "optNavPrList": {
+    "message": "Lista pull requestów"
+  },
+  "optNavDashboard": {
+    "message": "Pulpit"
+  },
+  "optNavShortcuts": {
+    "message": "Skróty klawiszowe"
+  },
+  "optNavNotifications": {
+    "message": "Powiadomienia"
+  },
+  "optNavLanguage": {
+    "message": "Język i dane"
+  },
+  "optNavAbout": {
+    "message": "O rozszerzeniu"
+  },
+  "optAccountTitle": {
+    "message": "Konto"
+  },
+  "optAccountDesc": {
+    "message": "Better GHub pobiera dane pull requestów z GitHuba za pomocą Twojego osobistego tokena dostępu."
+  },
+  "optPrListTitle": {
+    "message": "Lista pull requestów"
+  },
+  "optPrListDesc": {
+    "message": "Dodatkowy kontekst na każdej liście pull requestów na github.com."
+  },
+  "optPrListActivityLabel": {
+    "message": "Aktywność pod każdym pull requestem"
+  },
+  "optPrListActivityDesc": {
+    "message": "Ostatni komentarz, ostatni commit i liczba nierozwiązanych wątków, bezpośrednio na liście."
+  },
+  "optPreviewComment": {
+    "message": "komentarz od mona · 2 godz."
+  },
+  "optPreviewCommit": {
+    "message": "Ostatni commit · 5 godz."
+  },
+  "optPreviewUnresolved": {
+    "message": "3 nierozwiązane"
+  },
+  "optLabelsLabel": {
+    "message": "Sugerowane etykiety"
+  },
+  "optLabelsDesc": {
+    "message": "Podpowiada etykiety na podstawie zmienionych plików, np. brakujące testy lub zmiany w dokumentacji."
+  },
+  "optLabelsNeedsList": {
+    "message": "Włącz aktywność na listach pull requestów, aby z tego korzystać."
+  },
+  "optDashboardTitle": {
+    "message": "Pulpit"
+  },
+  "optDashboardDesc": {
+    "message": "Strona główna GitHuba z Twoją pracą na pierwszym planie."
+  },
+  "optDashboardLabel": {
+    "message": "Karta „Twoje pull requesty”"
+  },
+  "optDashboardCardDesc": {
+    "message": "Pokazuje Twoje otwarte pull requesty i ich status recenzji na górze pulpitu github.com."
+  },
+  "optShortcutsTitle": {
+    "message": "Skróty klawiszowe"
+  },
+  "optShortcutsDesc": {
+    "message": "Działają na stronach pull requestów i nigdy podczas pisania."
+  },
+  "optShortcutsEnabledLabel": {
+    "message": "Włącz skróty klawiszowe"
+  },
+  "optShortcutsEnabledDesc": {
+    "message": "Zwijaj wątki, przeskakuj między nierozwiązanymi komentarzami, przełączaj karty i kopiuj linki bez użycia myszy."
+  },
+  "optShortcutHintLabel": {
+    "message": "Pokazuj pływający przycisk skrótów"
+  },
+  "optShortcutHintDesc": {
+    "message": "Mały przycisk z klawiaturą w rogu strony pull requesta, który otwiera ściągawkę."
+  },
+  "optNotificationsTitle": {
+    "message": "Powiadomienia"
+  },
+  "optNotificationsDesc": {
+    "message": "Wiedz, kiedy pull request na Ciebie czeka, bez trzymania otwartego GitHuba."
+  },
+  "optBadgeLabel": {
+    "message": "Licznik na ikonie rozszerzenia"
+  },
+  "optBadgeDesc": {
+    "message": "Pokazuje, ile pull requestów w Twojej skrzynce ma nową aktywność. Otwarcie pull requesta oznacza go jako przeczytany."
+  },
+  "optIntervalLabel": {
+    "message": "Sprawdzaj aktualizacje co"
+  },
+  "optIntervalDesc": {
+    "message": "Krótszy odstęp to świeższe dane, ale większe zużycie limitu API GitHuba."
+  },
+  "optLanguageTitle": {
+    "message": "Język i dane"
+  },
+  "optLanguageSectionDesc": {
+    "message": "Jak Better GHub się z Tobą komunikuje i co przechowuje na tym urządzeniu."
+  },
+  "optLanguageLabel": {
+    "message": "Język"
+  },
+  "optLanguageDesc": {
+    "message": "Używany na tej stronie, w okienku rozszerzenia i na github.com."
+  },
+  "optLanguageSystem": {
+    "message": "Język przeglądarki"
+  },
+  "optCacheLabel": {
+    "message": "Przechowuj dane pull requestów przez"
+  },
+  "optCacheDesc": {
+    "message": "Pamięć podręczna przyspiesza ładowanie stron i oszczędza limit API. Pięć minut to dobry kompromis."
+  },
+  "optClearLabel": {
+    "message": "Wyczyść pamięć podręczną"
+  },
+  "optClearDesc": {
+    "message": "Usuwa zapisane dane pull requestów. Token i ustawienia zostają."
+  },
+  "optClearButton": {
+    "message": "Wyczyść"
+  },
+  "optAboutTitle": {
+    "message": "O rozszerzeniu"
+  },
+  "optAboutDesc": {
+    "message": "Małe rozszerzenie open source dla osób, które żyją w pull requestach."
+  },
+  "optPrivacyTitle": {
+    "message": "Prywatność"
+  },
+  "optPrivacyBody": {
+    "message": "Token jest przechowywany tylko w tej przeglądarce i wysyłany wyłącznie do api.github.com. Better GHub nie ma serwerów, analityki ani śledzenia."
+  },
+  "optLinkSource": {
+    "message": "Kod źródłowy"
+  },
+  "optLinkIssue": {
+    "message": "Zgłoś problem"
+  },
+  "optLinkPrivacy": {
+    "message": "Polityka prywatności"
+  },
+  "optNavFiles": {
+    "message": "Zmienione pliki"
+  },
+  "optStaleLabel": {
+    "message": "Oznacz jako nieaktywny po"
+  },
+  "optStaleDesc": {
+    "message": "Pull requesty bez commitów, komentarzy i recenzji przez ten czas dostają oznaczenie „Nieaktywny” na listach i w skrzynce."
+  },
+  "optStaleNever": {
+    "message": "Nigdy"
+  },
+  "optStaleDays_one": {
+    "message": "$1 dzień"
+  },
+  "optStaleDays_few": {
+    "message": "$1 dni"
+  },
+  "optStaleDays_many": {
+    "message": "$1 dni"
+  },
+  "optStaleDays_other": {
+    "message": "$1 dnia"
+  },
+  "optFilesTitle": {
+    "message": "Zmienione pliki"
+  },
+  "optFilesDesc": {
+    "message": "Szybszy przegląd zakładki Files changed w pull requeście."
+  },
+  "optCollapseLabel": {
+    "message": "Zwijaj wygenerowane pliki"
+  },
+  "optCollapseDesc": {
+    "message": "Pliki lock, snapshoty, wyniki budowania i inne wygenerowane pliki są od razu zwinięte, więc najpierw widzisz kod, który ma znaczenie."
+  },
+  "optPatternsLabel": {
+    "message": "Wzorce wygenerowanych plików"
+  },
+  "optPatternsDesc": {
+    "message": "Jeden wzorzec w wierszu. Plik pasujący do któregokolwiek z nich jest traktowany jako wygenerowany."
+  },
+  "optPatternStar": {
+    "message": "dowolne znaki oprócz „/”"
+  },
+  "optPatternGlobstar": {
+    "message": "dowolna ścieżka, przez wiele folderów"
+  },
+  "optPatternNoSlash": {
+    "message": "bez „/”: pasuje do nazwy pliku w dowolnym folderze"
+  },
+  "optPatternSlash": {
+    "message": "z „/”: pasuje do tej ścieżki w dowolnym folderze"
+  },
+  "optPatternsReset": {
+    "message": "Przywróć domyślne"
+  },
+  "optPatternsCount_one": {
+    "message": "$1 wzorzec"
+  },
+  "optPatternsCount_few": {
+    "message": "$1 wzorce"
+  },
+  "optPatternsCount_many": {
+    "message": "$1 wzorców"
+  },
+  "optPatternsCount_other": {
+    "message": "$1 wzorca"
+  },
+  "optPatternTestLabel": {
+    "message": "Sprawdź ścieżkę"
+  },
+  "optPatternTestHint": {
+    "message": "Wpisz ścieżkę pliku, aby sprawdzić, czy jest traktowany jako wygenerowany."
+  },
+  "optPatternTestMatch": {
+    "message": "Wygenerowany: pasuje do $1"
+  },
+  "optPatternTestNoMatch": {
+    "message": "Niewygenerowany: żaden wzorzec nie pasuje"
+  },
+  "optProgressLabel": {
+    "message": "Postęp recenzji"
+  },
+  "optProgressDesc": {
+    "message": "Pokazuje, ile plików oznaczono jako przejrzane, i skrót do następnego nieprzejrzanego."
+  },
+  "optCheckoutLabel": {
+    "message": "Polecenie checkout"
+  },
+  "optCheckoutDesc": {
+    "message": "Co kopiuje skrót „Kopiuj polecenie checkout” na stronie pull requesta."
+  },
+  "optCheckoutGh": {
+    "message": "GitHub CLI"
+  },
+  "optCheckoutGit": {
+    "message": "Zwykły git"
+  },
+  "optCheckoutPreview": {
+    "message": "Dla pull requesta #123:"
+  },
+  "optDesktopLabel": {
+    "message": "Powiadomienia systemowe"
+  },
+  "optDesktopDesc": {
+    "message": "Powiadomienia systemowe, gdy coś dzieje się w pull requeście z Twojej skrzynki."
+  },
+  "optEventsLabel": {
+    "message": "Powiadamiaj mnie, gdy"
+  },
+  "optNotifyReview": {
+    "message": "Ktoś prosi mnie o recenzję"
+  },
+  "optNotifyChanges": {
+    "message": "Recenzent prosi o zmiany w moim pull requeście"
+  },
+  "optNotifyChecks": {
+    "message": "Sprawdzenia w moim pull requeście kończą się błędem"
+  },
+  "optNotifyApproved": {
+    "message": "Mój pull request zostaje zatwierdzony"
+  },
+  "optQuietLabel": {
+    "message": "Godziny ciszy"
+  },
+  "optQuietDesc": {
+    "message": "W tych godzinach nie ma powiadomień systemowych. Licznik na ikonie nadal się aktualizuje."
+  },
+  "optQuietRange": {
+    "message": "Między"
+  },
+  "optQuietStart": {
+    "message": "Początek godzin ciszy"
+  },
+  "optQuietEnd": {
+    "message": "Koniec godzin ciszy"
+  },
+  "optTestLabel": {
+    "message": "Powiadomienie testowe"
+  },
+  "optTestDesc": {
+    "message": "Wysyła je od razu. Jeśli nic się nie pojawi, sprawdź, czy system zezwala Chrome na powiadomienia."
+  },
+  "optTestButton": {
+    "message": "Wyślij powiadomienie testowe"
+  },
+  "optTestNotificationTitle": {
+    "message": "Better GHub"
+  },
+  "optTestNotificationBody": {
+    "message": "Powiadomienia działają. Zobaczysz je, gdy pull request będzie Cię potrzebował."
+  },
+  "optTestSent": {
+    "message": "Wysłano powiadomienie testowe"
+  },
+  "optTestBlocked": {
+    "message": "Powiadomienia Better GHub są wyłączone w Chrome"
+  },
+  "optTestUnavailable": {
+    "message": "Powiadomienia nie są dostępne w tej przeglądarce"
+  },
+  "optTestFailed": {
+    "message": "Nie udało się wyświetlić powiadomienia"
+  },
+  "notifyReviewRequestedTitle": {
+    "message": "Prośba o recenzję · $1"
+  },
+  "notifyChangesRequestedTitle": {
+    "message": "Poproszono o zmiany · $1"
+  },
+  "notifyChecksFailedTitle": {
+    "message": "Sprawdzenia nie przeszły · $1"
+  },
+  "notifyApprovedTitle": {
+    "message": "Zatwierdzony · $1"
+  },
+  "notifySummary_one": {
+    "message": "$1 aktualizacja w Twoich pull requestach"
+  },
+  "notifySummary_few": {
+    "message": "$1 aktualizacje w Twoich pull requestach"
+  },
+  "notifySummary_many": {
+    "message": "$1 aktualizacji w Twoich pull requestach"
+  },
+  "notifySummary_other": {
+    "message": "$1 aktualizacji w Twoich pull requestach"
+  },
+  "shortcutToggleGenerated": {
+    "message": "Zwiń / rozwiń wygenerowane pliki"
+  },
+  "shortcutToggleThreadsPanel": {
+    "message": "Pokaż / ukryj panel nierozwiązanych wątków"
+  },
+  "shortcutMarkViewedNext": {
+    "message": "Oznacz plik jako przejrzany i przejdź do następnego"
+  },
+  "shortcutNextUnviewed": {
+    "message": "Przejdź do następnego nieprzejrzanego pliku"
+  },
+  "shortcutCopyCheckout": {
+    "message": "Kopiuj polecenie checkout"
+  },
+  "prPageGeneratedChip": {
+    "message": "Wygenerowany"
+  },
+  "prPageGeneratedChipTip": {
+    "message": "Zwinięty automatycznie przez Better GHub"
+  },
+  "prPageGeneratedAutoOne": {
+    "message": "Zwinięto 1 wygenerowany plik"
+  },
+  "prPageGeneratedAuto": {
+    "message": "Zwinięto wygenerowane pliki: $1"
+  },
+  "prPageGeneratedExpandAction": {
+    "message": "Rozwiń"
+  },
+  "prPageGeneratedCollapsed": {
+    "message": "Zwinięto wygenerowane pliki ($1)"
+  },
+  "prPageGeneratedExpanded": {
+    "message": "Rozwinięto wygenerowane pliki ($1)"
+  },
+  "prPageNoGenerated": {
+    "message": "W tych zmianach nie ma wygenerowanych plików"
+  },
+  "prPageProgressLabel": {
+    "message": "Postęp recenzji"
+  },
+  "prPageProgressText": {
+    "message": "Przejrzane pliki: $1 / $2"
+  },
+  "prPageProgressMeter": {
+    "message": "Przejrzane pliki"
+  },
+  "prPageProgressNext": {
+    "message": "Następny nieprzejrzany"
+  },
+  "prPageMarkedViewed": {
+    "message": "Oznaczono $1 jako przejrzany · $2/$3"
+  },
+  "prPageNextUnviewed": {
+    "message": "Następny nieprzejrzany: $1 · pozostało $2"
+  },
+  "prPageAllViewed": {
+    "message": "Przejrzano wszystkie pliki ($1)"
+  },
+  "prPageAllViewedOne": {
+    "message": "Przejrzano 1 plik"
+  },
+  "prPageViewedSignIn": {
+    "message": "Zaloguj się w GitHubie, aby oznaczać pliki jako przejrzane"
+  },
+  "prPagePanelTitle": {
+    "message": "Nierozwiązane wątki"
+  },
+  "prPagePanelCount": {
+    "message": "Nierozwiązane: $1"
+  },
+  "prPagePanelEmpty": {
+    "message": "Brak nierozwiązanych wątków"
+  },
+  "prPagePanelNoPath": {
+    "message": "Wątek recenzji"
+  },
+  "prPagePanelOutdated": {
+    "message": "Nieaktualny"
+  },
+  "prPagePanelKeysMove": {
+    "message": "wybór"
+  },
+  "prPagePanelKeysJump": {
+    "message": "przejdź"
+  },
+  "prPagePanelKeysClose": {
+    "message": "zamknij"
+  },
+  "prPageCopiedCheckout": {
+    "message": "Skopiowano polecenie checkout"
+  },
+  "shortcutToggleWhitespace": {
+    "message": "Ukryj / pokaż zmiany białych znaków"
+  },
+  "shortcutToggleSplitView": {
+    "message": "Przełącz widok diffa: podzielony / ujednolicony"
+  },
+  "shortcutFindFile": {
+    "message": "Znajdź zmieniony plik"
+  },
+  "shortcutChangesSinceVisit": {
+    "message": "Pokaż zmiany od ostatniej wizyty"
+  },
+  "prPageWhitespaceShown": {
+    "message": "Pokazuję zmiany białych znaków"
+  },
+  "prPageWhitespaceHidden": {
+    "message": "Ukrywam zmiany białych znaków"
+  },
+  "prPageSplitView": {
+    "message": "Przełączam na widok podzielony"
+  },
+  "prPageUnifiedView": {
+    "message": "Przełączam na widok ujednolicony"
+  },
+  "prPageFinderLabel": {
+    "message": "Znajdź zmieniony plik"
+  },
+  "prPageFinderPlaceholder": {
+    "message": "Szukaj zmienionego pliku…"
+  },
+  "prPageFinderResults": {
+    "message": "Zmienione pliki"
+  },
+  "prPageFinderEmpty": {
+    "message": "Brak pasujących plików"
+  },
+  "prPageFinderGenerated": {
+    "message": "Wygenerowany"
+  },
+  "prPageFinderNoFiles": {
+    "message": "Nie znaleziono zmienionych plików na tej stronie"
+  },
+  "prPageNewCommits": {
+    "message": "Nowe commity od ostatniej wizyty: $1 ($2)"
+  },
+  "prPageRewritten": {
+    "message": "Gałąź została przepisana od ostatniej wizyty ($1)"
+  },
+  "prPageShowFiles": {
+    "message": "Pokaż pliki"
+  },
+  "prPageShowOnlyThese": {
+    "message": "Pokaż tylko te zmiany"
+  },
+  "prPageNoChangesSince": {
+    "message": "Brak nowych zmian od ostatniej wizyty"
+  },
+  "inboxRereview": {
+    "message": "Nowe zmiany po Twoim review"
+  },
+  "inboxPendingReview": {
+    "message": "Niewysłane review · $1"
+  },
+  "inboxPendingReviewFor_one": {
+    "message": "Masz niewysłane review z $1 komentarzem. Otwórz PR i wybierz „Submit review”."
+  },
+  "inboxPendingReviewFor_few": {
+    "message": "Masz niewysłane review z $1 komentarzami. Otwórz PR i wybierz „Submit review”."
+  },
+  "inboxPendingReviewFor_many": {
+    "message": "Masz niewysłane review z $1 komentarzami. Otwórz PR i wybierz „Submit review”."
+  },
+  "inboxPendingReviewFor_other": {
+    "message": "Masz niewysłane review z $1 komentarzami. Otwórz PR i wybierz „Submit review”."
+  },
+  "prPendingReview_one": {
+    "message": "Masz niewysłane review z $1 komentarzem"
+  },
+  "prPendingReview_few": {
+    "message": "Masz niewysłane review z $1 komentarzami"
+  },
+  "prPendingReview_many": {
+    "message": "Masz niewysłane review z $1 komentarzami"
+  },
+  "prPendingReview_other": {
+    "message": "Masz niewysłane review z $1 komentarzami"
+  },
+  "prPendingReviewOpen": {
+    "message": "Otwórz Files changed"
+  },
+  "prPendingReviewDismiss": {
+    "message": "Zamknij"
+  },
+  "optBackupLabel": {
+    "message": "Kopia ustawień"
+  },
+  "optBackupDesc": {
+    "message": "Zapisz ustawienia do pliku albo wczytaj je z pliku. Tokeny nigdy nie są uwzględniane."
+  },
+  "optExportButton": {
+    "message": "Eksportuj"
+  },
+  "optImportButton": {
+    "message": "Importuj"
+  },
+  "optExported": {
+    "message": "Wyeksportowano ustawienia"
+  },
+  "optExportFailed": {
+    "message": "Nie udało się wyeksportować ustawień"
+  },
+  "optImported": {
+    "message": "Zaimportowano ustawienia: $1"
+  },
+  "optImportFailed": {
+    "message": "Nie udało się zaimportować ustawień"
+  },
+  "optImportInvalidJson": {
+    "message": "Ten plik nie jest poprawnym JSON-em."
+  },
+  "optImportWrongApp": {
+    "message": "To nie jest plik ustawień Better GHub."
+  },
+  "optImportTooLarge": {
+    "message": "Ten plik jest zbyt duży jak na plik ustawień."
+  },
+  "optImportEmpty": {
+    "message": "W tym pliku nie ma ustawień do zaimportowania."
+  },
+  "shortcutCommentTemplates": {
+    "message": "Wstaw szablon komentarza"
+  },
+  "prPageGroupCompose": {
+    "message": "Pisanie"
+  },
+  "scGroupCompose": {
+    "message": "Pisanie"
+  },
+  "commentPickerLabel": {
+    "message": "Wstaw szablon komentarza"
+  },
+  "commentPickerPlaceholder": {
+    "message": "Filtruj szablony…"
+  },
+  "commentPickerResults": {
+    "message": "Szablony"
+  },
+  "commentPickerSnippet": {
+    "message": "Fragment"
+  },
+  "commentPickerNoMatch": {
+    "message": "Brak pasujących szablonów"
+  },
+  "commentPickerNone": {
+    "message": "Nie ma jeszcze szablonów. Dodaj fragmenty w opcjach rozszerzenia."
+  },
+  "commentLabelHint_praise": {
+    "message": "Wyróżnij coś pozytywnego"
+  },
+  "commentLabelHint_nitpick": {
+    "message": "Drobna prośba wynikająca z preferencji"
+  },
+  "commentLabelHint_suggestion": {
+    "message": "Zaproponuj ulepszenie"
+  },
+  "commentLabelHint_issue": {
+    "message": "Konkretny problem do naprawy"
+  },
+  "commentLabelHint_question": {
+    "message": "Coś, czego nie jesteś pewien"
+  },
+  "commentLabelHint_thought": {
+    "message": "Pomysł, który pojawił się podczas przeglądu"
+  },
+  "commentLabelHint_chore": {
+    "message": "Zadanie do wykonania przed scaleniem"
+  },
+  "commentLabelHint_todo": {
+    "message": "Drobna, ale potrzebna zmiana"
+  },
+  "optNavTemplates": {
+    "message": "Szablony komentarzy"
+  },
+  "optTemplatesTitle": {
+    "message": "Szablony komentarzy"
+  },
+  "optTemplatesDesc": {
+    "message": "Wstawiaj gotowy tekst do każdego pola komentarza na GitHubie skrótem klawiszowym."
+  },
+  "optTemplatesEnabledLabel": {
+    "message": "Szablony komentarzy"
+  },
+  "optTemplatesEnabledDesc": {
+    "message": "Naciśnij skrót w polu komentarza, aby wybrać szablon. Skrót zmienisz w sekcji Skróty klawiszowe."
+  },
+  "optConventionalLabel": {
+    "message": "Etykiety Conventional Comments"
+  },
+  "optConventionalDesc": {
+    "message": "Dodaje etykiety takie jak praise, nitpick czy issue (blocking), wstawiane jako pogrubiony prefiks."
+  },
+  "optSnippetsLabel": {
+    "message": "Twoje fragmenty"
+  },
+  "optSnippetsDesc": {
+    "message": "Teksty do wielokrotnego użytku. Każdy pojawia się na liście pod swoim tytułem."
+  },
+  "optSnippetAdd": {
+    "message": "Dodaj fragment"
+  },
+  "optSnippetEmpty": {
+    "message": "Nie ma jeszcze fragmentów."
+  },
+  "optSnippetTitle": {
+    "message": "Tytuł"
+  },
+  "optSnippetBody": {
+    "message": "Tekst do wstawienia"
+  },
+  "optSnippetMoveUp": {
+    "message": "Przesuń w górę"
+  },
+  "optSnippetMoveDown": {
+    "message": "Przesuń w dół"
+  },
+  "optSnippetRemove": {
+    "message": "Usuń"
+  },
+  "optSnippetLimit": {
+    "message": "Możesz zachować maksymalnie $1 fragmentów."
+  },
+  "optSnippetItem": {
+    "message": "Fragment $1"
+  },
+  "optSnippetsCount_one": {
+    "message": "$1 fragment"
+  },
+  "optSnippetsCount_few": {
+    "message": "$1 fragmenty"
+  },
+  "optSnippetsCount_many": {
+    "message": "$1 fragmentów"
+  },
+  "optSnippetsCount_other": {
+    "message": "$1 fragmentu"
+  },
+  "shortcutLoadAllTimeline": {
+    "message": "Wczytaj wszystkie ukryte elementy rozmowy"
+  },
+  "shortcutToggleChecklist": {
+    "message": "Pokaż / ukryj listę kontrolną przeglądu"
+  },
+  "prPageLoadAll": {
+    "message": "Wczytaj wszystko"
+  },
+  "prPageLoadAllNone": {
+    "message": "Nic nie jest ukryte: cała rozmowa jest już wczytana"
+  },
+  "prPageLoadAllProgress": {
+    "message": "Wczytano $1 z ok. $2 elementów…"
+  },
+  "prPageLoadAllProgressBatches": {
+    "message": "Wczytuję kolejne elementy… (partia $1)"
+  },
+  "prPageLoadAllTimeout": {
+    "message": "GitHub nie odpowiedział. Spróbuj ponownie."
+  },
+  "prPageLoadAllCapped": {
+    "message": "Zatrzymano po $1 partiach. Uruchom ponownie, aby wczytać więcej."
+  },
+  "prPageLoadAllDone": {
+    "message": "Wczytano całą rozmowę"
+  },
+  "prChecklistTitle": {
+    "message": "Lista kontrolna przeglądu"
+  },
+  "prChecklistNone": {
+    "message": "Brak listy kontrolnej dla tego repozytorium. Dodaj ją w opcjach rozszerzenia."
+  },
+  "optChecklistLabel": {
+    "message": "Lista kontrolna przeglądu"
+  },
+  "optChecklistDesc": {
+    "message": "Pokazuje małą listę kontrolną w pull requestach repozytoriów, które mają szablon poniżej. Zaznaczenia są pamiętane osobno dla każdego pull requesta."
+  },
+  "optChecklistTemplatesLabel": {
+    "message": "Szablony list kontrolnych"
+  },
+  "optChecklistTemplatesDesc": {
+    "message": "Zacznij szablon od [właściciel/repo], [właściciel/*] lub [*] (dowolne repozytorium), a potem wypisz po jednym punkcie w wierszu. Wygrywa najbardziej szczegółowy szablon."
+  },
+  "prlChecksFailing": {
+    "message": "Błędy w testach"
+  },
+  "checksPopoverLabel": {
+    "message": "Nieudane sprawdzenia"
+  },
+  "checksLoading": {
+    "message": "Wczytywanie sprawdzeń…"
+  },
+  "checksLoadFailed": {
+    "message": "Nie udało się wczytać szczegółów sprawdzeń."
+  },
+  "checksNoneFailed": {
+    "message": "Brak nieudanych sprawdzeń. Mogły zostać uruchomione ponownie."
+  },
+  "checksMore": {
+    "message": "+$1 więcej"
+  },
+  "checksOpenTab": {
+    "message": "Otwórz kartę Checks"
+  },
+  "checksFailedCount_one": {
+    "message": "$1 nieudane sprawdzenie"
+  },
+  "checksFailedCount_few": {
+    "message": "$1 nieudane sprawdzenia"
+  },
+  "checksFailedCount_many": {
+    "message": "$1 nieudanych sprawdzeń"
+  },
+  "checksFailedCount_other": {
+    "message": "$1 nieudanego sprawdzenia"
+  },
+  "inboxFailedChecks": {
+    "message": "Nieudane sprawdzenia"
+  },
+  "popupCopySummary": {
+    "message": "Kopiuj podsumowanie dnia"
+  },
+  "summaryEmpty": {
+    "message": "Nie ma jeszcze czego podsumować"
+  },
+  "summaryCopied": {
+    "message": "Skopiowano podsumowanie do schowka"
+  },
+  "summaryCopyFailed": {
+    "message": "Nie udało się skopiować podsumowania"
+  },
+  "summaryMine": {
+    "message": "Moje pull requesty"
+  },
+  "summaryReviewing": {
+    "message": "Do recenzji"
+  },
+  "summaryReady": {
+    "message": "gotowy do scalenia"
+  },
+  "summaryChecksFailing": {
+    "message": "błędy w sprawdzeniach"
+  },
+  "summaryChangesRequested": {
+    "message": "wymagane zmiany"
+  },
+  "summaryApprovedWaiting": {
+    "message": "zatwierdzony (czeka na sprawdzenia)"
+  },
+  "summaryApproved": {
+    "message": "zatwierdzony"
+  },
+  "summaryDraft": {
+    "message": "szkic"
+  },
+  "summaryWaiting": {
+    "message": "czeka na recenzję"
   }
 }
-

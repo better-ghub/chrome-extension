@@ -1,180 +1,154 @@
-// Internationalization for Better GHub
-// Unified i18n system for content scripts, popup, and options
+// Better GHub - Internationalization
+//
+// Chrome's native chrome.i18n always follows the browser UI language, but users
+// can pick a language in Options. So we load _locales/<lang>/messages.json
+// ourselves: extension pages fetch it directly; content scripts (which cannot
+// fetch chrome-extension:// URLs) ask the background worker for it.
+
+import { sendToBackground } from './core/messages';
+import { readSettingItems } from './core/settings-storage';
 
 interface MessagesFile {
   [key: string]: { message: string };
 }
 
-// =============================================================================
-// Shared State
-// =============================================================================
+export const SUPPORTED_LANGUAGES = ['en', 'pl'] as const;
 
 let messages: MessagesFile | null = null;
 let currentLocale = 'en';
-let initialized = false;
+let loading: Promise<void> | null = null;
 
-// =============================================================================
-// Core i18n Functions
-// =============================================================================
-
-/**
- * Initialize i18n by loading the appropriate language
- * Works in both content scripts and popup/options pages
- */
-export async function initI18n(): Promise<void> {
-  if (initialized) return;
-
-  try {
-    const result = await chrome.storage.local.get(['language']);
-    let lang = typeof result.language === 'string' ? result.language : 'system';
-
-    if (lang === 'system') {
-      lang = chrome.i18n.getUILanguage().split('-')[0]; // en-US -> en
-    }
-
-    currentLocale = lang;
-
-    // Try loading directly first (works in popup/options)
-    const url = chrome.runtime.getURL(`_locales/${lang}/messages.json`);
-    const response = await fetch(url);
-
-    if (response.ok) {
-      messages = await response.json();
-    } else {
-      // Fall back to English
-      const enUrl = chrome.runtime.getURL('_locales/en/messages.json');
-      const enResponse = await fetch(enUrl);
-      messages = await enResponse.json();
-    }
-
-    console.log(`Better GHub: i18n loaded (${lang})`);
-    initialized = true;
-  } catch (error) {
-    // For content scripts, try via background script
+function resolveLanguage(stored: unknown): string {
+  let lang = typeof stored === 'string' ? stored : 'system';
+  if (lang === 'system') {
     try {
-      const result = await chrome.storage.local.get(['language']);
-      let lang = typeof result.language === 'string' ? result.language : chrome.i18n.getUILanguage().split('-')[0];
-      if (lang === 'system') lang = chrome.i18n.getUILanguage().split('-')[0];
-
-      currentLocale = lang;
-
-      const response = (await Promise.race([
-        chrome.runtime.sendMessage({ action: 'loadMessages', language: lang }),
-        new Promise<never>((_, reject) => setTimeout(() => reject(new Error('timeout')), 3000)),
-      ])) as { success: boolean; messages?: MessagesFile };
-
-      if (response?.success && response.messages) {
-        messages = response.messages;
-        initialized = true;
-      }
+      lang = chrome.i18n.getUILanguage().split('-')[0];
     } catch {
-      console.warn('Better GHub: i18n fallback to Chrome native');
-      messages = null;
-      initialized = true;
+      lang = 'en';
     }
+  }
+  return (SUPPORTED_LANGUAGES as readonly string[]).includes(lang) ? lang : 'en';
+}
+
+async function fetchMessages(lang: string): Promise<MessagesFile | null> {
+  const isExtensionPage = typeof location !== 'undefined' && location.protocol === 'chrome-extension:';
+  if (isExtensionPage || typeof document === 'undefined') {
+    try {
+      const res = await fetch(chrome.runtime.getURL(`_locales/${lang}/messages.json`));
+      if (res.ok) return (await res.json()) as MessagesFile;
+    } catch {
+      /* fall through */
+    }
+    return null;
+  }
+  const res = await sendToBackground('i18n:load', { language: lang }, { ok: false });
+  return res.ok && res.messages ? (res.messages as MessagesFile) : null;
+}
+
+async function load(): Promise<void> {
+  try {
+    const { language } = await readSettingItems(['language']);
+    const lang = resolveLanguage(language);
+    currentLocale = lang;
+    messages = (await fetchMessages(lang)) ?? (lang !== 'en' ? await fetchMessages('en') : null);
+  } catch {
+    messages = null; // fall back to chrome.i18n / inline fallbacks
   }
 }
 
-/**
- * Get a translated message by key
- */
+/** Load the user's language. Idempotent; concurrent callers share one load. */
+export function initI18n(): Promise<void> {
+  if (!loading) loading = load();
+  return loading;
+}
+
+/** Force a reload (after the language setting changes). */
+export function reloadI18n(): Promise<void> {
+  loading = load();
+  return loading;
+}
+
+function substitute(message: string, substitutions?: string | string[]): string {
+  if (substitutions === undefined) return message;
+  const subs = Array.isArray(substitutions) ? substitutions : [substitutions];
+  return message.replace(/\$(\d)/g, (m, i: string) => subs[Number(i) - 1] ?? m);
+}
+
+/** Translated message for `key`, or `key` itself when unknown. */
 export function getMessage(key: string, substitutions?: string | string[]): string {
-  // Try loaded messages first
-  if (messages?.[key]) {
-    let message = messages[key].message;
-
-    if (substitutions) {
-      if (Array.isArray(substitutions)) {
-        substitutions.forEach((sub, i) => {
-          message = message.replace(`$${i + 1}`, sub);
-        });
-      } else {
-        message = message.replace('$1', substitutions);
-      }
-    }
-
-    return message;
+  const entry = messages?.[key];
+  if (entry) return substitute(entry.message, substitutions);
+  try {
+    const native = chrome.i18n.getMessage(key, substitutions);
+    if (native) return native;
+  } catch {
+    /* chrome.i18n unavailable (tests / invalidated context) */
   }
-
-  // Fall back to Chrome's native i18n
-  const fallback = chrome.i18n.getMessage(key, substitutions);
-  return fallback || key;
+  return key;
 }
 
 /**
- * Shorthand for getMessage
+ * Preferred API: translated message with an English fallback used when the key
+ * is missing from the locale files. `$1`, `$2`… are replaced by `subs`.
  */
+export function t(key: string, fallback: string, subs?: string | string[]): string {
+  const out = getMessage(key, subs);
+  return out === key ? substitute(fallback, subs) : out;
+}
+
+/** Shorthand kept for older call sites. */
 export function msg(key: string, fallback?: string): string {
-  const result = getMessage(key);
-  return result === key && fallback ? fallback : result;
+  return fallback === undefined ? getMessage(key) : t(key, fallback);
 }
 
-/**
- * Get current locale
- */
 export function getLocale(): string {
   return currentLocale;
 }
 
-// =============================================================================
-// HTML Translation (for popup/options)
-// =============================================================================
+const MSG_RE = /__MSG_([a-zA-Z0-9_]+)__/g;
 
 /**
- * Translate all __MSG_*__ placeholders in the document
- * Call this after initI18n()
+ * Translate `__MSG_key__` placeholders in an extension page: text nodes, plus
+ * the title/placeholder/aria-label/title attributes. Also honours
+ * `data-i18n="key"` (textContent) and `data-i18n-attr="attr:key,attr2:key2"`.
  */
-export function translatePage(): void {
-  // Walk through all text nodes
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+export function translatePage(root: ParentNode = document): void {
+  const replace = (s: string): string => s.replace(MSG_RE, (_, key: string) => getMessage(key));
 
-  const nodesToUpdate: { node: Text; newText: string }[] = [];
-
+  const walker = document.createTreeWalker(root instanceof Document ? root.body : (root as Node), NodeFilter.SHOW_TEXT);
+  const updates: [Text, string][] = [];
   let node: Text | null;
   while ((node = walker.nextNode() as Text | null)) {
     const text = node.textContent;
-    if (text?.includes('__MSG_')) {
-      const translated = text.replace(/__MSG_([a-zA-Z0-9_]+)__/g, (_, key) => getMessage(key));
-      if (translated !== text) {
-        nodesToUpdate.push({ node, newText: translated });
-      }
-    }
+    if (text?.includes('__MSG_')) updates.push([node, replace(text)]);
   }
+  for (const [n, text] of updates) n.textContent = text;
 
-  nodesToUpdate.forEach(({ node, newText }) => {
-    node.textContent = newText;
+  for (const attr of ['placeholder', 'aria-label', 'title', 'alt']) {
+    root.querySelectorAll<HTMLElement>(`[${attr}*="__MSG_"]`).forEach((el) => {
+      el.setAttribute(attr, replace(el.getAttribute(attr) || ''));
+    });
+  }
+  root.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
+    const key = el.dataset.i18n;
+    if (key) el.textContent = getMessage(key);
   });
-
-  // Translate title
-  if (document.title.includes('__MSG_')) {
-    document.title = document.title.replace(/__MSG_([a-zA-Z0-9_]+)__/g, (_, key) => getMessage(key));
-  }
-
-  // Translate input placeholders
-  document.querySelectorAll('input[placeholder]').forEach((input) => {
-    const el = input as HTMLInputElement;
-    if (el.placeholder.includes('__MSG_')) {
-      el.placeholder = el.placeholder.replace(/__MSG_([a-zA-Z0-9_]+)__/g, (_, key) => getMessage(key));
+  root.querySelectorAll<HTMLElement>('[data-i18n-attr]').forEach((el) => {
+    for (const pair of (el.dataset.i18nAttr || '').split(',')) {
+      const [attr, key] = pair.split(':').map((s) => s.trim());
+      if (attr && key) el.setAttribute(attr, getMessage(key));
     }
   });
+
+  if (typeof document !== 'undefined' && document.title.includes('__MSG_')) {
+    document.title = replace(document.title);
+  }
+  if (typeof document !== 'undefined') document.documentElement.lang = currentLocale;
 }
 
-// =============================================================================
-// Class-based API (for backward compatibility with content scripts)
-// =============================================================================
-
-class I18nManager {
-  async init(): Promise<void> {
-    await initI18n();
-  }
-
-  getMessage(key: string, substitutions?: string | string[]): string {
-    return getMessage(key, substitutions);
-  }
-
-  getCurrentLocale(): string {
-    return getLocale();
-  }
-}
-
-export const i18n = new I18nManager();
+/** Back-compat object API used by older content-script code. */
+export const i18n = {
+  init: initI18n,
+  getMessage,
+  getCurrentLocale: getLocale,
+};

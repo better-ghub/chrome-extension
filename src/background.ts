@@ -1,163 +1,67 @@
-// Better GHub - Background Service Worker
+// Better GHub - Background service worker (entry).
+//
+// MV3 rules this file follows:
+// - every listener is registered synchronously at top level, so events that
+//   wake the worker are delivered;
+// - nothing calls the GitHub API at top level: the worker wakes for every
+//   message/alarm, and the old code validated the token on each wake.
 
-import { Constants } from './constants';
+import { LEGACY_KEYS, SETTINGS_KEYS } from './core/settings';
+import { isSettingsArea, migrateSettingsToSync } from './core/settings-storage';
+import { ALARM_INBOX, ALARM_VALIDATE, clearLegacyAlarms, syncAlarms } from './background/alarms';
+import { validateStoredTokens } from './background/auth-check';
+import { ALARM_SNOOZE, onInboxAlarm, onSnoozeAlarm } from './background/inbox';
+import { onNotificationClicked } from './background/notify';
+import { openOptions } from './background/pages';
+import { onMessage } from './background/router';
+import { invalidateSettings } from './background/store';
+import { migrateTokens } from './background/tokens';
 
-console.log(`Better GHub v${Constants.VERSION}: Background service worker initialized`);
+const SETTING_STORAGE_KEYS = new Set(Object.values(SETTINGS_KEYS));
 
-interface MessagesFile {
-  [key: string]: {
-    message: string;
-    description?: string;
-  };
-}
+chrome.runtime.onMessage.addListener(onMessage);
 
-async function validateStoredToken(): Promise<void> {
-  try {
-    const result = await chrome.storage.local.get(['githubToken']);
-    const token = typeof result.githubToken === 'string' ? result.githubToken : '';
-
-    if (!token) {
-      return; // No token to validate
+chrome.runtime.onInstalled.addListener((details) => {
+  void (async () => {
+    // Move a token left in chrome.storage.local (readable by content scripts)
+    // into the background-only secret store as early as possible.
+    await migrateTokens();
+    await migrateSettingsToSync(Object.values(SETTINGS_KEYS));
+    if (details.reason === 'install') {
+      await openOptions('welcome');
+    } else if (details.reason === 'update') {
+      // shortcutBindings stays: normalizeBindings() migrates it on read.
+      await chrome.storage.local.remove(LEGACY_KEYS).catch(() => undefined);
+      await clearLegacyAlarms();
     }
+    await syncAlarms();
+  })();
+});
 
-    const response = await fetch('https://api.github.com/user', {
-      headers: {
-        Authorization: `token ${token}`,
-        Accept: 'application/vnd.github.v3+json',
-      },
-    });
-
-    if (!response.ok) {
-      console.warn('Better GHub: Token validation failed, removing token');
-      await chrome.storage.local.remove(['githubToken', 'githubUser']);
-
-      // Notify all GitHub tabs
-      const tabs = await chrome.tabs.query({ url: 'https://github.com/*/*/pulls*' });
-      tabs.forEach((tab) => {
-        if (tab.id) {
-          chrome.tabs.sendMessage(tab.id, { action: 'tokenInvalid' }).catch(() => {
-            // Silently ignore if tab is not ready
-          });
-        }
-      });
-    }
-  } catch (error) {
-    console.error('Better GHub: Error validating token:', error instanceof Error ? error.message : String(error));
-  }
-}
-
-// Set up periodic token validation
-chrome.alarms.create('validateToken', { periodInMinutes: 360 }); // 6 hours
+chrome.runtime.onStartup.addListener(() => {
+  void migrateTokens()
+    .then(() => migrateSettingsToSync(Object.values(SETTINGS_KEYS)))
+    .then(syncAlarms);
+});
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'validateToken') {
-    void validateStoredToken();
-  }
+  if (alarm.name === ALARM_INBOX) void onInboxAlarm().catch(() => undefined);
+  else if (alarm.name === ALARM_VALIDATE) void validateStoredTokens().catch(() => undefined);
+  else if (alarm.name === ALARM_SNOOZE) void onSnoozeAlarm().catch(() => undefined);
 });
 
-// Validate on startup
-void validateStoredToken();
-
-// Listen for messages from content scripts
-chrome.runtime.onMessage.addListener(
-  (
-    request: { action: string; language?: string },
-    _sender: chrome.runtime.MessageSender,
-    sendResponse: (response: { success: boolean; messages?: MessagesFile; error?: string }) => void
-  ) => {
-    // Handle loading messages files for content scripts
-    if (request.action === 'loadMessages') {
-      const lang = request.language || 'en';
-      const url = chrome.runtime.getURL(`_locales/${lang}/messages.json`);
-
-      fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          return response.json() as Promise<MessagesFile>;
-        })
-        .then((messages) => {
-          sendResponse({ success: true, messages: messages });
-        })
-        .catch((error: Error) => {
-          console.error(`Better GHub: Error loading messages for ${lang}`, error instanceof Error ? error.message : String(error));
-          sendResponse({ success: false, error: error.message });
-        });
-
-      return true; // Keep channel open for async response
-    }
-
-    // Manual token validation request
-    if (request.action === 'validateToken') {
-      validateStoredToken()
-        .then(() => {
-          sendResponse({ success: true });
-        })
-        .catch((error: Error) => {
-          sendResponse({ success: false, error: error.message });
-        });
-
-      return true; // Keep channel open for async response
-    }
-
-    return false;
-  }
-);
-
-// Handle keyboard shortcuts from commands API
-chrome.commands.onCommand.addListener((command) => {
-  console.log(`Better GHub: Command received from Chrome: ${command}`);
-  if (command === 'toggle-all' || command === 'toggle-files') {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0];
-      console.log(`Better GHub: Active tab:`, tab?.url);
-      if (tab?.id && tab.url?.includes('github.com')) {
-        console.log(`Better GHub: Sending ${command} to tab ${tab.id}`);
-        chrome.tabs.sendMessage(tab.id, { action: command }).catch(() => {
-          // Content script not loaded - this happens after extension reload
-          // User needs to refresh the page
-          console.log('Better GHub: Content script not loaded. Please refresh the GitHub page.');
-        });
-      }
-    });
-  }
+// Optional chaining: the API is missing when the permission is not granted.
+chrome.notifications?.onClicked.addListener((id) => {
+  void onNotificationClicked(id).catch(() => undefined);
 });
 
-// Migrate classic PAT tokens to fine-grained
-async function migrateClassicToken(): Promise<void> {
-  try {
-    const result = await chrome.storage.local.get(['githubToken', 'classicTokenMigrated']);
-    if (result.classicTokenMigrated) return;
-
-    const token = typeof result.githubToken === 'string' ? result.githubToken : '';
-    if (token && token.startsWith('ghp_')) {
-      console.log('Better GHub: Classic PAT detected, removing for migration to fine-grained token');
-      await chrome.storage.local.remove(['githubToken', 'githubUser']);
-
-      // Notify all GitHub tabs about the invalidated token
-      const tabs = await chrome.tabs.query({ url: 'https://github.com/*' });
-      tabs.forEach((tab) => {
-        if (tab.id) {
-          chrome.tabs.sendMessage(tab.id, { action: 'tokenInvalid' }).catch(() => {
-            // Silently ignore if tab is not ready
-          });
-        }
-      });
-    }
-
-    await chrome.storage.local.set({ classicTokenMigrated: true });
-  } catch (error) {
-    console.error('Better GHub: Error during token migration:', error instanceof Error ? error.message : String(error));
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (!isSettingsArea(area)) return;
+  const keys = Object.keys(changes);
+  if (keys.some((k) => SETTING_STORAGE_KEYS.has(k))) invalidateSettings();
+  if (changes[SETTINGS_KEYS.notificationsEnabled] || changes[SETTINGS_KEYS.notificationInterval] || changes[SETTINGS_KEYS.desktopNotifications]) {
+    void syncAlarms(); // also shows/clears the badge
   }
-}
-
-// Handle extension installation
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason === 'install') {
-    console.log(`Better GHub v${Constants.VERSION}: Installed`);
-  } else if (details.reason === 'update') {
-    console.log(`Better GHub v${Constants.VERSION}: Updated from ${details.previousVersion}`);
-    void migrateClassicToken();
-  }
+  // The token is not in chrome.storage any more (see secret-store.ts);
+  // dropCredentials() clears the badge itself.
 });

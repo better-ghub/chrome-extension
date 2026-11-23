@@ -1,350 +1,173 @@
-// Better GHub - Options Page Script
+// Better GHub - Options page: hash-routed sections, auto-saving controls.
+//
+// Like the popup, this page never touches the token or api.github.com: all
+// GitHub work goes through the background worker.
 
-import { Octicons, TokenManager } from '../src/utils';
-import { initI18n, translatePage, msg } from '../src/i18n';
+import { icon, type IconName } from '../src/core/icons';
+import { getSettings, onSettingsChanged, type Settings } from '../src/core/settings';
+import { initI18n, reloadI18n, t, translatePage } from '../src/i18n';
+import { request, TIMEOUT } from '../src/pages/bg';
+import { SavedIndicator, setButtonBusy, isBusy } from '../src/pages/dom-ui';
+import { parseRoute, type Route } from '../src/pages/route';
+import { initSettingsBackup } from './backup-view';
+import { AccountSection } from './account-view';
+import { ChecklistView } from './checklist-view';
+import { FilesView } from './files-view';
+import { sendTestNotification, testNotificationMessage } from './notify-test';
+import { SettingsForm } from './settings-form';
+import { ShortcutsView } from './shortcuts-view';
+import { TemplatesView } from './templates-view';
 
-// Insert Octicons into placeholders
-function initOcticons(): void {
-  const authTab = document.querySelector('.tabnav-tab[data-tab="auth"] .tab-icon');
-  const settingsTab = document.querySelector('.tabnav-tab[data-tab="settings"] .tab-icon');
-  if (authTab) authTab.innerHTML = Octicons.get('key', 16);
-  if (settingsTab) settingsTab.innerHTML = Octicons.get('gear', 16);
-
-  const alertIcons = document.querySelectorAll('.flash .alert-icon');
-  alertIcons.forEach((icon, index) => {
-    icon.innerHTML = index === 0 ? Octicons.get('info', 16) : Octicons.get('check-circle', 16);
-  });
-
-  const trashIcon = document.querySelector('#clear-cache-btn .btn-icon');
-  if (trashIcon) trashIcon.innerHTML = Octicons.get('trash', 14);
-
-  const noticeIcon = document.querySelector('.notice-icon');
-  if (noticeIcon) noticeIcon.innerHTML = Octicons.get('database', 14);
-
-  const cacheDisabledWarningIcon = document.querySelector('#cache-disabled-warning .octicon-inline');
-  if (cacheDisabledWarningIcon) cacheDisabledWarningIcon.innerHTML = Octicons.get('alert', 16);
-
-  const cacheRecommendationIcon = document.querySelector('#cache-time-recommendation .octicon-inline');
-  if (cacheRecommendationIcon) cacheRecommendationIcon.innerHTML = Octicons.get('info', 16);
+function byId<T extends HTMLElement = HTMLElement>(id: string): T {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Missing #${id}`);
+  return el as T;
 }
 
-// Tab switching
-function initTabs(): void {
-  document.querySelectorAll('.tabnav-tab').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const tab = (btn as HTMLElement).dataset.tab;
-
-      document.querySelectorAll('.tabnav-tab').forEach((b) => {
-        b.classList.remove('active');
-        b.removeAttribute('aria-current');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-current', 'page');
-
-      document.querySelectorAll('.tab-content').forEach((c) => {
-        (c as HTMLElement).style.display = 'none';
-      });
-      const tabContent = document.getElementById(`tab-${tab}`);
-      if (tabContent) tabContent.style.display = 'block';
-    });
+/** Fill static <span data-icon="name" data-icon-size="12"> placeholders. */
+function renderIcons(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLElement>('[data-icon]').forEach((slot) => {
+    if (slot.firstElementChild) return;
+    const size = Number(slot.dataset.iconSize) || 16;
+    slot.replaceWith(icon(slot.dataset.icon as IconName, size));
   });
 }
 
-// ============================================================================
-// AUTHENTICATION TAB
-// ============================================================================
+function setVersion(): void {
+  let version = '';
+  try {
+    version = chrome.runtime.getManifest().version;
+  } catch {
+    /* not running as an extension page */
+  }
+  byId('version').textContent = version ? `v${version}` : '';
+  byId('about-version').textContent = version ? t('optAboutVersion', 'Version $1', version) : '';
+}
 
-async function displayUserInfo(token: string): Promise<boolean> {
-  const result = await TokenManager.testToken(token);
+// ---------------------------------------------------------------- routing
 
-  const loading = document.getElementById('auth-status-loading');
-  const loggedOut = document.getElementById('auth-status-logged-out');
-  const loggedIn = document.getElementById('auth-status-logged-in');
+let account: AccountSection;
 
-  if (result.success && result.user) {
-    const user = result.user;
+function showRoute(route: Route, moveFocus: boolean): void {
+  document.querySelectorAll<HTMLElement>('.section').forEach((section) => {
+    section.hidden = section.dataset.section !== route.section;
+  });
+  document.querySelectorAll<HTMLAnchorElement>('.nav-item').forEach((link) => {
+    if (link.dataset.nav === route.section) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  account.setWelcome(route.welcome);
+  if (route.addTokenFor !== undefined) {
+    // One-shot: drop the owner from the URL so a reload doesn't reopen the
+    // form, and so the next "Add token" click from GitHub changes the hash
+    // again (and fires hashchange) even for the same owner.
+    history.replaceState(null, '', '#account');
+    account.openAddToken(route.addTokenFor);
+    return;
+  }
+  if (moveFocus) {
+    window.scrollTo({ top: 0 });
+    const heading = route.welcome
+      ? document.getElementById('hero-title')
+      : document.querySelector<HTMLElement>(`.section[data-section="${route.section}"] h2[tabindex]`);
+    heading?.setAttribute('tabindex', '-1');
+    heading?.focus({ preventScroll: true });
+  }
+}
 
-    const userName = document.getElementById('user-name');
-    const userLogin = document.getElementById('user-login');
-    const userAvatar = document.getElementById('user-avatar') as HTMLImageElement;
+// ------------------------------------------------------------ clear cache
 
-    if (userName) userName.textContent = user.name || user.login;
-    if (userLogin) userLogin.textContent = `@${user.login}`;
-    if (userAvatar && user.avatar_url?.startsWith('https://')) userAvatar.src = user.avatar_url;
+function initClearCache(): void {
+  const button = byId<HTMLButtonElement>('clear-cache');
+  const status = new SavedIndicator();
+  byId('clear-status').replaceWith(status.el);
+  button.addEventListener('click', async () => {
+    if (isBusy(button)) return;
+    setButtonBusy(button, true, t('optClearing', 'Clearing…'));
+    const res = await request('cache:clear', {}, { ok: false }, TIMEOUT.quick);
+    setButtonBusy(button, false);
+    if (res.ok) status.flash(t('optCleared', 'Cache cleared'));
+    else status.flash(t('optClearFailed', 'Couldn’t clear the cache'), 'error');
+  });
+}
 
-    const rateLimit = await TokenManager.getRateLimit(token);
-    if (rateLimit) {
-      const rateLimitEl = document.getElementById('rate-limit');
-      if (rateLimitEl) {
-        rateLimitEl.textContent = `${rateLimit.remaining} / ${rateLimit.limit}`;
-      }
+// ------------------------------------------------------ test notification
+
+function initTestNotification(): void {
+  const button = byId<HTMLButtonElement>('test-notification');
+  const status = new SavedIndicator();
+  byId('test-notification-status').replaceWith(status.el);
+  button.addEventListener('click', async () => {
+    if (isBusy(button)) return;
+    setButtonBusy(button, true);
+    const result = await sendTestNotification();
+    setButtonBusy(button, false);
+    status.flash(testNotificationMessage(result), result === 'sent' ? 'success' : 'error');
+  });
+}
+
+// ------------------------------------------------------------------- init
+
+async function init(): Promise<void> {
+  try {
+    await initI18n();
+    translatePage();
+  } catch {
+    /* English fallbacks from the markup / t() keep the page usable */
+  }
+  renderIcons();
+  setVersion();
+
+  const settings: Settings = await getSettings();
+
+  account = new AccountSection(byId('account-card'), byId('welcome'));
+  account.listen();
+
+  const shortcuts = new ShortcutsView(settings.shortcutBindings);
+  shortcuts.setEnabled(settings.shortcutsEnabled);
+  byId('shortcut-editor').replaceWith(shortcuts.el);
+
+  let language = settings.language;
+  const relocalize = async (): Promise<void> => {
+    await reloadI18n();
+    translatePage();
+    setVersion();
+    form.renderOptions();
+    files.render();
+    templates.render();
+    shortcuts.render();
+    await account.render();
+  };
+
+  const form = new SettingsForm(document.body, settings, async (next) => {
+    language = next;
+    await relocalize();
+  });
+  const files = new FilesView(document.body, settings, (patterns) => form.saveSetting('generatedPatterns', patterns));
+  const templates = new TemplatesView(byId('snippets-editor'), settings, (snippets) => form.saveSetting('commentSnippets', snippets));
+  const checklist = new ChecklistView(document.body, settings, (templates) => form.saveSetting('reviewChecklists', templates));
+  initClearCache();
+  initTestNotification();
+  initSettingsBackup();
+
+  onSettingsChanged((next, changed) => {
+    form.sync(next);
+    files.sync(next);
+    templates.sync(next);
+    checklist.sync(next);
+    if (changed.includes('shortcutBindings')) shortcuts.sync(next.shortcutBindings);
+    if (changed.includes('shortcutsEnabled')) shortcuts.setEnabled(next.shortcutsEnabled);
+    if (changed.includes('language') && next.language !== language) {
+      language = next.language;
+      void relocalize();
     }
+  });
 
-    if (loading) loading.style.display = 'none';
-    if (loggedOut) loggedOut.style.display = 'none';
-    if (loggedIn) loggedIn.style.display = 'block';
-    return true;
-  } else {
-    // Token validation failed - show logged out state
-    if (loading) loading.style.display = 'none';
-    if (loggedOut) loggedOut.style.display = 'block';
-    if (loggedIn) loggedIn.style.display = 'none';
-    return false;
-  }
+  showRoute(parseRoute(location.hash), false);
+  window.addEventListener('hashchange', () => showRoute(parseRoute(location.hash), true));
+  document.body.classList.add('is-ready');
+
+  await account.load();
 }
 
-async function checkAuthStatus(): Promise<void> {
-  const { token } = await TokenManager.getToken();
-
-  const loading = document.getElementById('auth-status-loading');
-  const loggedOut = document.getElementById('auth-status-logged-out');
-  const loggedIn = document.getElementById('auth-status-logged-in');
-
-  if (token) {
-    await displayUserInfo(token);
-  } else {
-    if (loading) loading.style.display = 'none';
-    if (loggedOut) loggedOut.style.display = 'block';
-    if (loggedIn) loggedIn.style.display = 'none';
-  }
-}
-
-function initAuthListeners(): void {
-  // Save token
-  document.getElementById('save-token')?.addEventListener('click', async () => {
-    const tokenInput = document.getElementById('github-token') as HTMLInputElement;
-    const token = tokenInput.value.trim();
-    const saveBtn = document.getElementById('save-token') as HTMLButtonElement;
-
-    if (!token) {
-      showStatus(msg('pleaseEnterToken', 'Please enter a token'), 'error');
-      return;
-    }
-
-    if (!TokenManager.validateTokenFormat(token)) {
-      showStatus(msg('invalidToken', 'Invalid token format'), 'error');
-      return;
-    }
-
-    saveBtn.textContent = msg('testing', 'Testing...');
-    saveBtn.disabled = true;
-
-    const result = await TokenManager.testToken(token);
-
-    if (result.success && result.user) {
-      await TokenManager.setToken(token, result.user);
-      showStatus(msg('tokenSaved', 'Token saved!'), 'success');
-      tokenInput.value = '';
-      saveBtn.textContent = msg('saveToken', 'Save Token');
-      saveBtn.disabled = false;
-
-      TokenManager.notifyTabs('tokenUpdated');
-
-      setTimeout(() => {
-        void checkAuthStatus();
-      }, 500);
-    } else {
-      showStatus(`❌ ${msg('tokenValidationFailed', 'Token validation failed')}: ${result.error}`, 'error');
-      saveBtn.textContent = msg('saveToken', 'Save Token');
-      saveBtn.disabled = false;
-    }
-  });
-
-  // Logout
-  document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    if (confirm(msg('confirmLogout', 'Are you sure you want to logout?'))) {
-      await TokenManager.removeToken();
-      showStatus(msg('loggedOut', 'Logged out successfully'), 'success');
-      TokenManager.notifyTabs('tokenRemoved');
-
-      setTimeout(() => {
-        void checkAuthStatus();
-      }, 500);
-    }
-  });
-}
-
-// ============================================================================
-// SETTINGS TAB
-// ============================================================================
-
-function loadSettings(): void {
-  chrome.storage.local.get(['language', 'cacheEnabled', 'cacheTime', 'batchDelay'], (result) => {
-    const lang = typeof result.language === 'string' ? result.language : 'system';
-    const langSelect = document.getElementById('setting-language') as HTMLSelectElement;
-    if (langSelect) langSelect.value = lang;
-
-    const cacheEnabled = typeof result.cacheEnabled === 'boolean' ? result.cacheEnabled : true;
-    const cacheEnabledCheckbox = document.getElementById('setting-cache-enabled') as HTMLInputElement;
-    if (cacheEnabledCheckbox) cacheEnabledCheckbox.checked = cacheEnabled;
-    updateCacheVisibility(cacheEnabled);
-
-    const cacheTime = typeof result.cacheTime === 'number' && !isNaN(result.cacheTime) ? result.cacheTime : 300000;
-    const cacheTimeInput = document.getElementById('setting-cache-time') as HTMLInputElement;
-    if (cacheTimeInput) cacheTimeInput.value = String(cacheTime);
-    const formatted = formatCacheTime(cacheTime);
-    const cacheTimeValue = document.getElementById('cache-time-value');
-    const cacheTimeUnit = document.getElementById('cache-time-unit');
-    if (cacheTimeValue) cacheTimeValue.textContent = formatted.value;
-    if (cacheTimeUnit) cacheTimeUnit.textContent = formatted.unit;
-    updateCacheTimeWarning(cacheTime);
-
-    const batchDelay = typeof result.batchDelay === 'number' && !isNaN(result.batchDelay) ? result.batchDelay : 500;
-    const batchDelayInput = document.getElementById('setting-batch-delay') as HTMLInputElement;
-    if (batchDelayInput) batchDelayInput.value = String(batchDelay);
-    const batchDelayValue = document.getElementById('batch-delay-value');
-    if (batchDelayValue) batchDelayValue.textContent = String(batchDelay);
-  });
-}
-
-function updateCacheVisibility(enabled: boolean): void {
-  const durationSection = document.getElementById('cache-duration-section');
-  const disabledWarning = document.getElementById('cache-disabled-warning');
-
-  if (enabled) {
-    if (durationSection) durationSection.style.display = 'block';
-    if (disabledWarning) disabledWarning.style.display = 'none';
-  } else {
-    if (durationSection) durationSection.style.display = 'none';
-    if (disabledWarning) disabledWarning.style.display = 'block';
-  }
-}
-
-function updateCacheTimeWarning(ms: number): void {
-  const recommendation = document.getElementById('cache-time-recommendation');
-  if (recommendation) {
-    recommendation.style.display = ms < 300000 ? 'block' : 'none';
-  }
-}
-
-function initSettingsListeners(): void {
-  // Language change
-  document.getElementById('setting-language')?.addEventListener('change', (e) => {
-    const newLanguage = (e.target as HTMLSelectElement).value;
-
-    chrome.storage.local.set({ language: newLanguage }, () => {
-      showStatus(msg('languageSaved', 'Language saved. Reloading...'), 'success');
-
-      TokenManager.notifyTabs('settingsUpdated');
-
-      setTimeout(() => {
-        location.reload();
-      }, 800);
-    });
-  });
-
-  // Cache Enabled
-  document.getElementById('setting-cache-enabled')?.addEventListener('change', (e) => {
-    const enabled = (e.target as HTMLInputElement).checked;
-    chrome.storage.local.set({ cacheEnabled: enabled }, () => {
-      const statusMsg = enabled ? msg('cacheEnabled', 'Cache enabled') : msg('cacheDisabled', 'Cache disabled');
-      showStatus(statusMsg, 'success');
-      updateCacheVisibility(enabled);
-      TokenManager.notifyTabs('settingsUpdated');
-    });
-  });
-
-  // Cache Time
-  document.getElementById('setting-cache-time')?.addEventListener('input', (e) => {
-    const ms = parseInt((e.target as HTMLInputElement).value);
-    if (isNaN(ms)) return;
-    const formatted = formatCacheTime(ms);
-    const cacheTimeValue = document.getElementById('cache-time-value');
-    const cacheTimeUnit = document.getElementById('cache-time-unit');
-    if (cacheTimeValue) cacheTimeValue.textContent = formatted.value;
-    if (cacheTimeUnit) cacheTimeUnit.textContent = formatted.unit;
-    updateCacheTimeWarning(ms);
-  });
-
-  document.getElementById('setting-cache-time')?.addEventListener('change', (e) => {
-    const ms = parseInt((e.target as HTMLInputElement).value);
-    if (isNaN(ms)) return;
-    chrome.storage.local.set({ cacheTime: ms }, () => {
-      const formatted = formatCacheTime(ms);
-      const statusMsg = msg('cacheTimeSet', 'Cache duration set').replace('$1', `${formatted.value} ${formatted.unit}`);
-      showStatus(statusMsg, 'success');
-      TokenManager.notifyTabs('settingsUpdated');
-    });
-  });
-
-  // Batch Delay
-  document.getElementById('setting-batch-delay')?.addEventListener('input', (e) => {
-    const value = (e.target as HTMLInputElement).value;
-    const batchDelayValue = document.getElementById('batch-delay-value');
-    if (batchDelayValue) batchDelayValue.textContent = value;
-  });
-
-  document.getElementById('setting-batch-delay')?.addEventListener('change', (e) => {
-    const value = parseInt((e.target as HTMLInputElement).value);
-    if (isNaN(value)) return;
-    chrome.storage.local.set({ batchDelay: value }, () => {
-      const statusMsg = msg('batchDelaySet', 'Batch delay set').replace('$1', String(value));
-      showStatus(statusMsg, 'success');
-      TokenManager.notifyTabs('settingsUpdated');
-    });
-  });
-
-  // Clear Cache
-  document.getElementById('clear-cache-btn')?.addEventListener('click', () => {
-    TokenManager.notifyTabs('clearCache');
-
-    const clearedSpan = document.getElementById('cache-cleared');
-    if (clearedSpan) clearedSpan.style.display = 'inline';
-    showStatus(msg('cacheCleared', 'Cache cleared!'), 'success');
-
-    setTimeout(() => {
-      if (clearedSpan) clearedSpan.style.display = 'none';
-    }, 3000);
-  });
-}
-
-// ============================================================================
-// UTILITIES
-// ============================================================================
-
-function showStatus(message: string, type: 'success' | 'error' = 'success'): void {
-  const statusDiv = document.getElementById('status-message');
-  if (!statusDiv) return;
-
-  statusDiv.textContent = message;
-  statusDiv.style.display = 'block';
-  statusDiv.className = 'flash mt-3';
-
-  if (type === 'error') {
-    statusDiv.classList.add('flash-error');
-  } else {
-    statusDiv.classList.add('flash-success');
-  }
-
-  setTimeout(() => {
-    statusDiv.style.display = 'none';
-  }, 3000);
-}
-
-function formatCacheTime(ms: number): { value: string; unit: string } {
-  if (ms < 1000) {
-    return { value: String(ms), unit: 'ms' };
-  } else if (ms < 60000) {
-    return { value: (ms / 1000).toFixed(1), unit: 's' };
-  } else {
-    return { value: (ms / 60000).toFixed(1), unit: 'min' };
-  }
-}
-
-// ============================================================================
-// INITIALIZATION
-// ============================================================================
-
-document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize i18n and translate HTML __MSG_*__ placeholders
-  await initI18n();
-  translatePage();
-
-  initOcticons();
-  initTabs();
-  initAuthListeners();
-  initSettingsListeners();
-
-  void checkAuthStatus();
-  loadSettings();
-});
+void init().finally(() => document.body.classList.add('is-ready'));

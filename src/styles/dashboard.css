@@ -1,0 +1,160 @@
+/* Better GHub - "Your pull requests" card on the github.com dashboard.
+   Owned by the PR-list workstream. Native Primer Box/Counter/Link look. */
+
+.bghub-dash {
+  margin-bottom: 16px;
+  font: 400 14px/1.5 var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-bg);
+  border: 1px solid var(--bghub-border);
+  border-radius: var(--bghub-radius);
+  animation: bghub-rise var(--bghub-dur) var(--bghub-ease-out) both;
+}
+
+.bghub-dash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--bghub-border-muted);
+}
+.bghub-dash-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+.bghub-dash-counter {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+  color: var(--bghub-fg);
+  background: var(--bghub-bg-neutral);
+  border: 1px solid transparent;
+  border-radius: 2em;
+}
+.bghub-dash-counter[hidden] { display: none; }
+.bghub-dash-viewall { font-size: 12px; color: var(--bghub-accent); text-decoration: none; white-space: nowrap; }
+.bghub-dash-viewall:hover { text-decoration: underline; }
+
+.bghub-dash-list { margin: 0; padding: 0; list-style: none; }
+.bghub-dash-list--enter > .bghub-dash-row { animation: bghub-fade-in 150ms var(--bghub-ease-out) both; }
+.bghub-dash-list--enter > .bghub-dash-row:nth-child(2) { animation-delay: 30ms; }
+.bghub-dash-list--enter > .bghub-dash-row:nth-child(n + 3) { animation-delay: 60ms; }
+
+.bghub-dash-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--bghub-border-muted);
+}
+.bghub-dash-row:first-child { border-top: 0; }
+.bghub-dash-row:not(.bghub-dash-row--skeleton):hover { background: var(--bghub-bg-muted); }
+.bghub-dash-row:last-child { border-radius: 0 0 var(--bghub-radius) var(--bghub-radius); }
+
+.bghub-dash-dot {
+  position: absolute;
+  top: 15px;
+  left: 5px;
+  width: 6px;
+  height: 6px;
+  background: var(--bghub-accent-emphasis);
+  border-radius: 50%;
+}
+
+.bghub-dash-pr-icon { display: inline-flex; flex: none; margin-top: 2px; }
+.bghub-dash-pr-icon--open { color: var(--bghub-open); }
+.bghub-dash-pr-icon--draft { color: var(--bghub-draft); }
+
+.bghub-dash-main { display: flex; flex: 1 1 auto; flex-direction: column; gap: 2px; min-width: 0; }
+.bghub-dash-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--bghub-fg-muted);
+}
+.bghub-dash-repo { overflow: hidden; color: inherit; text-decoration: none; text-overflow: ellipsis; white-space: nowrap; }
+.bghub-dash-repo:hover { color: var(--bghub-accent); text-decoration: underline; }
+.bghub-dash-number { flex: none; }
+.bghub-dash-reason { flex: none; margin-left: 4px; font-weight: 500; color: var(--bghub-done); white-space: nowrap; }
+.bghub-dash-title {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--bghub-fg);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.bghub-dash-title:hover { color: var(--bghub-accent); text-decoration: underline; }
+
+.bghub-dash-side {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--bghub-fg-muted);
+}
+.bghub-dash-statuses { display: inline-flex; align-items: center; gap: 8px; min-height: 20px; }
+.bghub-dash-status { display: inline-flex; align-items: center; gap: 2px; font-weight: 500; }
+.bghub-dash-status--success { color: var(--bghub-success); }
+.bghub-dash-status--danger { color: var(--bghub-danger); }
+.bghub-dash-status--attention { color: var(--bghub-attention); }
+.bghub-dash-status--done { color: var(--bghub-done); }
+.bghub-dash-status--muted { color: var(--bghub-fg-muted); }
+.bghub-dash-time { white-space: nowrap; color: var(--bghub-fg-muted); }
+
+.bghub-dash-row--skeleton .bghub-dash-main { gap: 8px; padding: 2px 0; }
+.bghub-dash-row--skeleton .bghub-skeleton { display: block; height: 10px; }
+.bghub-dash-skel-icon { flex: none; width: 16px; height: 16px !important; margin-top: 2px; border-radius: 50%; }
+
+.bghub-dash-empty { padding: 24px 16px; text-align: center; color: var(--bghub-fg-muted); }
+.bghub-dash-empty .octicon { color: var(--bghub-fg-muted); }
+.bghub-dash-empty-title { margin: 8px 0 4px; font-size: 14px; font-weight: 600; color: var(--bghub-fg); }
+.bghub-dash-empty-body { margin: 0; font-size: 12px; }
+
+.bghub-dash-error { display: flex; align-items: flex-start; gap: 8px; padding: 16px; }
+.bghub-dash-error-icon { flex: none; margin-top: 2px; color: var(--bghub-danger); }
+.bghub-dash-error-title { margin: 0; font-size: 14px; font-weight: 600; }
+.bghub-dash-error-body { margin: 2px 0 0; font-size: 12px; color: var(--bghub-fg-muted); }
+.bghub-dash-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+
+.bghub-dash-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  font: 500 12px/1 var(--bghub-font);
+  color: var(--button-default-fgColor-rest, var(--bghub-fg));
+  background: var(--button-default-bgColor-rest, var(--bghub-bg-muted));
+  border: 1px solid var(--button-default-borderColor-rest, var(--bghub-border));
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-dash-btn:hover { background: var(--button-default-bgColor-hover, var(--bghub-bg-neutral)); }
+.bghub-dash-btn:active { transform: scale(0.98); }
+.bghub-dash-btn--invisible { color: var(--bghub-accent); background: transparent; border-color: transparent; }
+.bghub-dash-btn--invisible:hover { background: var(--bghub-bg-neutral); }
+
+@media (forced-colors: active) {
+  .bghub-dash-dot { background: Highlight; }
+}

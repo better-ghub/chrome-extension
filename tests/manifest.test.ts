@@ -99,4 +99,19 @@ describe('Manifest Validation', () => {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     expect(manifest.version).toBe(packageJson.version);
   });
+
+  test('single content script covers all of github.com (SPA navigation)', () => {
+    expect(manifest.content_scripts).toHaveLength(1);
+    expect(manifest.content_scripts[0].matches).toEqual(['https://github.com/*']);
+  });
+
+  test('keyboard shortcuts stay page-level: no chrome.commands block', () => {
+    // chrome.commands double-fired with the page listener and could not be
+    // remapped from Options — see src/shortcuts.ts.
+    expect((manifest as unknown as Record<string, unknown>).commands).toBeUndefined();
+  });
+
+  test('requests no broad "tabs" permission', () => {
+    expect(manifest.permissions).not.toContain('tabs');
+  });
 });

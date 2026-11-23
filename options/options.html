@@ -1,312 +1,489 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  data-color-mode="auto"
-  data-light-theme="light"
-  data-dark-theme="dark"
->
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>__MSG_extensionName__ - __MSG_tabSettings__</title>
-    <link rel="stylesheet" href="primer.css" />
+    <meta name="color-scheme" content="light dark" />
+    <title data-i18n="optPageTitle">Better GHub settings</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
-    <div class="container-lg p-4">
-      <!-- Header -->
-      <div class="text-center mb-4 pb-4 border-bottom">
-        <h1
-          class="h1 mb-2"
-          style="
-            background: linear-gradient(180deg, #6e40c9 0%, #3c1e70 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          "
-        >
-          Better GHub
-        </h1>
-        <span
-          class="Label Label--large"
-          id="version"
-          style="background: #6e40c9; color: white"
-          >v0.3.0</span
-        >
-      </div>
+    <a class="skip-link" href="#content" data-i18n="optSkipToContent">Skip to content</a>
 
-      <!-- Tabs Navigation (Primer Tabnav) -->
-      <div class="tabnav mb-4">
-        <nav class="tabnav-tabs" aria-label="Settings">
-          <button class="tabnav-tab active" data-tab="auth" aria-current="page">
-            <span class="tab-icon octicon-inline mr-1"></span>
-            <span>__MSG_tabAuthorization__</span>
-          </button>
-          <button class="tabnav-tab" data-tab="settings">
-            <span class="tab-icon octicon-inline mr-1"></span>
-            <span>__MSG_tabSettings__</span>
-          </button>
-        </nav>
-      </div>
-
-      <!-- Tab: Authorization -->
-      <div class="tab-content" id="tab-auth" style="display: block">
-        <div class="Box">
-          <div class="Box-header">
-            <h3 class="Box-title">__MSG_githubAuth__</h3>
-          </div>
-
-          <!-- Loading state -->
-          <div id="auth-status-loading" class="Box-row text-center py-4">
-            <div class="anim-pulse">
-              <div class="AnimatedEllipsis mb-2"></div>
-              <p class="color-fg-muted">__MSG_checkingAuth__</p>
-            </div>
-          </div>
-
-          <!-- Logged Out -->
-          <div id="auth-status-logged-out" style="display: none">
-            <div class="Box-row">
-              <div class="flash mb-3">
-                <span class="alert-icon octicon-inline mr-2"></span>
-                <div>
-                  <strong>__MSG_notAuthenticated__</strong>
-                  <p class="color-fg-muted mt-1 mb-0">__MSG_authDescription__</p>
-                </div>
-              </div>
-
-              <div class="Subhead mb-3">
-                <h4 class="Subhead-heading">__MSG_setupInstructions__</h4>
-              </div>
-              <ol class="mb-3 pl-3">
-                <li class="mb-1">__MSG_step1__</li>
-                <li class="mb-1">__MSG_step2__</li>
-                <li class="mb-1">__MSG_step3__</li>
-                <li class="mb-1">__MSG_step4__</li>
-              </ol>
-
-              <div class="form-group">
-                <div class="form-group-header">
-                  <label for="github-token">__MSG_tokenLabel__</label>
-                </div>
-                <div class="form-group-body">
-                  <input
-                    type="password"
-                    id="github-token"
-                    class="form-control input-block mb-2"
-                    placeholder="github_pat_xxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                  />
-                  <button
-                    id="save-token"
-                    class="btn btn-primary btn-block"
-                    style="background: #6e40c9; border-color: #6e40c9"
-                  >
-                    __MSG_saveToken__
-                  </button>
-                </div>
-              </div>
-
-              <div class="text-center mt-3">
-                <a
-                  href="https://github.com/settings/personal-access-tokens/new?name=Better+GHub&description=Enhanced+GitHub+PR+workflow&pull_requests=read&contents=read"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="btn-link"
-                >
-                  __MSG_createToken__
-                </a>
-                <p class="color-fg-muted f6 mt-2">__MSG_repoAccessNote__</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Logged In -->
-          <div id="auth-status-logged-in" style="display: none">
-            <div class="Box-row">
-              <div class="flash flash-success mb-3 d-flex flex-row">
-                <span class="alert-icon octicon-inline"></span>
-                <strong>__MSG_authenticated__</strong>
-                <p class="ml-1 mb-0">__MSG_accountConnected__</p>
-              </div>
-
-              <div class="d-flex flex-items-center p-3 border rounded-2 mb-3">
-                <img
-                  id="user-avatar"
-                  src=""
-                  alt="Avatar"
-                  class="avatar avatar-8 circle mr-3"
-                />
-                <div class="flex-1">
-                  <div class="text-bold f4 mb-1" id="user-name">Loading...</div>
-                  <div class="color-fg-muted f5 mb-2" id="user-login">
-                    @username
-                  </div>
-                  <div class="d-flex flex-items-center">
-                    <span class="color-fg-muted mr-2">__MSG_rateLimit__</span>
-                    <span
-                      class="Counter"
-                      id="rate-limit"
-                      style="background: #6e40c9; color: white"
-                      >-</span
-                    >
-                  </div>
-                </div>
-              </div>
-
-              <button id="logout-btn" class="btn btn-block">
-                __MSG_logout__
-              </button>
-            </div>
-          </div>
+    <header class="page-header">
+      <div class="page-header-inner">
+        <img class="page-logo" src="../icons/icon128.png" alt="" width="32" height="32" />
+        <div class="page-brand">
+          <h1>Better GHub</h1>
+          <span class="page-version" id="version"></span>
         </div>
+        <p class="autosave"><span data-icon="check-circle"></span><span data-i18n="optAutosave">Changes save automatically</span></p>
       </div>
+    </header>
 
-      <!-- Tab: Settings -->
-      <div class="tab-content" id="tab-settings" style="display: none">
-        <div class="Box">
-          <div class="Box-header">
-            <h3 class="Box-title">__MSG_extensionSettings__</h3>
-          </div>
+    <div class="layout">
+      <nav class="side-nav" data-i18n-attr="aria-label:optNavLabel" aria-label="Settings sections">
+        <ul class="nav-list" role="list">
+          <li><a class="nav-item" href="#account" data-nav="account"><span data-icon="person"></span><span data-i18n="optNavAccount">Account</span></a></li>
+          <li><a class="nav-item" href="#pr-list" data-nav="pr-list"><span data-icon="git-pull-request"></span><span data-i18n="optNavPrList">Pull request list</span></a></li>
+          <li><a class="nav-item" href="#files" data-nav="files"><span data-icon="file-diff"></span><span data-i18n="optNavFiles">Files changed</span></a></li>
+          <li><a class="nav-item" href="#templates" data-nav="templates"><span data-icon="comment"></span><span data-i18n="optNavTemplates">Comment templates</span></a></li>
+          <li><a class="nav-item" href="#dashboard" data-nav="dashboard"><span data-icon="home"></span><span data-i18n="optNavDashboard">Dashboard</span></a></li>
+          <li><a class="nav-item" href="#shortcuts" data-nav="shortcuts"><span data-icon="command-palette"></span><span data-i18n="optNavShortcuts">Keyboard shortcuts</span></a></li>
+          <li><a class="nav-item" href="#notifications" data-nav="notifications"><span data-icon="bell"></span><span data-i18n="optNavNotifications">Notifications</span></a></li>
+          <li><a class="nav-item" href="#language" data-nav="language"><span data-icon="globe"></span><span data-i18n="optNavLanguage">Language &amp; data</span></a></li>
+          <li><a class="nav-item" href="#about" data-nav="about"><span data-icon="info"></span><span data-i18n="optNavAbout">About</span></a></li>
+        </ul>
+      </nav>
 
-          <!-- Language -->
-          <div class="Box-row">
-            <div class="form-group mb-0">
-              <div class="form-group-header">
-                <label for="setting-language">__MSG_languageSetting__</label>
+      <main class="content" id="content" tabindex="-1">
+        <!-- Account ---------------------------------------------------- -->
+        <section class="section" data-section="account" aria-labelledby="h-account" hidden>
+          <div id="welcome"></div>
+          <header class="section-header">
+            <h2 id="h-account" tabindex="-1" data-i18n="optAccountTitle">Account</h2>
+            <p data-i18n="optAccountDesc">Better GHub reads pull request data from GitHub with your personal access token.</p>
+          </header>
+          <div class="card card-pad" id="account-card"></div>
+        </section>
+
+        <!-- Pull request list ------------------------------------------ -->
+        <section class="section" data-section="pr-list" aria-labelledby="h-pr-list" hidden>
+          <header class="section-header">
+            <h2 id="h-pr-list" tabindex="-1" data-i18n="optPrListTitle">Pull request list</h2>
+            <p data-i18n="optPrListDesc">Extra context on every pull request list on github.com.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-prList" data-i18n="optPrListActivityLabel">Activity under each pull request</label>
+                <p class="setting-desc" id="desc-prList" data-i18n="optPrListActivityDesc">The last comment, the last commit and the number of unresolved review threads, right in the list.</p>
+                <div class="preview" aria-hidden="true">
+                  <span class="preview-chip"><span data-icon="comment" data-icon-size="12"></span><span data-i18n="optPreviewComment">mona commented · 2h</span></span>
+                  <span class="preview-chip"><span data-icon="git-commit" data-icon-size="12"></span><span data-i18n="optPreviewCommit">Last commit · 5h</span></span>
+                  <span class="preview-chip is-attention"><span data-icon="comment-discussion" data-icon-size="12"></span><span data-i18n="optPreviewUnresolved">3 unresolved</span></span>
+                </div>
               </div>
-              <div class="form-group-body">
-                <p class="note mb-2">__MSG_languageDesc__</p>
-                <select id="setting-language" class="form-select">
-                  <option value="system">System default / Systemowy</option>
-                  <option value="en">English</option>
-                  <option value="pl">Polski</option>
-                </select>
+              <div class="setting-control">
+                <span data-saved-for="prListEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-prList" data-setting="prListEnabled" aria-describedby="desc-prList" />
+              </div>
+            </div>
+            <div class="setting" data-depends="prListEnabled">
+              <div class="setting-text">
+                <label class="setting-label" for="set-labels" data-i18n="optLabelsLabel">Suggested labels</label>
+                <p class="setting-desc" id="desc-labels" data-i18n="optLabelsDesc">Suggests labels from the files a pull request changes, such as missing tests or documentation updates.</p>
+                <div class="preview" aria-hidden="true">
+                  <span class="preview-chip is-label is-attention" data-i18n="needsTests">needs tests</span>
+                  <span class="preview-chip is-label" data-i18n="documentation">docs</span>
+                  <span class="preview-chip is-label" data-i18n="dependencies">deps</span>
+                </div>
+                <p class="setting-note" data-depends-note="prListEnabled" data-i18n="optLabelsNeedsList" hidden>Turn on activity in pull request lists to use this.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="suggestedLabelsEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-labels" data-setting="suggestedLabelsEnabled" aria-describedby="desc-labels" />
+              </div>
+            </div>
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-stale" data-i18n="optStaleLabel">Mark as stale after</label>
+                <p class="setting-desc" id="desc-stale" data-i18n="optStaleDesc">Pull requests without commits, comments or reviews for this long get a “Stale” chip in lists and in your inbox.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="staleDays"></span>
+                <span class="select-wrap">
+                  <select class="select" id="set-stale" data-setting="staleDays" aria-describedby="desc-stale"></select>
+                  <span data-icon="chevron-down"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Files changed ---------------------------------------------- -->
+        <section class="section" data-section="files" aria-labelledby="h-files" hidden>
+          <header class="section-header">
+            <h2 id="h-files" tabindex="-1" data-i18n="optFilesTitle">Files changed</h2>
+            <p data-i18n="optFilesDesc">Make the Files changed tab of a pull request quicker to review.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-collapse" data-i18n="optCollapseLabel">Collapse generated files</label>
+                <p class="setting-desc" id="desc-collapse" data-i18n="optCollapseDesc">Lockfiles, snapshots, build output and other generated files start collapsed, so you see the code that matters first.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="autoCollapseGenerated"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-collapse" data-setting="autoCollapseGenerated" aria-describedby="desc-collapse" />
+              </div>
+            </div>
+            <div class="setting setting-stack patterns-setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-patterns" data-i18n="optPatternsLabel">Generated file patterns</label>
+                <p class="setting-desc" id="desc-patterns" data-i18n="optPatternsDesc">One pattern per line. A file that matches any of them counts as generated.</p>
+                <ul class="pattern-syntax list-reset" id="patterns-syntax" role="list">
+                  <li><code>*</code><span data-i18n="optPatternStar">any characters except “/”</span></li>
+                  <li><code>**</code><span data-i18n="optPatternGlobstar">any path, across folders</span></li>
+                  <li><code>*.min.js</code><span data-i18n="optPatternNoSlash">no “/”: matches the file name in any folder</span></li>
+                  <li><code>dist/**</code><span data-i18n="optPatternSlash">with “/”: matches that path in any folder</span></li>
+                </ul>
+              </div>
+              <div class="patterns-editor">
+                <textarea class="input textarea input-mono" id="set-patterns" rows="9" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="desc-patterns patterns-syntax"></textarea>
+                <div class="patterns-actions">
+                  <span class="patterns-count text-muted" id="patterns-count"></span>
+                  <span data-saved-for="generatedPatterns"></span>
+                  <button type="button" class="btn btn-sm" id="patterns-reset"><span data-icon="history"></span><span class="btn-label" data-i18n="optPatternsReset">Reset to defaults</span></button>
+                </div>
+                <div class="field pattern-test">
+                  <label class="field-label" for="pattern-test" data-i18n="optPatternTestLabel">Test a path</label>
+                  <input class="input input-mono" id="pattern-test" type="text" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="packages/web/dist/app.js" aria-describedby="pattern-test-result" />
+                  <p class="pattern-test-result" id="pattern-test-result" role="status" aria-live="polite"></p>
+                </div>
+              </div>
+            </div>
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-progress" data-i18n="optProgressLabel">Review progress</label>
+                <p class="setting-desc" id="desc-progress" data-i18n="optProgressDesc">Shows how many files you’ve marked as viewed, with a shortcut to the next unviewed one.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="reviewProgressEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-progress" data-setting="reviewProgressEnabled" aria-describedby="desc-progress" />
+              </div>
+            </div>
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-checklist-on" data-i18n="optChecklistLabel">Review checklist</label>
+                <p class="setting-desc" id="desc-checklist-on" data-i18n="optChecklistDesc">Shows a small checklist on pull requests of repositories that have a template below. Ticks are remembered per pull request.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="reviewChecklistEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-checklist-on" data-setting="reviewChecklistEnabled" aria-describedby="desc-checklist-on" />
+              </div>
+            </div>
+            <div class="setting setting-stack" data-depends="reviewChecklistEnabled">
+              <div class="setting-text">
+                <label class="setting-label" for="set-checklists" data-i18n="optChecklistTemplatesLabel">Checklist templates</label>
+                <p class="setting-desc" id="desc-checklists" data-i18n="optChecklistTemplatesDesc">Start a template with [owner/repo], [owner/*] or [*] (any repository), then list one item per line. The most specific template wins.</p>
+              </div>
+              <div class="patterns-editor">
+                <textarea class="input textarea input-mono" id="set-checklists" rows="9" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="[acme/web]&#10;- Tests added&#10;- Docs updated&#10;&#10;[*]&#10;- Self-reviewed" aria-describedby="desc-checklists"></textarea>
+                <div class="patterns-actions"><span data-saved-for="reviewChecklists"></span></div>
+              </div>
+            </div>
+            <div class="setting setting-stack">
+              <div class="setting-text">
+                <span class="setting-label" id="label-checkout" data-i18n="optCheckoutLabel">Checkout command</span>
+                <p class="setting-desc" id="desc-checkout" data-i18n="optCheckoutDesc">What “Copy checkout command” copies on a pull request page.</p>
+              </div>
+              <div class="setting-control">
+                <div class="segmented checkout-control" role="radiogroup" aria-labelledby="label-checkout" aria-describedby="desc-checkout checkout-preview-line">
+                  <label class="segmented-item"><input class="sr-only" type="radio" name="checkoutCommand" value="gh" data-radio-setting="checkoutCommand" /><span class="segmented-label" data-i18n="optCheckoutGh">GitHub CLI</span></label>
+                  <label class="segmented-item"><input class="sr-only" type="radio" name="checkoutCommand" value="git" data-radio-setting="checkoutCommand" /><span class="segmented-label" data-i18n="optCheckoutGit">Plain git</span></label>
+                </div>
+                <span data-saved-for="checkoutCommand"></span>
+              </div>
+              <p class="checkout-preview" id="checkout-preview-line"><span class="checkout-preview-label" data-i18n="optCheckoutPreview">For pull request #123:</span> <code id="checkout-preview"></code></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Comment templates ------------------------------------------ -->
+        <section class="section" data-section="templates" aria-labelledby="h-templates" hidden>
+          <header class="section-header">
+            <h2 id="h-templates" tabindex="-1" data-i18n="optTemplatesTitle">Comment templates</h2>
+            <p data-i18n="optTemplatesDesc">Insert ready-made text into any GitHub comment box with a shortcut.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-templates" data-i18n="optTemplatesEnabledLabel">Comment templates</label>
+                <p class="setting-desc" id="desc-templates" data-i18n="optTemplatesEnabledDesc">Press the shortcut inside a comment box to pick a template. The shortcut can be changed under Keyboard shortcuts.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="commentTemplatesEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-templates" data-setting="commentTemplatesEnabled" aria-describedby="desc-templates" />
+              </div>
+            </div>
+            <div class="setting" data-depends="commentTemplatesEnabled">
+              <div class="setting-text">
+                <label class="setting-label" for="set-conventional" data-i18n="optConventionalLabel">Conventional Comments labels</label>
+                <p class="setting-desc" id="desc-conventional" data-i18n="optConventionalDesc">Offer labels such as praise, nitpick or issue (blocking), inserted as bold prefixes.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="conventionalCommentsEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-conventional" data-setting="conventionalCommentsEnabled" aria-describedby="desc-conventional" />
+              </div>
+            </div>
+            <div class="setting setting-stack">
+              <div class="setting-text">
+                <span class="setting-label" id="label-snippets" data-i18n="optSnippetsLabel">Your snippets</span> <span data-saved-for="commentSnippets"></span>
+                <p class="setting-desc" id="desc-snippets" data-i18n="optSnippetsDesc">Reusable pieces of text. Each one appears in the picker by its title.</p>
+              </div>
+              <div class="snippets-editor" id="snippets-editor" role="group" aria-labelledby="label-snippets" aria-describedby="desc-snippets"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Dashboard -------------------------------------------------- -->
+        <section class="section" data-section="dashboard" aria-labelledby="h-dashboard" hidden>
+          <header class="section-header">
+            <h2 id="h-dashboard" tabindex="-1" data-i18n="optDashboardTitle">Dashboard</h2>
+            <p data-i18n="optDashboardDesc">Your GitHub home page, with your own work up front.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-dashboard" data-i18n="optDashboardLabel">“Your pull requests” card</label>
+                <p class="setting-desc" id="desc-dashboard" data-i18n="optDashboardCardDesc">Shows your open pull requests with their review status at the top of the github.com dashboard.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="dashboardEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-dashboard" data-setting="dashboardEnabled" aria-describedby="desc-dashboard" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Keyboard shortcuts ----------------------------------------- -->
+        <section class="section" data-section="shortcuts" aria-labelledby="h-shortcuts" hidden>
+          <header class="section-header">
+            <h2 id="h-shortcuts" tabindex="-1" data-i18n="optShortcutsTitle">Keyboard shortcuts</h2>
+            <p data-i18n="optShortcutsDesc">Work on pull request pages and never fire while you’re typing.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-shortcuts" data-i18n="optShortcutsEnabledLabel">Enable keyboard shortcuts</label>
+                <p class="setting-desc" id="desc-shortcuts" data-i18n="optShortcutsEnabledDesc">Collapse threads, jump between unresolved comments, switch tabs and copy links without the mouse.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="shortcutsEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-shortcuts" data-setting="shortcutsEnabled" aria-describedby="desc-shortcuts" />
+              </div>
+            </div>
+            <div class="setting" data-depends="shortcutsEnabled">
+              <div class="setting-text">
+                <label class="setting-label" for="set-hint" data-i18n="optShortcutHintLabel">Show floating shortcuts button</label>
+                <p class="setting-desc" id="desc-hint" data-i18n="optShortcutHintDesc">A small keyboard button in the corner of pull request pages that opens the cheat sheet.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="shortcutHintEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-hint" data-setting="shortcutHintEnabled" aria-describedby="desc-hint" />
+              </div>
+            </div>
+          </div>
+          <div id="shortcut-editor"></div>
+        </section>
+
+        <!-- Notifications ---------------------------------------------- -->
+        <section class="section" data-section="notifications" aria-labelledby="h-notifications" hidden>
+          <header class="section-header">
+            <h2 id="h-notifications" tabindex="-1" data-i18n="optNotificationsTitle">Notifications</h2>
+            <p data-i18n="optNotificationsDesc">Know when a pull request needs you, without keeping GitHub open.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-notifications" data-i18n="optBadgeLabel">Badge on the toolbar icon</label>
+                <p class="setting-desc" id="desc-notifications" data-i18n="optBadgeDesc">Shows how many pull requests in your inbox have new activity. Opening one clears it.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="notificationsEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-notifications" data-setting="notificationsEnabled" aria-describedby="desc-notifications" />
+              </div>
+            </div>
+            <div class="setting setting-stack" data-depends="notificationsEnabled">
+              <div class="setting-text">
+                <span class="setting-label" id="label-interval" data-i18n="optIntervalLabel">Check for updates every</span>
+                <p class="setting-desc" id="desc-interval" data-i18n="optIntervalDesc">Shorter intervals feel more live but use more of your GitHub API budget.</p>
+              </div>
+              <div class="setting-control">
+                <div class="segmented interval-control" id="interval-options" role="radiogroup" aria-labelledby="label-interval" aria-describedby="desc-interval"></div>
+                <span data-saved-for="notificationInterval"></span>
               </div>
             </div>
           </div>
 
-          <!-- Cache Enable/Disable -->
-          <div class="Box-row">
-            <div class="form-group mb-0">
-              <div class="form-group-header">
-                <label for="setting-cache-enabled">__MSG_cacheEnabled__</label>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-desktop" data-i18n="optDesktopLabel">Desktop notifications</label>
+                <p class="setting-desc" id="desc-desktop" data-i18n="optDesktopDesc">System notifications when something happens on a pull request in your inbox.</p>
               </div>
-              <div class="form-group-body">
-                <p class="note mb-2">__MSG_cacheEnabledDesc__</p>
-                <div class="form-checkbox">
-                  <label>
-                    <input type="checkbox" id="setting-cache-enabled" checked />
-                    <span>__MSG_cacheEnabledLabel__</span>
-                  </label>
+              <div class="setting-control">
+                <span data-saved-for="desktopNotifications"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-desktop" data-setting="desktopNotifications" aria-describedby="desc-desktop" />
+              </div>
+            </div>
+            <div class="setting-group" data-depends="desktopNotifications" role="group" aria-labelledby="label-events">
+              <p class="setting-group-title" id="label-events" data-i18n="optEventsLabel">Notify me when</p>
+              <div class="setting setting-sub">
+                <div class="setting-text"><label class="setting-label" for="set-notify-review" data-i18n="optNotifyReview">Someone requests my review</label></div>
+                <div class="setting-control">
+                  <span data-saved-for="notifyReviewRequested"></span>
+                  <input type="checkbox" role="switch" class="switch switch-sm" id="set-notify-review" data-setting="notifyReviewRequested" />
                 </div>
-                <div
-                  id="cache-disabled-warning"
-                  class="flash flash-warn mt-2"
-                  style="display: none"
-                >
-                  <span class="octicon-inline"></span>
-                  <span>__MSG_cacheDisabledWarning__</span>
+              </div>
+              <div class="setting setting-sub">
+                <div class="setting-text"><label class="setting-label" for="set-notify-changes" data-i18n="optNotifyChanges">A reviewer requests changes on my pull request</label></div>
+                <div class="setting-control">
+                  <span data-saved-for="notifyChangesRequested"></span>
+                  <input type="checkbox" role="switch" class="switch switch-sm" id="set-notify-changes" data-setting="notifyChangesRequested" />
+                </div>
+              </div>
+              <div class="setting setting-sub">
+                <div class="setting-text"><label class="setting-label" for="set-notify-checks" data-i18n="optNotifyChecks">Checks fail on my pull request</label></div>
+                <div class="setting-control">
+                  <span data-saved-for="notifyChecksFailed"></span>
+                  <input type="checkbox" role="switch" class="switch switch-sm" id="set-notify-checks" data-setting="notifyChecksFailed" />
+                </div>
+              </div>
+              <div class="setting setting-sub">
+                <div class="setting-text"><label class="setting-label" for="set-notify-approved" data-i18n="optNotifyApproved">My pull request is approved</label></div>
+                <div class="setting-control">
+                  <span data-saved-for="notifyApproved"></span>
+                  <input type="checkbox" role="switch" class="switch switch-sm" id="set-notify-approved" data-setting="notifyApproved" />
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Cache Duration -->
-          <div class="Box-row" id="cache-duration-section">
-            <div class="form-group mb-0">
-              <div class="form-group-header">
-                <label for="setting-cache-time">__MSG_cacheDuration__</label>
+            <div class="setting" data-depends="desktopNotifications">
+              <div class="setting-text">
+                <label class="setting-label" for="set-quiet" data-i18n="optQuietLabel">Quiet hours</label>
+                <p class="setting-desc" id="desc-quiet" data-i18n="optQuietDesc">No desktop notifications during these hours. The badge still updates.</p>
               </div>
-              <div class="form-group-body">
-                <p class="note mb-2">__MSG_cacheDurationDesc__</p>
-                <div class="d-flex flex-items-center">
-                  <input
-                    type="range"
-                    id="setting-cache-time"
-                    class="flex-1"
-                    min="100"
-                    max="600000"
-                    step="100"
-                    value="300000"
-                  />
-                  <span
-                    class="Label Label--large ml-3"
-                    style="min-width: 100px"
-                  >
-                    <span id="cache-time-value">5</span>
-                    <span id="cache-time-unit">min</span>
-                  </span>
-                </div>
-                <div
-                  id="cache-time-recommendation"
-                  class="flash mt-2"
-                  style="display: none"
-                >
-                  <span class="octicon-inline"></span>
-                  <span>__MSG_cacheTimeRecommendation__</span>
-                </div>
+              <div class="setting-control">
+                <span data-saved-for="quietHoursEnabled"></span>
+                <input type="checkbox" role="switch" class="switch" id="set-quiet" data-setting="quietHoursEnabled" aria-describedby="desc-quiet" />
               </div>
             </div>
-          </div>
-
-          <!-- Clear Cache -->
-          <div class="Box-row">
-            <div class="form-group mb-0">
-              <div class="form-group-header">
-                <label>__MSG_clearCache__</label>
+            <div class="setting setting-sub setting-follow" data-depends="desktopNotifications quietHoursEnabled">
+              <div class="setting-text"><span class="setting-label" id="label-quiet-range" data-i18n="optQuietRange">Between</span></div>
+              <div class="setting-control quiet-range" role="group" aria-labelledby="label-quiet-range">
+                <span data-saved-for="quietHoursStart"></span>
+                <label class="sr-only" for="set-quiet-start" data-i18n="optQuietStart">Quiet hours start</label>
+                <input type="time" class="input input-time" id="set-quiet-start" data-setting="quietHoursStart" />
+                <span class="quiet-sep" aria-hidden="true">–</span>
+                <label class="sr-only" for="set-quiet-end" data-i18n="optQuietEnd">Quiet hours end</label>
+                <input type="time" class="input input-time" id="set-quiet-end" data-setting="quietHoursEnd" />
+                <span data-saved-for="quietHoursEnd"></span>
               </div>
-              <div class="form-group-body">
-                <p class="note mb-2">__MSG_clearCacheDesc__</p>
-                <button id="clear-cache-btn" class="btn">
-                  <span class="btn-icon octicon-inline mr-1"></span>
-                  <span>__MSG_clearCache__</span>
+            </div>
+            <div class="setting">
+              <div class="setting-text">
+                <span class="setting-label" data-i18n="optTestLabel">Test notification</span>
+                <p class="setting-desc" id="desc-test-notification" data-i18n="optTestDesc">Sends one right away. If nothing appears, check that your system allows notifications from Chrome.</p>
+              </div>
+              <div class="setting-control">
+                <span id="test-notification-status"></span>
+                <button type="button" class="btn btn-sm" id="test-notification" aria-describedby="desc-test-notification">
+                  <span data-icon="bell"></span><span class="btn-label" data-i18n="optTestButton">Send a test notification</span>
                 </button>
-                <span
-                  id="cache-cleared"
-                  class="Label Label--success ml-2"
-                  style="display: none"
-                >__MSG_cacheCleared__</span>
               </div>
             </div>
           </div>
+        </section>
 
-          <!-- Batch Delay -->
-          <div class="Box-row">
-            <div class="form-group mb-0">
-              <div class="form-group-header">
-                <label for="setting-batch-delay">__MSG_batchDelay__</label>
+        <!-- Language & data -------------------------------------------- -->
+        <section class="section" data-section="language" aria-labelledby="h-language" hidden>
+          <header class="section-header">
+            <h2 id="h-language" tabindex="-1" data-i18n="optLanguageTitle">Language &amp; data</h2>
+            <p data-i18n="optLanguageSectionDesc">How Better GHub talks to you, and what it keeps on this device.</p>
+          </header>
+          <div class="card">
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-language" data-i18n="optLanguageLabel">Language</label>
+                <p class="setting-desc" id="desc-language" data-i18n="optLanguageDesc">Used in this page, the popup and on github.com.</p>
               </div>
-              <div class="form-group-body">
-                <p class="note mb-2">__MSG_batchDelayDesc__</p>
-                <div class="d-flex flex-items-center">
-                  <input
-                    type="range"
-                    id="setting-batch-delay"
-                    class="flex-1"
-                    min="100"
-                    max="2000"
-                    step="100"
-                    value="500"
-                  />
-                  <span class="Label Label--large ml-3" style="min-width: 80px">
-                    <span id="batch-delay-value">500</span> ms
-                  </span>
-                </div>
+              <div class="setting-control">
+                <span data-saved-for="language"></span>
+                <span class="select-wrap">
+                  <select class="select" id="set-language" data-setting="language" aria-describedby="desc-language">
+                    <option value="system" data-i18n="optLanguageSystem">Browser default</option>
+                    <option value="en" lang="en">English</option>
+                    <option value="pl" lang="pl">Polski</option>
+                  </select>
+                  <span data-icon="chevron-down"></span>
+                </span>
+              </div>
+            </div>
+            <div class="setting">
+              <div class="setting-text">
+                <label class="setting-label" for="set-cache" data-i18n="optCacheLabel">Keep pull request data for</label>
+                <p class="setting-desc" id="desc-cache" data-i18n="optCacheDesc">Cached data makes pages load instantly and saves API budget. Five minutes is a good balance.</p>
+              </div>
+              <div class="setting-control">
+                <span data-saved-for="cacheDuration"></span>
+                <span class="select-wrap">
+                  <select class="select" id="set-cache" data-setting="cacheDuration" aria-describedby="desc-cache"></select>
+                  <span data-icon="chevron-down"></span>
+                </span>
+              </div>
+            </div>
+            <div class="setting">
+              <div class="setting-text">
+                <span class="setting-label" id="label-clear" data-i18n="optClearLabel">Clear cached data</span>
+                <p class="setting-desc" id="desc-clear" data-i18n="optClearDesc">Removes cached pull request data. Your token and settings stay.</p>
+              </div>
+              <div class="setting-control">
+                <span id="clear-status"></span>
+                <button type="button" class="btn btn-sm" id="clear-cache" aria-describedby="desc-clear">
+                  <span data-icon="trash"></span><span class="btn-label" data-i18n="optClearButton">Clear cache</span>
+                </button>
               </div>
             </div>
           </div>
+        </section>
 
-          <!-- Auto-save notice -->
-          <div class="Box-row border-top">
-            <div class="flash text-center mb-0">
-              <span class="notice-icon octicon-inline mr-2"></span>
-              <span>__MSG_autoSave__</span>
+        <!-- About ------------------------------------------------------ -->
+        <section class="section" data-section="about" aria-labelledby="h-about" hidden>
+          <header class="section-header">
+            <h2 id="h-about" tabindex="-1" data-i18n="optAboutTitle">About</h2>
+            <p data-i18n="optAboutDesc">A small, open-source extension for people who live in pull requests.</p>
+          </header>
+          <div class="card card-pad about-card">
+            <div class="about-id">
+              <img src="../icons/icon128.png" alt="" width="48" height="48" />
+              <div>
+                <p class="about-name">Better GHub</p>
+                <p class="about-version text-muted" id="about-version"></p>
+              </div>
+            </div>
+            <div class="about-privacy">
+              <h3><span data-icon="shield-check"></span><span data-i18n="optPrivacyTitle">Privacy</span></h3>
+              <p data-i18n="optPrivacyBody">Your token is stored only in this browser and is sent only to api.github.com. Better GHub has no servers, no analytics and no tracking.</p>
+            </div>
+            <ul class="about-links" role="list">
+              <li><a href="https://github.com/better-ghub/chrome-extension" target="_blank" rel="noopener noreferrer"><span data-icon="mark-github"></span><span data-i18n="optLinkSource">Source code</span><span data-icon="link-external" data-icon-size="12"></span></a></li>
+              <li><a href="https://github.com/better-ghub/chrome-extension/issues/new" target="_blank" rel="noopener noreferrer"><span data-icon="bug"></span><span data-i18n="optLinkIssue">Report a problem</span><span data-icon="link-external" data-icon-size="12"></span></a></li>
+              <li><a href="https://github.com/better-ghub/chrome-extension/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer"><span data-icon="law"></span><span data-i18n="optLinkPrivacy">Privacy policy</span><span data-icon="link-external" data-icon-size="12"></span></a></li>
+            </ul>
+          </div>
+          <div class="card" aria-labelledby="h-backup">
+            <div class="setting">
+              <div class="setting-text">
+                <span class="setting-label" id="h-backup" data-i18n="optBackupLabel">Back up settings</span>
+                <p class="setting-desc" id="desc-backup" data-i18n="optBackupDesc">Save your settings to a file, or load them from one. Tokens are never included.</p>
+              </div>
+              <div class="setting-control">
+                <span id="export-status"></span>
+                <span id="import-status"></span>
+                <button type="button" class="btn btn-sm" id="export-settings" aria-describedby="desc-backup">
+                  <span data-icon="download"></span><span class="btn-label" data-i18n="optExportButton">Export</span>
+                </button>
+                <button type="button" class="btn btn-sm" id="import-settings" aria-describedby="desc-backup">
+                  <span data-icon="upload"></span><span class="btn-label" data-i18n="optImportButton">Import</span>
+                </button>
+                <input type="file" id="import-file" accept="application/json,.json" hidden />
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Status Messages -->
-      <div id="status-message" class="flash mt-3" style="display: none"></div>
+        </section>
+      </main>
     </div>
 
     <script src="options.js"></script>

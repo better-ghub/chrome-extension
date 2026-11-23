@@ -3,72 +3,7 @@
     "message": "Better GHub"
   },
   "extensionDescription": {
-    "message": "Shows last activity and unresolved suggestions on GitHub pull request lists"
-  },
-  "lastComment": {
-    "message": "Last comment"
-  },
-  "lastCommit": {
-    "message": "Last commit"
-  },
-  "unresolvedSuggestions": {
-    "message": "Unresolved suggestions"
-  },
-  "reviewComments": {
-    "message": "Review comments"
-  },
-  "unresolvedTooltip": {
-    "message": "Unresolved review threads (fetched via GraphQL API)"
-  },
-  "by": {
-    "message": "by"
-  },
-  "unresolvedSuggestionsCount": {
-    "message": "$COUNT$ unresolved",
-    "placeholders": {
-      "count": {
-        "content": "$1"
-      }
-    }
-  },
-  "authRequired": {
-    "message": "Authentication required"
-  },
-  "authDescription": {
-    "message": "Connect your GitHub account to see detailed PR activity information."
-  },
-  "setupInstructions": {
-    "message": "Setup Instructions:"
-  },
-  "step1": {
-    "message": "Go to GitHub Settings → Developer settings → Personal access tokens → Fine-grained tokens"
-  },
-  "step2": {
-    "message": "Click \"Generate new token\""
-  },
-  "step3": {
-    "message": "Select \"All repositories\" under Repository access, then set Pull requests: Read and Contents: Read permissions"
-  },
-  "step4": {
-    "message": "Copy the token and paste it below"
-  },
-  "tokenLabel": {
-    "message": "GitHub Fine-grained Personal Access Token:"
-  },
-  "saveToken": {
-    "message": "Save Token"
-  },
-  "createToken": {
-    "message": "→ Create a fine-grained token on GitHub"
-  },
-  "createTokenPrivate": {
-    "message": "→ Create a fine-grained token on GitHub"
-  },
-  "authenticated": {
-    "message": "Authenticated"
-  },
-  "apiCalls": {
-    "message": "API Calls Today:"
+    "message": "Faster GitHub pull request reviews: PR inbox, smart list chips, keyboard shortcuts and a file finder. No servers, no tracking."
   },
   "rateLimit": {
     "message": "Rate Limit:"
@@ -76,191 +11,1969 @@
   "logout": {
     "message": "Logout"
   },
-  "madeWith": {
-    "message": "Made with"
-  },
   "loading": {
     "message": "Loading activity..."
-  },
-  "unresolvedBreakdown": {
-    "message": "Unresolved by author:"
-  },
-  "noUnresolved": {
-    "message": "No unresolved threads"
-  },
-  "pleaseEnterToken": {
-    "message": "Please enter a token"
-  },
-  "invalidToken": {
-    "message": "Invalid token format. Token should start with github_pat_"
-  },
-  "testing": {
-    "message": "Testing token..."
-  },
-  "tokenSaved": {
-    "message": "Token saved successfully!"
-  },
-  "tokenValidationFailed": {
-    "message": "Token validation failed"
-  },
-  "confirmLogout": {
-    "message": "Are you sure you want to logout?"
-  },
-  "loggedOut": {
-    "message": "Logged out successfully"
-  },
-  "languageSaved": {
-    "message": "Language saved. Reloading..."
-  },
-  "cacheTimeSet": {
-    "message": "Cache duration set to $1"
-  },
-  "batchDelaySet": {
-    "message": "Batch delay set to $1ms"
-  },
-  "cacheCleared": {
-    "message": "Cache cleared successfully!"
-  },
-  "tabAuthorization": {
-    "message": "Authorization"
-  },
-  "tabSettings": {
-    "message": "Settings"
-  },
-  "githubAuth": {
-    "message": "GitHub Authentication"
-  },
-  "checkingAuth": {
-    "message": "Checking authentication..."
-  },
-  "notAuthenticated": {
-    "message": "Not authenticated"
-  },
-  "accountConnected": {
-    "message": "your GitHub account is connected."
-  },
-  "extensionSettings": {
-    "message": "Extension Settings"
-  },
-  "languageSetting": {
-    "message": "Language / Język"
-  },
-  "languageDesc": {
-    "message": "Choose the display language for the extension"
   },
   "cacheEnabled": {
     "message": "Enable Cache"
   },
-  "cacheEnabledDesc": {
-    "message": "Cache PR data to reduce API calls"
-  },
-  "cacheEnabledLabel": {
-    "message": "Enable caching"
-  },
-  "cacheDisabledWarning": {
-    "message": "Warning: Disabling cache can lead to excessive API calls when visiting many repositories. This may quickly exhaust your API rate limit."
-  },
-  "cacheDisabled": {
-    "message": "Cache disabled"
-  },
   "cacheDuration": {
     "message": "Cache Duration"
-  },
-  "cacheDurationDesc": {
-    "message": "How long to cache PR data"
-  },
-  "cacheTimeRecommendation": {
-    "message": "For optimal token usage, 5 minutes is the recommended cache duration."
-  },
-  "clearCache": {
-    "message": "Clear Cache"
-  },
-  "clearCacheDesc": {
-    "message": "Clear all cached PR data"
   },
   "batchDelay": {
     "message": "Batch Delay"
   },
-  "batchDelayDesc": {
-    "message": "Delay before batching GraphQL requests (in milliseconds)"
-  },
-  "autoSave": {
-    "message": "Settings are saved automatically"
-  },
-  "openSettings": {
-    "message": "Settings"
-  },
-  "signInWithGitHub": {
-    "message": "Sign in with GitHub (OAuth)"
-  },
-  "recommendedMethod": {
-    "message": "✓ Recommended - More secure"
-  },
-  "waitingForAuth": {
-    "message": "Waiting for authorization..."
-  },
-  "enterCode": {
-    "message": "Enter this code on GitHub:"
-  },
-  "openGitHub": {
-    "message": "Open GitHub to Authorize"
-  },
-  "codeExpires": {
-    "message": "Code expires in: "
-  },
   "cancel": {
     "message": "Cancel"
-  },
-  "orUseToken": {
-    "message": "or use token"
-  },
-  "usePersonalToken": {
-    "message": "Use Fine-grained Personal Access Token (Manual)"
-  },
-  "repoAccessNote": {
-    "message": "Note: Select \"All repositories\" under Repository access when creating your token."
-  },
-  "oauthSuccess": {
-    "message": "Successfully authenticated with GitHub!"
-  },
-  "oauthFailed": {
-    "message": "OAuth failed"
-  },
-  "oauthError": {
-    "message": "Failed to start OAuth"
-  },
-  "codeExpired": {
-    "message": "Authorization code expired"
-  },
-  "yourPRs": {
-    "message": "Your PR's"
-  },
-  "noOpenPRs": {
-    "message": "No open pull requests"
-  },
-  "noOpenPRsDescription": {
-    "message": "You don't have any open pull requests at the moment."
   },
   "note": {
     "message": "Note"
   },
-  "authNote": {
-    "message": "Without authentication, the extension works with public repositories only (limited to 60 API calls per hour). Use a fine-grained personal access token for full access."
-  },
-  "forBetterExperience": {
-    "message": "for better GitHub experience"
-  },
-  "keyboardShortcuts": {
-    "message": "Keyboard Shortcuts"
-  },
   "shortcutToggleComments": {
-    "message": "Toggle comments"
+    "message": "Collapse / expand all review threads"
   },
   "shortcutToggleFiles": {
-    "message": "Toggle file diffs"
+    "message": "Collapse / expand all files"
   },
-  "shortcutFilesViewOnly": {
-    "message": "Files view only"
+  "needsTests": {
+    "message": "needs tests"
+  },
+  "styling": {
+    "message": "styling"
+  },
+  "database": {
+    "message": "database"
+  },
+  "documentation": {
+    "message": "docs"
+  },
+  "infrastructure": {
+    "message": "infra"
+  },
+  "ci": {
+    "message": "CI"
+  },
+  "dependencies": {
+    "message": "deps"
+  },
+  "i18n": {
+    "message": "i18n"
+  },
+  "config": {
+    "message": "config"
+  },
+  "api": {
+    "message": "API"
+  },
+  "media": {
+    "message": "media"
+  },
+  "build": {
+    "message": "build"
+  },
+  "security": {
+    "message": "security"
+  },
+  "notificationsEnabled": {
+    "message": "Notifications"
+  },
+  "shortcutNextUnresolved": {
+    "message": "Jump to next unresolved thread"
+  },
+  "shortcutPrevUnresolved": {
+    "message": "Jump to previous unresolved thread"
+  },
+  "shortcutGotoConversation": {
+    "message": "Go to Conversation"
+  },
+  "shortcutGotoCommits": {
+    "message": "Go to Commits"
+  },
+  "shortcutGotoChecks": {
+    "message": "Go to Checks"
+  },
+  "shortcutGotoFiles": {
+    "message": "Go to Files changed"
+  },
+  "shortcutCopyBranch": {
+    "message": "Copy head branch name"
+  },
+  "shortcutCopyMarkdownLink": {
+    "message": "Copy PR as Markdown link"
+  },
+  "shortcutShowHelp": {
+    "message": "Show keyboard shortcuts"
+  },
+  "prPageCheatsheetTitle": {
+    "message": "Keyboard shortcuts"
+  },
+  "prPageClose": {
+    "message": "Close"
+  },
+  "prPageCustomize": {
+    "message": "Customize"
+  },
+  "prPageHideHint": {
+    "message": "Hide floating button"
+  },
+  "prPageHintHidden": {
+    "message": "Floating button hidden. Press $1 to see shortcuts."
+  },
+  "prPageHintHiddenNoKey": {
+    "message": "Floating button hidden. You can turn it back on in the options."
+  },
+  "prPageHintLabel": {
+    "message": "Keyboard shortcuts ($1)"
+  },
+  "prPageTypingNote": {
+    "message": "Shortcuts pause while you type."
+  },
+  "prPageNotSet": {
+    "message": "Not set"
+  },
+  "prPageOptionsFailed": {
+    "message": "Couldn't open the extension options"
+  },
+  "prPageGroupView": {
+    "message": "View"
+  },
+  "prPageGroupNavigate": {
+    "message": "Navigate"
+  },
+  "prPageGroupCopy": {
+    "message": "Copy"
+  },
+  "prPageGroupHelp": {
+    "message": "Help"
+  },
+  "prPageScopeConversation": {
+    "message": "Conversation tab"
+  },
+  "prPageScopeFiles": {
+    "message": "Files changed tab"
+  },
+  "prPageScopeThreads": {
+    "message": "Conversation & Files changed"
+  },
+  "prPageTabConversation": {
+    "message": "Conversation"
+  },
+  "prPageTabCommits": {
+    "message": "Commits"
+  },
+  "prPageTabChecks": {
+    "message": "Checks"
+  },
+  "prPageTabFiles": {
+    "message": "Files changed"
+  },
+  "prPageAlreadyOnTab": {
+    "message": "You're already on $1"
+  },
+  "prPageWorksOnFiles": {
+    "message": "“$1” works on the Files changed tab"
+  },
+  "prPageWorksOnThreads": {
+    "message": "“$1” works on the Conversation and Files changed tabs"
+  },
+  "prPageNoThreads": {
+    "message": "No review threads on this page"
+  },
+  "prPageThreadsCollapsed": {
+    "message": "Review threads collapsed ($1)"
+  },
+  "prPageThreadsExpanded": {
+    "message": "Review threads expanded ($1)"
+  },
+  "prPageCommentsHidden": {
+    "message": "Inline comments hidden ($1)"
+  },
+  "prPageCommentsShown": {
+    "message": "Inline comments shown ($1)"
+  },
+  "prPageNoFiles": {
+    "message": "No file diffs found yet"
+  },
+  "prPageFilesCollapsed": {
+    "message": "Files collapsed ($1)"
+  },
+  "prPageFilesExpanded": {
+    "message": "Files expanded ($1)"
+  },
+  "prPageThreadPosition": {
+    "message": "Unresolved thread $1 of $2"
+  },
+  "prPageNoUnresolved": {
+    "message": "No unresolved threads. Nice work!"
+  },
+  "prPageCopiedBranch": {
+    "message": "Copied branch"
+  },
+  "prPageCopiedLink": {
+    "message": "Copied Markdown link to #$1"
+  },
+  "prPageCopyFailed": {
+    "message": "Couldn't copy to the clipboard"
+  },
+  "prPageBranchNotFound": {
+    "message": "Couldn't find the head branch"
+  },
+  "prlNoticeText": {
+    "message": "Connect a GitHub token to see review activity here."
+  },
+  "prlNoticeConnect": {
+    "message": "Connect"
+  },
+  "prlDismiss": {
+    "message": "Dismiss"
+  },
+  "prlLoading": {
+    "message": "Loading review activity…"
+  },
+  "prlLoaded": {
+    "message": "Review activity loaded."
+  },
+  "prlSizeLabel": {
+    "message": "Size $1: $2 additions, $3 deletions"
+  },
+  "prlSizeTooltip": {
+    "message": "Size $1 · $2 lines changed"
+  },
+  "prlFilesChanged_one": {
+    "message": "$1 file changed"
+  },
+  "prlFilesChanged_other": {
+    "message": "$1 files changed"
+  },
+  "prlConflicts": {
+    "message": "Conflicts"
+  },
+  "prlUnresolved_one": {
+    "message": "$1 unresolved thread"
+  },
+  "prlUnresolved_other": {
+    "message": "$1 unresolved threads"
+  },
+  "prlThreadsStartedBy": {
+    "message": "Started by"
+  },
+  "prlOutdatedCount": {
+    "message": "($1 outdated)"
+  },
+  "prlOutdatedNote": {
+    "message": "$1 on outdated code"
+  },
+  "prlYourReview": {
+    "message": "Your review"
+  },
+  "prlYourReviewTooltip": {
+    "message": "Your review was requested $1"
+  },
+  "prlReviewRequested": {
+    "message": "Review requested · $1"
+  },
+  "prlReviewRequestedNoTime": {
+    "message": "Review requested"
+  },
+  "prlReviewersTitle": {
+    "message": "Requested reviewers"
+  },
+  "prlActCommit": {
+    "message": "$1 pushed · $2"
+  },
+  "prlActComment": {
+    "message": "$1 commented · $2"
+  },
+  "prlActApproved": {
+    "message": "$1 approved · $2"
+  },
+  "prlActChanges": {
+    "message": "$1 requested changes · $2"
+  },
+  "prlActReviewed": {
+    "message": "$1 reviewed · $2"
+  },
+  "prlSomeone": {
+    "message": "someone"
+  },
+  "prlSuggestedLabel": {
+    "message": "Suggested label:"
+  },
+  "prlLabelNeedsTests": {
+    "message": "needs tests"
+  },
+  "prlLabelHasTests": {
+    "message": "has tests"
+  },
+  "prlLabelStyling": {
+    "message": "styling"
+  },
+  "prlLabelDatabase": {
+    "message": "database"
+  },
+  "prlLabelDocs": {
+    "message": "docs"
+  },
+  "prlLabelInfra": {
+    "message": "infra"
+  },
+  "prlLabelCi": {
+    "message": "CI"
+  },
+  "prlLabelDeps": {
+    "message": "deps"
+  },
+  "prlLabelI18n": {
+    "message": "i18n"
+  },
+  "prlLabelConfig": {
+    "message": "config"
+  },
+  "prlLabelApi": {
+    "message": "API"
+  },
+  "prlLabelMedia": {
+    "message": "media"
+  },
+  "prlLabelBuild": {
+    "message": "build"
+  },
+  "prlLabelSecurity": {
+    "message": "security"
+  },
+  "prlSummaryLabel": {
+    "message": "Pull request activity summary"
+  },
+  "prlSumReview_one": {
+    "message": "$1 needs your review"
+  },
+  "prlSumReview_other": {
+    "message": "$1 need your review"
+  },
+  "prlSumConflicts_one": {
+    "message": "$1 has conflicts"
+  },
+  "prlSumConflicts_other": {
+    "message": "$1 have conflicts"
+  },
+  "prlSumThreads_one": {
+    "message": "$1 unresolved thread"
+  },
+  "prlSumThreads_other": {
+    "message": "$1 unresolved threads"
+  },
+  "prlRateLimited": {
+    "message": "GitHub API rate limit reached — activity paused until $1."
+  },
+  "prlNoAccess": {
+    "message": "Your GitHub token can't read pull requests in this repository."
+  },
+  "prlOpenSettings": {
+    "message": "Settings"
+  },
+  "prlNeedsToken": {
+    "message": "Private pull requests of $1 need a token for $1."
+  },
+  "prlAddToken": {
+    "message": "Add token"
+  },
+  "prlAuthorizeSso": {
+    "message": "Authorize your token for $1 (SSO)"
+  },
+  "prlReady": {
+    "message": "Ready to merge"
+  },
+  "prlStale": {
+    "message": "Stale · $1d"
+  },
+  "prlStaleTooltip_one": {
+    "message": "No activity for $1 day"
+  },
+  "prlStaleTooltip_other": {
+    "message": "No activity for $1 days"
+  },
+  "prlSumReady_one": {
+    "message": "$1 ready to merge"
+  },
+  "prlSumReady_other": {
+    "message": "$1 ready to merge"
+  },
+  "prlFiltersLabel": {
+    "message": "Quick filters for this page"
+  },
+  "prlFilterReview": {
+    "message": "Needs my review"
+  },
+  "prlFilterReviewTip": {
+    "message": "Only pull requests on this page that wait for your review"
+  },
+  "prlFilterReady": {
+    "message": "Ready to merge"
+  },
+  "prlFilterReadyTip": {
+    "message": "Only pull requests on this page that are approved, green and conflict-free"
+  },
+  "prlFilterConflicts": {
+    "message": "Conflicts"
+  },
+  "prlFilterConflictsTip": {
+    "message": "Only pull requests on this page with merge conflicts"
+  },
+  "prlFilterStale": {
+    "message": "Stale"
+  },
+  "prlFilterStaleTip": {
+    "message": "Only pull requests on this page without recent activity"
+  },
+  "prlFilterHideDrafts": {
+    "message": "Hide drafts"
+  },
+  "prlFilterHideDraftsTip": {
+    "message": "Hide draft pull requests on this page"
+  },
+  "prlFilterOnPage": {
+    "message": "on this page"
+  },
+  "prlFilterSearchAll": {
+    "message": "search all"
+  },
+  "prlFilterSearchAllLabel": {
+    "message": "Search all pull requests that need your review"
+  },
+  "prlFilterResult": {
+    "message": "$1 of $2 shown"
+  },
+  "prlFiltersCleared": {
+    "message": "Filters cleared"
+  },
+  "prlFilterEmpty": {
+    "message": "No pull requests on this page match"
+  },
+  "prlFilterClear": {
+    "message": "Clear filters"
+  },
+  "dashTitle": {
+    "message": "Your pull requests"
+  },
+  "dashViewAll": {
+    "message": "View all"
+  },
+  "dashLoading": {
+    "message": "Loading pull requests…"
+  },
+  "dashEmptyTitle": {
+    "message": "No open pull requests"
+  },
+  "dashEmptyBody": {
+    "message": "Pull requests you opened or that wait for your review will show up here."
+  },
+  "dashErrorTitle": {
+    "message": "Couldn't load your pull requests"
+  },
+  "dashErrorRateLimited": {
+    "message": "GitHub API rate limit reached. Try again in a few minutes."
+  },
+  "dashErrorNetwork": {
+    "message": "GitHub couldn't be reached. Check your connection."
+  },
+  "dashErrorGeneric": {
+    "message": "Check your connection or your token in the extension settings."
+  },
+  "dashRetry": {
+    "message": "Retry"
+  },
+  "dashOpenSettings": {
+    "message": "Open settings"
+  },
+  "dashReviewRequested": {
+    "message": "Review requested"
+  },
+  "dashDraft": {
+    "message": "Draft pull request"
+  },
+  "dashOpenPR": {
+    "message": "Open pull request"
+  },
+  "dashNew": {
+    "message": "New activity"
+  },
+  "dashChecksSuccess": {
+    "message": "Checks passing"
+  },
+  "dashChecksFailure": {
+    "message": "Checks failing"
+  },
+  "dashChecksPending": {
+    "message": "Checks running"
+  },
+  "dashApproved": {
+    "message": "Approved"
+  },
+  "dashChangesRequested": {
+    "message": "Changes requested"
+  },
+  "dashReviewRequired": {
+    "message": "Review required"
+  },
+  "dashConflicts": {
+    "message": "Merge conflicts"
+  },
+  "commonSaved": {
+    "message": "Saved"
+  },
+  "commonCancel": {
+    "message": "Cancel"
+  },
+  "inboxChecksPassed": {
+    "message": "All checks passed"
+  },
+  "inboxChecksFailed": {
+    "message": "Some checks failed"
+  },
+  "inboxChecksPending": {
+    "message": "Checks in progress"
+  },
+  "inboxApproved": {
+    "message": "Approved"
+  },
+  "inboxChangesRequested": {
+    "message": "Changes requested"
+  },
+  "inboxReviewRequired": {
+    "message": "Review required"
+  },
+  "inboxDraft": {
+    "message": "Draft"
+  },
+  "inboxConflicts": {
+    "message": "Merge conflicts"
+  },
+  "inboxUnresolvedThreads_one": {
+    "message": "$1 unresolved thread"
+  },
+  "inboxUnresolvedThreads_other": {
+    "message": "$1 unresolved threads"
+  },
+  "inboxLinesAdded_one": {
+    "message": "$1 line added"
+  },
+  "inboxLinesAdded_other": {
+    "message": "$1 lines added"
+  },
+  "inboxLinesRemoved_one": {
+    "message": "$1 line removed"
+  },
+  "inboxLinesRemoved_other": {
+    "message": "$1 lines removed"
+  },
+  "authErrorEmpty": {
+    "message": "Paste your personal access token first."
+  },
+  "authErrorWhitespace": {
+    "message": "The token contains spaces or line breaks. Copy it again from GitHub."
+  },
+  "authErrorNotPat": {
+    "message": "That is an app or OAuth token. Create a personal access token instead."
+  },
+  "authErrorPrefix": {
+    "message": "This doesn’t look like a GitHub token. It should start with github_pat_ or ghp_."
+  },
+  "authErrorCharacters": {
+    "message": "The token contains characters GitHub never uses. Copy it again from GitHub."
+  },
+  "authErrorLength": {
+    "message": "The token looks incomplete. Make sure you copied all of it."
+  },
+  "authErrorInvalid": {
+    "message": "GitHub didn’t accept this token. It may have expired or been revoked."
+  },
+  "authErrorNetwork": {
+    "message": "Couldn’t reach GitHub. Check your connection and try again."
+  },
+  "authErrorRateLimited": {
+    "message": "GitHub’s rate limit was hit. Try again in a few minutes."
+  },
+  "authErrorPermissions": {
+    "message": "GitHub refused access. Check the token’s permissions and organization (SSO) approval."
+  },
+  "authErrorUnavailable": {
+    "message": "Better GHub’s background service isn’t responding. Reload the extension and try again."
+  },
+  "authErrorUnknown": {
+    "message": "Couldn’t verify the token: $1"
+  },
+  "authErrorGeneric": {
+    "message": "Couldn’t verify the token. Try again."
+  },
+  "authErrorDuplicate": {
+    "message": "This token is already added."
+  },
+  "authErrorDifferentAccount": {
+    "message": "This token belongs to @$1, not @$2."
+  },
+  "authErrorDifferentAccountYou": {
+    "message": "This token belongs to a different GitHub account. Use a token created by @$1."
+  },
+  "authErrorDifferentAccountGeneric": {
+    "message": "This token belongs to a different GitHub account."
+  },
+  "authPermissionsHint": {
+    "message": "Give it access to the repositories you work in, with Pull requests: Read and Metadata: Read. Contents: Read is optional."
+  },
+  "authMoreOptions": {
+    "message": "Classic tokens and security"
+  },
+  "authClassicTitle": {
+    "message": "Classic token"
+  },
+  "authClassicBody": {
+    "message": "One classic token covers every organization you belong to, so you don’t need a token per organization. But its repo scope is much broader: it grants write access to all your repositories."
+  },
+  "authCreateClassic": {
+    "message": "Create a classic token"
+  },
+  "authSecurityTitle": {
+    "message": "Security"
+  },
+  "authSecurityBody": {
+    "message": "Your token is stored only in this browser and sent only to api.github.com. Signing out removes it here; revoke it on GitHub to disable it everywhere."
+  },
+  "authShowToken": {
+    "message": "Show token"
+  },
+  "authHideToken": {
+    "message": "Hide token"
+  },
+  "authConnect": {
+    "message": "Connect"
+  },
+  "authTokenLabel": {
+    "message": "Personal access token"
+  },
+  "authTokenHint": {
+    "message": "Starts with github_pat_ (fine-grained) or ghp_ (classic)."
+  },
+  "authConnecting": {
+    "message": "Connecting…"
+  },
+  "authConnectTitle": {
+    "message": "Connect your GitHub account"
+  },
+  "authConnectLead": {
+    "message": "See review requests and your pull requests at a glance, with checks, reviews and unresolved threads."
+  },
+  "authCreateToken": {
+    "message": "Create a token on GitHub"
+  },
+  "authCreateFineGrained": {
+    "message": "Create a fine-grained token"
+  },
+  "apiRemaining": {
+    "message": "$1 / $2"
+  },
+  "apiBudget": {
+    "message": "API budget"
+  },
+  "apiResets": {
+    "message": "resets $1"
+  },
+  "apiMeterText": {
+    "message": "$1 of $2 requests left this hour"
+  },
+  "authKindFineGrained": {
+    "message": "Fine-grained token"
+  },
+  "authKindClassic": {
+    "message": "Classic token"
+  },
+  "authSignOut": {
+    "message": "Sign out"
+  },
+  "authSignOutQuestion": {
+    "message": "Sign out of Better GHub?"
+  },
+  "authSigningOut": {
+    "message": "Signing out…"
+  },
+  "authSignOutFailed": {
+    "message": "Couldn’t sign out. Try again."
+  },
+  "authSignedOut": {
+    "message": "Signed out"
+  },
+  "authRevokeHint": {
+    "message": "Signing out removes every token from this browser. To disable a token everywhere, revoke it on GitHub."
+  },
+  "authRevoke": {
+    "message": "Revoke on GitHub"
+  },
+  "authConnectedAs": {
+    "message": "Connected as @$1"
+  },
+  "inboxTabReview": {
+    "message": "Review requests"
+  },
+  "inboxTabAuthored": {
+    "message": "Your PRs"
+  },
+  "inboxTabAssigned": {
+    "message": "Assigned"
+  },
+  "inboxEmptyReviewTitle": {
+    "message": "You’re all caught up"
+  },
+  "inboxEmptyReviewBody": {
+    "message": "No one is waiting on your review. New requests show up here."
+  },
+  "inboxEmptyAuthoredTitle": {
+    "message": "No open pull requests"
+  },
+  "inboxEmptyAuthoredBody": {
+    "message": "Pull requests you open appear here with their checks, reviews and threads."
+  },
+  "inboxEmptyAssignedTitle": {
+    "message": "Nothing assigned to you"
+  },
+  "inboxEmptyAssignedBody": {
+    "message": "Pull requests assigned to you will appear here."
+  },
+  "inboxActivityCommit": {
+    "message": "$1 pushed"
+  },
+  "inboxActivityReview": {
+    "message": "$1 reviewed"
+  },
+  "inboxActivityComment": {
+    "message": "$1 commented"
+  },
+  "inboxByAuthor": {
+    "message": "by $1"
+  },
+  "inboxTabsLabel": {
+    "message": "Pull request inbox"
+  },
+  "inboxMarkAllRead": {
+    "message": "Mark all as read"
+  },
+  "inboxTitle": {
+    "message": "Inbox"
+  },
+  "inboxLoading": {
+    "message": "Loading pull requests…"
+  },
+  "inboxRefreshing": {
+    "message": "Refreshing…"
+  },
+  "commonRetry": {
+    "message": "Try again"
+  },
+  "inboxErrorTitle": {
+    "message": "Couldn’t load your inbox"
+  },
+  "inboxTabUnseen": {
+    "message": "$1 new"
+  },
+  "inboxViewAll": {
+    "message": "View all on GitHub"
+  },
+  "inboxNew": {
+    "message": "New"
+  },
+  "inboxUpdated": {
+    "message": "Updated $1"
+  },
+  "authSessionExpired": {
+    "message": "GitHub no longer accepts your saved token. Connect again to continue."
+  },
+  "authStoredTokenFailed": {
+    "message": "Your saved token stopped working."
+  },
+  "tokensTitle": {
+    "message": "Tokens"
+  },
+  "tokensKindFineGrained": {
+    "message": "Fine-grained"
+  },
+  "tokensKindClassic": {
+    "message": "Classic"
+  },
+  "tokensKindOther": {
+    "message": "Other"
+  },
+  "tokensCoveragePrivate": {
+    "message": "Private repos: $1"
+  },
+  "tokensCoveragePublicOnly": {
+    "message": "Public repositories only — pending organization approval?"
+  },
+  "tokensCoverageAll": {
+    "message": "All your organizations"
+  },
+  "tokensExpiresIn": {
+    "message": "Expires $1"
+  },
+  "tokensExpired": {
+    "message": "Expired"
+  },
+  "tokensNoExpiry": {
+    "message": "No expiration"
+  },
+  "tokensExpiryDate": {
+    "message": "Expiration date: $1"
+  },
+  "tokensProblemInvalid": {
+    "message": "Revoked or expired — remove it"
+  },
+  "tokensProblemSso": {
+    "message": "Authorize SSO"
+  },
+  "tokensRemove": {
+    "message": "Remove"
+  },
+  "tokensRemoveLabel": {
+    "message": "Remove token $1"
+  },
+  "tokensRemoveQuestion": {
+    "message": "Remove this token?"
+  },
+  "tokensRemoveLastQuestion": {
+    "message": "This is your only token. Remove it and sign out?"
+  },
+  "tokensRemoveAndSignOut": {
+    "message": "Remove and sign out"
+  },
+  "tokensRemoving": {
+    "message": "Removing…"
+  },
+  "tokensRemoved": {
+    "message": "Token removed"
+  },
+  "tokensRemoveFailed": {
+    "message": "Couldn’t remove the token. Try again."
+  },
+  "tokensAddToggle": {
+    "message": "Add a token for another organization"
+  },
+  "tokensAddTitle": {
+    "message": "Add a token"
+  },
+  "tokensAddWhy": {
+    "message": "A fine-grained token can read private repositories of only one owner: you or one organization. Add one token per organization and Better GHub uses the right one for each repository."
+  },
+  "tokensOrgLabel": {
+    "message": "Organization"
+  },
+  "tokensOptional": {
+    "message": "(optional)"
+  },
+  "tokensOrgHint": {
+    "message": "Prefills the new token on GitHub. Leave it empty for your own repositories."
+  },
+  "tokensOrgInvalid": {
+    "message": "Enter the organization’s GitHub name, like acme."
+  },
+  "tokensCreateFor": {
+    "message": "Create a token for $1"
+  },
+  "tokensPrefillDescription": {
+    "message": "Read-only pull request insights on github.com"
+  },
+  "tokensAddSubmit": {
+    "message": "Add token"
+  },
+  "tokensAdding": {
+    "message": "Adding…"
+  },
+  "tokensAdded": {
+    "message": "Token added"
+  },
+  "tokensAddedCoverage": {
+    "message": "Token added. $1"
+  },
+  "tokensOwnerMismatch": {
+    "message": "The new token can’t read private repositories of $1 yet. If $1 requires approval for fine-grained tokens, an organization owner has to approve it."
+  },
+  "tokensCount_one": {
+    "message": "$1 token"
+  },
+  "tokensCount_other": {
+    "message": "$1 tokens"
+  },
+  "tokensSummaryAll": {
+    "message": "all organizations"
+  },
+  "tokensSummaryPublic": {
+    "message": "public repositories only"
+  },
+  "tokensSummaryMore": {
+    "message": "+$1"
+  },
+  "tokensSummaryLine": {
+    "message": "$1 · $2"
+  },
+  "tokensAttention": {
+    "message": "A token needs attention"
+  },
+  "tokensManage": {
+    "message": "Manage"
+  },
+  "tokensManageLabel": {
+    "message": "Manage tokens"
+  },
+  "popupUnavailableTitle": {
+    "message": "Better GHub isn’t responding"
+  },
+  "popupOfflineTitle": {
+    "message": "Can’t reach GitHub"
+  },
+  "popupUnavailableBody": {
+    "message": "The extension’s background service didn’t answer. Try again, or reload the extension."
+  },
+  "popupAccount": {
+    "message": "Account"
+  },
+  "inboxErrorTimeout": {
+    "message": "GitHub is taking too long to answer. Try again in a moment."
+  },
+  "inboxUpdatedAnnouncement": {
+    "message": "Inbox updated"
+  },
+  "inboxErrorGeneric": {
+    "message": "Some pull requests couldn’t be loaded: $1"
+  },
+  "inboxAllRead": {
+    "message": "All pull requests marked as read"
+  },
+  "inboxMarkReadFailed": {
+    "message": "Couldn’t mark pull requests as read"
+  },
+  "inboxSnoozeHour": {
+    "message": "Snooze for 1 hour"
+  },
+  "inboxSnoozeTomorrow": {
+    "message": "Snooze until tomorrow 9:00"
+  },
+  "inboxSnoozeMonday": {
+    "message": "Snooze until Monday 9:00"
+  },
+  "inboxSnoozedUntil": {
+    "message": "until $1"
+  },
+  "inboxReady": {
+    "message": "Ready to merge"
+  },
+  "inboxStale": {
+    "message": "Stale $1d"
+  },
+  "inboxStaleFor_one": {
+    "message": "No activity for $1 day"
+  },
+  "inboxStaleFor_other": {
+    "message": "No activity for $1 days"
+  },
+  "inboxPin": {
+    "message": "Pin to top"
+  },
+  "inboxUnpin": {
+    "message": "Unpin"
+  },
+  "inboxPinnedLabel": {
+    "message": "Pinned"
+  },
+  "inboxPinnedAnnounce": {
+    "message": "Pinned to the top"
+  },
+  "inboxUnpinnedAnnounce": {
+    "message": "Unpinned"
+  },
+  "inboxPinFailed": {
+    "message": "Couldn’t update the pin. Try again."
+  },
+  "inboxSnoozedAnnounce": {
+    "message": "Snoozed $1"
+  },
+  "inboxUnsnoozedAnnounce": {
+    "message": "Back in your inbox"
+  },
+  "inboxSnoozeFailed": {
+    "message": "Couldn’t snooze the pull request. Try again."
+  },
+  "inboxUnsnoozeFailed": {
+    "message": "Couldn’t unsnooze the pull request. Try again."
+  },
+  "inboxActionsLabel": {
+    "message": "Actions for $1"
+  },
+  "inboxActionsMenu": {
+    "message": "Actions for $1"
+  },
+  "inboxSnoozedTitle": {
+    "message": "Snoozed ($1)"
+  },
+  "inboxUnsnooze": {
+    "message": "Unsnooze"
+  },
+  "inboxUnsnoozeLabel": {
+    "message": "Unsnooze $1"
+  },
+  "popupShortcutHint": {
+    "message": "Press $1 on any pull request for shortcuts"
+  },
+  "commonSaveFailed": {
+    "message": "Couldn’t save"
+  },
+  "optRecommended": {
+    "message": "$1 (recommended)"
+  },
+  "scGroupView": {
+    "message": "View"
+  },
+  "scGroupNavigate": {
+    "message": "Navigate"
+  },
+  "scGroupCopy": {
+    "message": "Copy"
+  },
+  "scGroupHelp": {
+    "message": "Help"
+  },
+  "scScopeConversation": {
+    "message": "Conversation"
+  },
+  "scScopeFiles": {
+    "message": "Files changed"
+  },
+  "scScopePr": {
+    "message": "Any PR tab"
+  },
+  "commonQuoted": {
+    "message": "“$1”"
+  },
+  "scResetAll": {
+    "message": "Reset all to defaults"
+  },
+  "scResetAllQuestion": {
+    "message": "Reset every shortcut?"
+  },
+  "scResetAllConfirm": {
+    "message": "Reset all"
+  },
+  "scResetAllDone": {
+    "message": "All shortcuts reset"
+  },
+  "scHint": {
+    "message": "Click a shortcut to change it. Combinations need Ctrl, Alt or ⌘ so they never fire while you type."
+  },
+  "scOffNote": {
+    "message": "Shortcuts are turned off. Your changes apply when you turn them back on."
+  },
+  "scCancelled": {
+    "message": "Recording cancelled"
+  },
+  "scRecordingHelp": {
+    "message": "Press a combination · Esc cancels · Backspace clears"
+  },
+  "scRecordingAnnouncement": {
+    "message": "Recording shortcut for $1. Press a key combination, Escape to cancel, Backspace to clear."
+  },
+  "scNeedsModifier": {
+    "message": "Add Ctrl, Alt or ⌘. Single keys would fire while you type and clash with GitHub’s own shortcuts."
+  },
+  "scRemoved": {
+    "message": "Removed"
+  },
+  "scDuplicate": {
+    "message": "$1 is already used by $2."
+  },
+  "scSavedAnnouncement": {
+    "message": "$1 is now $2"
+  },
+  "scClearedAnnouncement": {
+    "message": "$1 has no shortcut"
+  },
+  "scResetDone": {
+    "message": "Reset"
+  },
+  "scAlsoUsedBy": {
+    "message": "Also used by $1. Only one of them will work."
+  },
+  "scBrowserConflict": {
+    "message": "Your browser may already use this combination."
+  },
+  "scTypingConflict": {
+    "message": "Without Ctrl, Alt or ⌘ this can clash with GitHub’s own shortcuts."
+  },
+  "scPressKeys": {
+    "message": "Press keys…"
+  },
+  "scRecordingLabel": {
+    "message": "Recording shortcut for $1"
+  },
+  "scKeyLabel": {
+    "message": "$1: $2"
+  },
+  "scNotSet": {
+    "message": "Not set"
+  },
+  "scKeyLabelUnset": {
+    "message": "$1: not set"
+  },
+  "scResetRow": {
+    "message": "Reset to $1"
+  },
+  "scReplace": {
+    "message": "Use it here instead"
+  },
+  "welcomeFeatureListTitle": {
+    "message": "Activity at a glance"
+  },
+  "welcomeFeatureListBody": {
+    "message": "Last comment, last commit and unresolved threads under every pull request in lists."
+  },
+  "welcomeFeatureShortcutsTitle": {
+    "message": "Shortcuts on PR pages"
+  },
+  "welcomeFeatureShortcutsBody": {
+    "message": "Collapse threads, jump between unresolved comments and copy branch names."
+  },
+  "welcomeFeatureInboxTitle": {
+    "message": "Inbox and badge"
+  },
+  "welcomeFeatureInboxBody": {
+    "message": "Review requests and your pull requests in the toolbar, with a badge when something changes."
+  },
+  "welcomeFeatureDashboardTitle": {
+    "message": "Dashboard card"
+  },
+  "welcomeFeatureDashboardBody": {
+    "message": "Your open pull requests and their review status at the top of github.com."
+  },
+  "welcomeStepDone": {
+    "message": "Done"
+  },
+  "welcomeDoneTitle": {
+    "message": "You’re all set"
+  },
+  "welcomeTitle": {
+    "message": "Welcome to Better GHub"
+  },
+  "welcomeDoneLead": {
+    "message": "Open any pull request on GitHub to see it in action. Your inbox is in the toolbar."
+  },
+  "welcomeLead": {
+    "message": "Pull requests on github.com, with the context you usually click around for. Connect a token to get started."
+  },
+  "welcomeStepsLabel": {
+    "message": "Get started"
+  },
+  "welcomeStep1": {
+    "message": "Create a token on GitHub"
+  },
+  "welcomeStep2": {
+    "message": "Paste it below and connect"
+  },
+  "welcomeStep3Done": {
+    "message": "Open your pull requests"
+  },
+  "welcomeStep3": {
+    "message": "You’re all set"
+  },
+  "optAboutVersion": {
+    "message": "Version $1"
+  },
+  "optClearing": {
+    "message": "Clearing…"
+  },
+  "optCleared": {
+    "message": "Cache cleared"
+  },
+  "optClearFailed": {
+    "message": "Couldn’t clear the cache"
+  },
+  "popupToggleShortcuts": {
+    "message": "Shortcuts"
+  },
+  "popupToggleBadge": {
+    "message": "Badge"
+  },
+  "popupRefresh": {
+    "message": "Refresh inbox"
+  },
+  "popupSettings": {
+    "message": "Settings"
+  },
+  "optPageTitle": {
+    "message": "Better GHub settings"
+  },
+  "optSkipToContent": {
+    "message": "Skip to content"
+  },
+  "optAutosave": {
+    "message": "Changes save automatically"
+  },
+  "optNavAccount": {
+    "message": "Account"
+  },
+  "optNavPrList": {
+    "message": "Pull request list"
+  },
+  "optNavDashboard": {
+    "message": "Dashboard"
+  },
+  "optNavShortcuts": {
+    "message": "Keyboard shortcuts"
+  },
+  "optNavNotifications": {
+    "message": "Notifications"
+  },
+  "optNavLanguage": {
+    "message": "Language & data"
+  },
+  "optNavAbout": {
+    "message": "About"
+  },
+  "optAccountTitle": {
+    "message": "Account"
+  },
+  "optAccountDesc": {
+    "message": "Better GHub reads pull request data from GitHub with your personal access token."
+  },
+  "optPrListTitle": {
+    "message": "Pull request list"
+  },
+  "optPrListDesc": {
+    "message": "Extra context on every pull request list on github.com."
+  },
+  "optPrListActivityLabel": {
+    "message": "Activity under each pull request"
+  },
+  "optPrListActivityDesc": {
+    "message": "The last comment, the last commit and the number of unresolved review threads, right in the list."
+  },
+  "optPreviewComment": {
+    "message": "mona commented · 2h"
+  },
+  "optPreviewCommit": {
+    "message": "Last commit · 5h"
+  },
+  "optPreviewUnresolved": {
+    "message": "3 unresolved"
+  },
+  "optLabelsLabel": {
+    "message": "Suggested labels"
+  },
+  "optLabelsDesc": {
+    "message": "Suggests labels from the files a pull request changes, such as missing tests or documentation updates."
+  },
+  "optLabelsNeedsList": {
+    "message": "Turn on activity in pull request lists to use this."
+  },
+  "optDashboardTitle": {
+    "message": "Dashboard"
+  },
+  "optDashboardDesc": {
+    "message": "Your GitHub home page, with your own work up front."
+  },
+  "optDashboardLabel": {
+    "message": "“Your pull requests” card"
+  },
+  "optDashboardCardDesc": {
+    "message": "Shows your open pull requests with their review status at the top of the github.com dashboard."
+  },
+  "optShortcutsTitle": {
+    "message": "Keyboard shortcuts"
+  },
+  "optShortcutsDesc": {
+    "message": "Work on pull request pages and never fire while you’re typing."
+  },
+  "optShortcutsEnabledLabel": {
+    "message": "Enable keyboard shortcuts"
+  },
+  "optShortcutsEnabledDesc": {
+    "message": "Collapse threads, jump between unresolved comments, switch tabs and copy links without the mouse."
+  },
+  "optShortcutHintLabel": {
+    "message": "Show floating shortcuts button"
+  },
+  "optShortcutHintDesc": {
+    "message": "A small keyboard button in the corner of pull request pages that opens the cheat sheet."
+  },
+  "optNotificationsTitle": {
+    "message": "Notifications"
+  },
+  "optNotificationsDesc": {
+    "message": "Know when a pull request needs you, without keeping GitHub open."
+  },
+  "optBadgeLabel": {
+    "message": "Badge on the toolbar icon"
+  },
+  "optBadgeDesc": {
+    "message": "Shows how many pull requests in your inbox have new activity. Opening one clears it."
+  },
+  "optIntervalLabel": {
+    "message": "Check for updates every"
+  },
+  "optIntervalDesc": {
+    "message": "Shorter intervals feel more live but use more of your GitHub API budget."
+  },
+  "optLanguageTitle": {
+    "message": "Language & data"
+  },
+  "optLanguageSectionDesc": {
+    "message": "How Better GHub talks to you, and what it keeps on this device."
+  },
+  "optLanguageLabel": {
+    "message": "Language"
+  },
+  "optLanguageDesc": {
+    "message": "Used in this page, the popup and on github.com."
+  },
+  "optLanguageSystem": {
+    "message": "Browser default"
+  },
+  "optCacheLabel": {
+    "message": "Keep pull request data for"
+  },
+  "optCacheDesc": {
+    "message": "Cached data makes pages load instantly and saves API budget. Five minutes is a good balance."
+  },
+  "optClearLabel": {
+    "message": "Clear cached data"
+  },
+  "optClearDesc": {
+    "message": "Removes cached pull request data. Your token and settings stay."
+  },
+  "optClearButton": {
+    "message": "Clear cache"
+  },
+  "optAboutTitle": {
+    "message": "About"
+  },
+  "optAboutDesc": {
+    "message": "A small, open-source extension for people who live in pull requests."
+  },
+  "optPrivacyTitle": {
+    "message": "Privacy"
+  },
+  "optPrivacyBody": {
+    "message": "Your token is stored only in this browser and is sent only to api.github.com. Better GHub has no servers, no analytics and no tracking."
+  },
+  "optLinkSource": {
+    "message": "Source code"
+  },
+  "optLinkIssue": {
+    "message": "Report a problem"
+  },
+  "optLinkPrivacy": {
+    "message": "Privacy policy"
+  },
+  "optNavLabel": {
+    "message": "Settings sections"
+  },
+  "optNavFiles": {
+    "message": "Files changed"
+  },
+  "optStaleLabel": {
+    "message": "Mark as stale after"
+  },
+  "optStaleDesc": {
+    "message": "Pull requests without commits, comments or reviews for this long get a “Stale” chip in lists and in your inbox."
+  },
+  "optStaleNever": {
+    "message": "Never"
+  },
+  "optStaleDays_one": {
+    "message": "$1 day"
+  },
+  "optStaleDays_other": {
+    "message": "$1 days"
+  },
+  "optFilesTitle": {
+    "message": "Files changed"
+  },
+  "optFilesDesc": {
+    "message": "Make the Files changed tab of a pull request quicker to review."
+  },
+  "optCollapseLabel": {
+    "message": "Collapse generated files"
+  },
+  "optCollapseDesc": {
+    "message": "Lockfiles, snapshots, build output and other generated files start collapsed, so you see the code that matters first."
+  },
+  "optPatternsLabel": {
+    "message": "Generated file patterns"
+  },
+  "optPatternsDesc": {
+    "message": "One pattern per line. A file that matches any of them counts as generated."
+  },
+  "optPatternStar": {
+    "message": "any characters except “/”"
+  },
+  "optPatternGlobstar": {
+    "message": "any path, across folders"
+  },
+  "optPatternNoSlash": {
+    "message": "no “/”: matches the file name in any folder"
+  },
+  "optPatternSlash": {
+    "message": "with “/”: matches that path in any folder"
+  },
+  "optPatternsReset": {
+    "message": "Reset to defaults"
+  },
+  "optPatternsCount_one": {
+    "message": "$1 pattern"
+  },
+  "optPatternsCount_other": {
+    "message": "$1 patterns"
+  },
+  "optPatternTestLabel": {
+    "message": "Test a path"
+  },
+  "optPatternTestHint": {
+    "message": "Type a file path to see whether it counts as generated."
+  },
+  "optPatternTestMatch": {
+    "message": "Generated: matches $1"
+  },
+  "optPatternTestNoMatch": {
+    "message": "Not generated: no pattern matches"
+  },
+  "optProgressLabel": {
+    "message": "Review progress"
+  },
+  "optProgressDesc": {
+    "message": "Shows how many files you’ve marked as viewed, with a shortcut to the next unviewed one."
+  },
+  "optCheckoutLabel": {
+    "message": "Checkout command"
+  },
+  "optCheckoutDesc": {
+    "message": "What “Copy checkout command” copies on a pull request page."
+  },
+  "optCheckoutGh": {
+    "message": "GitHub CLI"
+  },
+  "optCheckoutGit": {
+    "message": "Plain git"
+  },
+  "optCheckoutPreview": {
+    "message": "For pull request #123:"
+  },
+  "optDesktopLabel": {
+    "message": "Desktop notifications"
+  },
+  "optDesktopDesc": {
+    "message": "System notifications when something happens on a pull request in your inbox."
+  },
+  "optEventsLabel": {
+    "message": "Notify me when"
+  },
+  "optNotifyReview": {
+    "message": "Someone requests my review"
+  },
+  "optNotifyChanges": {
+    "message": "A reviewer requests changes on my pull request"
+  },
+  "optNotifyChecks": {
+    "message": "Checks fail on my pull request"
+  },
+  "optNotifyApproved": {
+    "message": "My pull request is approved"
+  },
+  "optQuietLabel": {
+    "message": "Quiet hours"
+  },
+  "optQuietDesc": {
+    "message": "No desktop notifications during these hours. The badge still updates."
+  },
+  "optQuietRange": {
+    "message": "Between"
+  },
+  "optQuietStart": {
+    "message": "Quiet hours start"
+  },
+  "optQuietEnd": {
+    "message": "Quiet hours end"
+  },
+  "optTestLabel": {
+    "message": "Test notification"
+  },
+  "optTestDesc": {
+    "message": "Sends one right away. If nothing appears, check that your system allows notifications from Chrome."
+  },
+  "optTestButton": {
+    "message": "Send a test notification"
+  },
+  "optTestNotificationTitle": {
+    "message": "Better GHub"
+  },
+  "optTestNotificationBody": {
+    "message": "Notifications work. You’ll see one when a pull request needs you."
+  },
+  "optTestSent": {
+    "message": "Test notification sent"
+  },
+  "optTestBlocked": {
+    "message": "Notifications are turned off for Better GHub in Chrome"
+  },
+  "optTestUnavailable": {
+    "message": "Notifications aren’t available in this browser"
+  },
+  "optTestFailed": {
+    "message": "Couldn’t show a notification"
+  },
+  "notifyReviewRequestedTitle": {
+    "message": "Review requested · $1"
+  },
+  "notifyChangesRequestedTitle": {
+    "message": "Changes requested · $1"
+  },
+  "notifyChecksFailedTitle": {
+    "message": "Checks failed · $1"
+  },
+  "notifyApprovedTitle": {
+    "message": "Approved · $1"
+  },
+  "notifySummary_one": {
+    "message": "$1 update in your pull requests"
+  },
+  "notifySummary_other": {
+    "message": "$1 updates in your pull requests"
+  },
+  "shortcutToggleGenerated": {
+    "message": "Collapse / expand generated files"
+  },
+  "shortcutToggleThreadsPanel": {
+    "message": "Show / hide the unresolved threads panel"
+  },
+  "shortcutMarkViewedNext": {
+    "message": "Mark file as viewed and go to the next one"
+  },
+  "shortcutNextUnviewed": {
+    "message": "Jump to the next unviewed file"
+  },
+  "shortcutCopyCheckout": {
+    "message": "Copy checkout command"
+  },
+  "prPageGeneratedChip": {
+    "message": "Generated"
+  },
+  "prPageGeneratedChipTip": {
+    "message": "Collapsed automatically by Better GHub"
+  },
+  "prPageGeneratedAutoOne": {
+    "message": "Collapsed 1 generated file"
+  },
+  "prPageGeneratedAuto": {
+    "message": "Collapsed $1 generated files"
+  },
+  "prPageGeneratedExpandAction": {
+    "message": "Expand"
+  },
+  "prPageGeneratedCollapsed": {
+    "message": "Generated files collapsed ($1)"
+  },
+  "prPageGeneratedExpanded": {
+    "message": "Generated files expanded ($1)"
+  },
+  "prPageNoGenerated": {
+    "message": "No generated files in this diff"
+  },
+  "prPageProgressLabel": {
+    "message": "Review progress"
+  },
+  "prPageProgressText": {
+    "message": "$1 / $2 files viewed"
+  },
+  "prPageProgressMeter": {
+    "message": "Files viewed"
+  },
+  "prPageProgressNext": {
+    "message": "Next unviewed"
+  },
+  "prPageMarkedViewed": {
+    "message": "Marked $1 as viewed · $2/$3"
+  },
+  "prPageNextUnviewed": {
+    "message": "Next unviewed: $1 · $2 left"
+  },
+  "prPageAllViewed": {
+    "message": "All $1 files viewed"
+  },
+  "prPageAllViewedOne": {
+    "message": "1 file viewed"
+  },
+  "prPageViewedSignIn": {
+    "message": "Sign in to GitHub to mark files as viewed"
+  },
+  "prPagePanelTitle": {
+    "message": "Unresolved threads"
+  },
+  "prPagePanelCount": {
+    "message": "$1 unresolved"
+  },
+  "prPagePanelEmpty": {
+    "message": "No unresolved threads"
+  },
+  "prPagePanelNoPath": {
+    "message": "Review thread"
+  },
+  "prPagePanelOutdated": {
+    "message": "Outdated"
+  },
+  "prPagePanelKeysMove": {
+    "message": "move"
+  },
+  "prPagePanelKeysJump": {
+    "message": "jump"
+  },
+  "prPagePanelKeysClose": {
+    "message": "close"
+  },
+  "prPageCopiedCheckout": {
+    "message": "Copied checkout command"
+  },
+  "shortcutToggleWhitespace": {
+    "message": "Hide / show whitespace changes"
+  },
+  "shortcutToggleSplitView": {
+    "message": "Switch between split and unified diff"
+  },
+  "shortcutFindFile": {
+    "message": "Find a changed file"
+  },
+  "shortcutChangesSinceVisit": {
+    "message": "Show changes since your last visit"
+  },
+  "prPageWhitespaceShown": {
+    "message": "Showing whitespace changes"
+  },
+  "prPageWhitespaceHidden": {
+    "message": "Hiding whitespace changes"
+  },
+  "prPageSplitView": {
+    "message": "Switching to split view"
+  },
+  "prPageUnifiedView": {
+    "message": "Switching to unified view"
+  },
+  "prPageFinderLabel": {
+    "message": "Find a changed file"
+  },
+  "prPageFinderPlaceholder": {
+    "message": "Find a changed file…"
+  },
+  "prPageFinderResults": {
+    "message": "Changed files"
+  },
+  "prPageFinderEmpty": {
+    "message": "No matching files"
+  },
+  "prPageFinderGenerated": {
+    "message": "Generated"
+  },
+  "prPageFinderNoFiles": {
+    "message": "No changed files found on this page"
+  },
+  "prPageNewCommits": {
+    "message": "New commits since your last visit: $1 ($2)"
+  },
+  "prPageRewritten": {
+    "message": "The branch was rewritten since your last visit ($1)"
+  },
+  "prPageShowFiles": {
+    "message": "Show files"
+  },
+  "prPageShowOnlyThese": {
+    "message": "Show only these changes"
+  },
+  "prPageNoChangesSince": {
+    "message": "No new changes since your last visit"
+  },
+  "inboxRereview": {
+    "message": "New changes since your review"
+  },
+  "inboxPendingReview": {
+    "message": "Unsubmitted review · $1"
+  },
+  "inboxPendingReviewFor_one": {
+    "message": "You have an unsubmitted review with $1 comment. Open the PR and choose \"Submit review\"."
+  },
+  "inboxPendingReviewFor_other": {
+    "message": "You have an unsubmitted review with $1 comments. Open the PR and choose \"Submit review\"."
+  },
+  "prPendingReview_one": {
+    "message": "You have an unsubmitted review with $1 comment"
+  },
+  "prPendingReview_other": {
+    "message": "You have an unsubmitted review with $1 comments"
+  },
+  "prPendingReviewOpen": {
+    "message": "Open Files changed"
+  },
+  "prPendingReviewDismiss": {
+    "message": "Dismiss"
+  },
+  "optBackupLabel": {
+    "message": "Back up settings"
+  },
+  "optBackupDesc": {
+    "message": "Save your settings to a file, or load them from one. Tokens are never included."
+  },
+  "optExportButton": {
+    "message": "Export"
+  },
+  "optImportButton": {
+    "message": "Import"
+  },
+  "optExported": {
+    "message": "Settings exported"
+  },
+  "optExportFailed": {
+    "message": "Couldn’t export the settings"
+  },
+  "optImported": {
+    "message": "Imported $1 settings"
+  },
+  "optImportFailed": {
+    "message": "Couldn’t import the settings"
+  },
+  "optImportInvalidJson": {
+    "message": "That file isn’t valid JSON."
+  },
+  "optImportWrongApp": {
+    "message": "That isn’t a Better GHub settings file."
+  },
+  "optImportTooLarge": {
+    "message": "That file is too large to be a settings file."
+  },
+  "optImportEmpty": {
+    "message": "That file has no settings to import."
+  },
+  "shortcutCommentTemplates": {
+    "message": "Insert a comment template"
+  },
+  "prPageGroupCompose": {
+    "message": "Write"
+  },
+  "scGroupCompose": {
+    "message": "Write"
+  },
+  "commentPickerLabel": {
+    "message": "Insert a comment template"
+  },
+  "commentPickerPlaceholder": {
+    "message": "Filter templates…"
+  },
+  "commentPickerResults": {
+    "message": "Templates"
+  },
+  "commentPickerSnippet": {
+    "message": "Snippet"
+  },
+  "commentPickerNoMatch": {
+    "message": "No matching templates"
+  },
+  "commentPickerNone": {
+    "message": "No templates yet. Add snippets in the extension options."
+  },
+  "commentLabelHint_praise": {
+    "message": "Highlight something positive"
+  },
+  "commentLabelHint_nitpick": {
+    "message": "A trivial, preference-based request"
+  },
+  "commentLabelHint_suggestion": {
+    "message": "Propose an improvement"
+  },
+  "commentLabelHint_issue": {
+    "message": "A specific problem that needs fixing"
+  },
+  "commentLabelHint_question": {
+    "message": "Something you are unsure about"
+  },
+  "commentLabelHint_thought": {
+    "message": "An idea that came up while reviewing"
+  },
+  "commentLabelHint_chore": {
+    "message": "A task that must be done before merging"
+  },
+  "commentLabelHint_todo": {
+    "message": "A small but necessary change"
+  },
+  "optNavTemplates": {
+    "message": "Comment templates"
+  },
+  "optTemplatesTitle": {
+    "message": "Comment templates"
+  },
+  "optTemplatesDesc": {
+    "message": "Insert ready-made text into any GitHub comment box with a shortcut."
+  },
+  "optTemplatesEnabledLabel": {
+    "message": "Comment templates"
+  },
+  "optTemplatesEnabledDesc": {
+    "message": "Press the shortcut inside a comment box to pick a template. The shortcut can be changed under Keyboard shortcuts."
+  },
+  "optConventionalLabel": {
+    "message": "Conventional Comments labels"
+  },
+  "optConventionalDesc": {
+    "message": "Offer labels such as praise, nitpick or issue (blocking), inserted as bold prefixes."
+  },
+  "optSnippetsLabel": {
+    "message": "Your snippets"
+  },
+  "optSnippetsDesc": {
+    "message": "Reusable pieces of text. Each one appears in the picker by its title."
+  },
+  "optSnippetAdd": {
+    "message": "Add snippet"
+  },
+  "optSnippetEmpty": {
+    "message": "No snippets yet."
+  },
+  "optSnippetTitle": {
+    "message": "Title"
+  },
+  "optSnippetBody": {
+    "message": "Text to insert"
+  },
+  "optSnippetMoveUp": {
+    "message": "Move up"
+  },
+  "optSnippetMoveDown": {
+    "message": "Move down"
+  },
+  "optSnippetRemove": {
+    "message": "Remove"
+  },
+  "optSnippetLimit": {
+    "message": "You can keep up to $1 snippets."
+  },
+  "optSnippetItem": {
+    "message": "Snippet $1"
+  },
+  "optSnippetsCount_one": {
+    "message": "$1 snippet"
+  },
+  "optSnippetsCount_other": {
+    "message": "$1 snippets"
+  },
+  "shortcutLoadAllTimeline": {
+    "message": "Load all hidden conversation items"
+  },
+  "shortcutToggleChecklist": {
+    "message": "Show / hide the review checklist"
+  },
+  "prPageLoadAll": {
+    "message": "Load all"
+  },
+  "prPageLoadAllNone": {
+    "message": "Nothing hidden: the whole conversation is already loaded"
+  },
+  "prPageLoadAllProgress": {
+    "message": "Loaded $1 of ~$2 items…"
+  },
+  "prPageLoadAllProgressBatches": {
+    "message": "Loading more items… (batch $1)"
+  },
+  "prPageLoadAllTimeout": {
+    "message": "GitHub did not respond. Try again."
+  },
+  "prPageLoadAllCapped": {
+    "message": "Stopped after $1 rounds. Run it again to load more."
+  },
+  "prPageLoadAllDone": {
+    "message": "Loaded the whole conversation"
+  },
+  "prChecklistTitle": {
+    "message": "Review checklist"
+  },
+  "prChecklistNone": {
+    "message": "No review checklist for this repository. Add one in the extension options."
+  },
+  "optChecklistLabel": {
+    "message": "Review checklist"
+  },
+  "optChecklistDesc": {
+    "message": "Shows a small checklist on pull requests of repositories that have a template below. Ticks are remembered per pull request."
+  },
+  "optChecklistTemplatesLabel": {
+    "message": "Checklist templates"
+  },
+  "optChecklistTemplatesDesc": {
+    "message": "Start a template with [owner/repo], [owner/*] or [*] (any repository), then list one item per line. The most specific template wins."
+  },
+  "prlChecksFailing": {
+    "message": "Checks failing"
+  },
+  "checksPopoverLabel": {
+    "message": "Failed checks"
+  },
+  "checksLoading": {
+    "message": "Loading checks…"
+  },
+  "checksLoadFailed": {
+    "message": "Couldn’t load check details."
+  },
+  "checksNoneFailed": {
+    "message": "No failed checks found. They may have been re-run."
+  },
+  "checksMore": {
+    "message": "+$1 more"
+  },
+  "checksOpenTab": {
+    "message": "Open Checks tab"
+  },
+  "checksFailedCount_one": {
+    "message": "$1 failed check"
+  },
+  "checksFailedCount_other": {
+    "message": "$1 failed checks"
+  },
+  "inboxFailedChecks": {
+    "message": "Failed checks"
+  },
+  "popupCopySummary": {
+    "message": "Copy daily summary"
+  },
+  "summaryEmpty": {
+    "message": "Nothing to summarize yet"
+  },
+  "summaryCopied": {
+    "message": "Summary copied to the clipboard"
+  },
+  "summaryCopyFailed": {
+    "message": "Couldn’t copy the summary"
+  },
+  "summaryMine": {
+    "message": "My pull requests"
+  },
+  "summaryReviewing": {
+    "message": "Reviewing"
+  },
+  "summaryReady": {
+    "message": "ready to merge"
+  },
+  "summaryChecksFailing": {
+    "message": "checks failing"
+  },
+  "summaryChangesRequested": {
+    "message": "changes requested"
+  },
+  "summaryApprovedWaiting": {
+    "message": "approved (waiting on checks)"
+  },
+  "summaryApproved": {
+    "message": "approved"
+  },
+  "summaryDraft": {
+    "message": "draft"
+  },
+  "summaryWaiting": {
+    "message": "waiting for review"
   }
 }
-

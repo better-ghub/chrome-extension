@@ -1,0 +1,52 @@
+/* Better GHub - unsubmitted review notice (PR page). */
+.bghub-pending-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0;
+  padding: 8px 8px 8px 12px;
+  font: 400 14px/20px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-attention-bg);
+  border: 1px solid var(--bghub-attention-border);
+  border-radius: var(--bghub-radius-lg);
+}
+
+.bghub-pending-icon {
+  flex: none;
+  fill: var(--bghub-attention);
+}
+
+.bghub-pending-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.bghub-pending-link {
+  color: var(--bghub-accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.bghub-pending-dismiss {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font: 400 18px/1 var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+
+.bghub-pending-dismiss:hover {
+  background: var(--bghub-bg-neutral);
+}
+
+.bghub-pending-dismiss:focus-visible,
+.bghub-pending-link:focus-visible {
+  outline: 2px solid var(--bghub-accent);
+  outline-offset: 1px;
+}

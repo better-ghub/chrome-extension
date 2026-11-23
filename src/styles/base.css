@@ -1,0 +1,221 @@
+/* ==========================================================================
+   Better GHub - base tokens for UI injected into github.com
+   --------------------------------------------------------------------------
+   Every color maps to a GitHub Primer CSS variable, so our UI follows the
+   user's GitHub theme (light, dark, dimmed, high-contrast, colorblind) for
+   free. The second value is a light-theme fallback for pages that predate
+   the Primer variables. Everything we inject is prefixed `bghub-`.
+   ========================================================================== */
+
+:root {
+  --bghub-fg: var(--fgColor-default, #1f2328);
+  --bghub-fg-muted: var(--fgColor-muted, #59636e);
+  --bghub-fg-on-emphasis: var(--fgColor-onEmphasis, #ffffff);
+  --bghub-bg: var(--bgColor-default, #ffffff);
+  --bghub-bg-muted: var(--bgColor-muted, #f6f8fa);
+  --bghub-bg-inset: var(--bgColor-inset, #f6f8fa);
+  --bghub-bg-emphasis: var(--bgColor-emphasis, #25292e);
+  --bghub-bg-neutral: var(--bgColor-neutral-muted, #818b981f);
+  --bghub-border: var(--borderColor-default, #d1d9e0);
+  --bghub-border-muted: var(--borderColor-muted, #d1d9e0b3);
+
+  --bghub-accent: var(--fgColor-accent, #0969da);
+  --bghub-accent-bg: var(--bgColor-accent-muted, #ddf4ff);
+  --bghub-accent-border: var(--borderColor-accent-muted, #54aeff66);
+  --bghub-accent-emphasis: var(--bgColor-accent-emphasis, #0969da);
+  --bghub-success: var(--fgColor-success, #1a7f37);
+  --bghub-success-bg: var(--bgColor-success-muted, #dafbe1);
+  --bghub-success-border: var(--borderColor-success-muted, #4ac26b66);
+  --bghub-attention: var(--fgColor-attention, #9a6700);
+  --bghub-attention-bg: var(--bgColor-attention-muted, #fff8c5);
+  --bghub-attention-border: var(--borderColor-attention-muted, #d4a72c66);
+  --bghub-danger: var(--fgColor-danger, #d1242f);
+  --bghub-danger-bg: var(--bgColor-danger-muted, #ffebe9);
+  --bghub-danger-border: var(--borderColor-danger-muted, #ff818266);
+  --bghub-done: var(--fgColor-done, #8250df);
+  --bghub-done-bg: var(--bgColor-done-muted, #fbefff);
+  --bghub-done-border: var(--borderColor-done-muted, #c297ff66);
+
+  /* Brand = Primer "done" purple, so it adapts to every theme. */
+  --bghub-brand: var(--bghub-done);
+  --bghub-brand-bg: var(--bghub-done-bg);
+
+  --bghub-shadow-small: var(--shadow-resting-small, 0 1px 1px 0 #1f23280f, 0 1px 3px 0 #1f23280f);
+  --bghub-shadow-medium: var(--shadow-floating-small, 0 0 0 1px #d1d9e080, 0 6px 12px -3px #25292e0a, 0 6px 18px 0 #25292e1f);
+  --bghub-shadow-large: var(--shadow-floating-large, 0 0 0 1px #d1d9e0, 0 40px 80px 0 #25292e3d);
+  --bghub-backdrop: var(--overlay-backdrop-bgColor, #c8d1da66);
+
+  --bghub-radius-sm: var(--borderRadius-small, 3px);
+  --bghub-radius: var(--borderRadius-medium, 6px);
+  --bghub-radius-lg: var(--borderRadius-large, 12px);
+  --bghub-radius-full: var(--borderRadius-full, 9999px);
+
+  --bghub-font: var(--fontStack-system, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif);
+  --bghub-mono: var(--fontStack-monospace, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace);
+
+  --bghub-overlay-bg: var(--overlay-bgColor, #ffffff);
+  --bghub-focus: var(--focus-outlineColor, #0969da);
+  --bghub-open: var(--fgColor-open, #1a7f37);
+  --bghub-draft: var(--fgColor-draft, #59636e);
+  --bghub-merged: var(--fgColor-done, #8250df);
+
+  /* Motion — GitHub's own curves. Animate only opacity/transform. */
+  --bghub-ease-out: cubic-bezier(0.3, 0.8, 0.6, 1);
+  --bghub-ease-in: cubic-bezier(0.7, 0.1, 0.75, 0.9);
+  --bghub-ease-in-out: cubic-bezier(0.6, 0, 0.2, 1);
+  --bghub-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --bghub-dur-press: 80ms;
+  --bghub-dur-fast: 120ms;
+  --bghub-dur: 180ms;
+  --bghub-dur-slow: 260ms;
+
+  /*
+   * Layers. GitHub's scale: sticky 100, dropdown 200, overlay 300, modal 400,
+   * popover 500. Persistent injected UI stays below sticky; anything floating
+   * (tooltips, toasts, dialogs) goes in the browser top layer via the Popover
+   * API or <dialog>.showModal(), so it needs no z-index at all.
+   */
+  --bghub-z-float: 99;
+}
+
+/* ---------- Keyframes (shared) ---------- */
+
+@keyframes bghub-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bghub-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes bghub-pop-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bghub-pop-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(2px) scale(0.98); }
+}
+@keyframes bghub-slide-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bghub-rise {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bghub-shimmer {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+@keyframes bghub-spin { to { transform: rotate(360deg); } }
+@keyframes bghub-pulse-ring {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--bghub-accent) 45%, transparent); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
+@keyframes bghub-flash {
+  0%, 100% { background-color: transparent; }
+  25% { background-color: var(--bghub-attention-bg); }
+}
+
+/* Generic exit animation used by core/dom.ts removeAnimated(). */
+.bghub-leaving {
+  animation: bghub-pop-out var(--bghub-dur-fast) var(--bghub-ease-in) forwards !important;
+  pointer-events: none !important;
+}
+
+/* ---------- Small shared primitives ---------- */
+
+.bghub-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Keyboard key cap */
+.bghub-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  font: 500 11px/1 var(--bghub-mono);
+  color: var(--bghub-fg);
+  background: var(--bghub-bg-muted);
+  border: 1px solid var(--bghub-border);
+  border-bottom-width: 2px;
+  border-radius: var(--bghub-radius-sm);
+  white-space: nowrap;
+}
+.bghub-kbd-group { display: inline-flex; gap: 3px; align-items: center; }
+
+/* Compact pill used for status chips */
+.bghub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 7px;
+  font: 500 12px/1 var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  background: var(--bghub-bg-neutral);
+  border: 1px solid transparent;
+  border-radius: var(--bghub-radius-full);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.bghub-chip .octicon { flex: none; }
+.bghub-chip--accent { color: var(--bghub-accent); background: var(--bghub-accent-bg); border-color: var(--bghub-accent-border); }
+.bghub-chip--success { color: var(--bghub-success); background: var(--bghub-success-bg); border-color: var(--bghub-success-border); }
+.bghub-chip--attention { color: var(--bghub-attention); background: var(--bghub-attention-bg); border-color: var(--bghub-attention-border); }
+.bghub-chip--danger { color: var(--bghub-danger); background: var(--bghub-danger-bg); border-color: var(--bghub-danger-border); }
+.bghub-chip--done { color: var(--bghub-done); background: var(--bghub-done-bg); border-color: var(--bghub-done-border); }
+
+/* Skeleton shimmer */
+.bghub-skeleton {
+  display: inline-block;
+  height: 12px;
+  border-radius: var(--bghub-radius-full);
+  background: linear-gradient(90deg, var(--bghub-bg-neutral) 25%, var(--bghub-bg-muted) 50%, var(--bghub-bg-neutral) 75%);
+  background-size: 200% 100%;
+  animation: bghub-shimmer 1.4s linear infinite;
+}
+
+.bghub-spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--bghub-border);
+  border-top-color: var(--bghub-accent);
+  border-radius: 50%;
+  animation: bghub-spin 0.7s linear infinite;
+}
+
+/* Visible focus ring for everything we inject */
+[class^="bghub-"]:focus-visible,
+[class*=" bghub-"]:focus-visible {
+  outline: 2px solid var(--bghub-focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Accessibility preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  [class^="bghub-"],
+  [class*=" bghub-"],
+  [class^="bghub-"]::before,
+  [class*=" bghub-"]::before,
+  [class^="bghub-"]::after,
+  [class*=" bghub-"]::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+  .bghub-skeleton { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .bghub-chip,
+  .bghub-kbd { border-color: CanvasText; }
+}

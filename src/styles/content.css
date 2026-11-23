@@ -1,0 +1,6 @@
+/* Better GHub - injected UI stylesheet (bundled by esbuild into dist/content.css). */
+@import './base.css';
+@import './pr-page.css';
+@import './pending-review.css';
+@import './pr-list.css';
+@import './dashboard.css';

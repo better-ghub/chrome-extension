@@ -1,99 +1,73 @@
 <!DOCTYPE html>
-<html lang="en" data-color-mode="auto" data-light-theme="light" data-dark-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>__MSG_extensionName__</title>
-    <link rel="stylesheet" href="primer.css" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Better GHub</title>
+    <link rel="stylesheet" href="../shared/ui.css" />
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="p-3" style="width: 350px; min-height: 200px">
-      <div class="d-flex flex-justify-between flex-items-center mb-3">
-        <h2 class="h3 m-0" style="background: linear-gradient(180deg, #6e40c9 0%, #3c1e70 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-          Better GHub
-        </h2>
-        <span class="Label Label--primary" id="version" style="background: #6e40c9">v0.3.0</span>
-      </div>
-
-      <div id="auth-section" style="position: relative; min-height: 120px">
-        <!-- Loading state -->
-        <div id="loading-state" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
-          <div class="anim-pulse text-center">
-            <div class="AnimatedEllipsis"></div>
-            <p class="text-small color-fg-muted mt-2">__MSG_loading__</p>
-          </div>
+    <div class="app" id="app" data-state="loading">
+      <header class="app-header">
+        <img class="app-logo" src="../icons/icon48.png" alt="" width="24" height="24" />
+        <div class="app-title">
+          <h1>Better GHub</h1>
+          <span class="app-version" id="version"></span>
         </div>
-
-        <!-- Logged out -->
-        <div id="logged-out" style="display: none">
-          <div class="flash mb-3">
-            <div class="d-flex flex-items-start">
-              <span class="icon octicon-inline mr-2 mt-1"></span>
-              <div class="flex-1">
-                <strong>__MSG_authRequired__</strong>
-                <p class="color-fg-muted f6 mt-1 mb-0">__MSG_authDescription__</p>
-                <p class="color-fg-muted" style="margin-top: 8px; font-size: 11px">
-                  <strong>__MSG_note__:</strong> __MSG_authNote__
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Token Input -->
-          <div class="form-group">
-            <label class="d-block mb-1 f6" for="github-token">__MSG_tokenLabel__</label>
-            <input type="password" id="github-token" class="form-control input-block mb-2" placeholder="github_pat_xxxxxxxxxxxx_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
-            <button id="save-token" class="btn btn-primary btn-block" style="background: #6e40c9; border-color: #6e40c9">
-              __MSG_saveToken__
-            </button>
-          </div>
-
-          <div class="f6 mt-2">
-            <a href="https://github.com/settings/personal-access-tokens/new?name=Better+GHub&description=Enhanced+GitHub+PR+workflow&pull_requests=read&contents=read" target="_blank" rel="noopener noreferrer" class="Link d-block mb-1">
-              __MSG_createToken__
-            </a>
-            <p class="color-fg-muted f6 mt-1">__MSG_repoAccessNote__</p>
-          </div>
+        <div class="app-actions">
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon btn-sm"
+            id="copy-summary"
+            hidden
+            data-tooltip-side="below"
+            data-tooltip-align="end"
+            data-i18n-attr="aria-label:popupCopySummary,data-tooltip:popupCopySummary"
+            aria-label="Copy daily summary"
+            data-tooltip="Copy daily summary"
+          ></button>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon btn-sm"
+            id="refresh"
+            hidden
+            data-tooltip-side="below"
+            data-tooltip-align="end"
+            data-i18n-attr="aria-label:popupRefresh,data-tooltip:popupRefresh"
+            aria-label="Refresh inbox"
+            data-tooltip="Refresh inbox"
+          ></button>
+          <button
+            type="button"
+            class="btn btn-ghost btn-icon btn-sm"
+            id="open-settings"
+            data-tooltip-side="below"
+            data-tooltip-align="end"
+            data-i18n-attr="aria-label:popupSettings,data-tooltip:popupSettings"
+            aria-label="Settings"
+            data-tooltip="Settings"
+          ></button>
         </div>
+      </header>
 
-        <!-- Logged in -->
-        <div id="logged-in" style="display: none">
-          <div class="Box mb-2">
-            <div class="Box-row d-flex flex-items-center">
-              <img id="user-avatar" src="" alt="Avatar" class="avatar avatar-4 circle mr-2" />
-              <div class="flex-1">
-                <div class="text-bold" id="user-name">Loading...</div>
-                <div class="d-flex flex-items-center flex-justify-between">
-                  <div class="text-small color-fg-muted" id="user-login">@username</div>
-                  <div class="text-small">
-                    <span class="color-fg-muted">__MSG_rateLimit__</span>
-                    <span class="text-bold" id="rate-limit" style="color: #6e40c9">5000</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <button id="logout-btn" class="btn btn-block">__MSG_logout__</button>
+      <main class="app-main" id="main" aria-busy="true"></main>
+
+      <footer class="app-footer" id="footer">
+        <div class="quick-toggles">
+          <label class="quick-toggle">
+            <input type="checkbox" role="switch" class="switch switch-sm" id="toggle-shortcuts" data-setting="shortcutsEnabled" />
+            <span data-i18n="popupToggleShortcuts">Shortcuts</span>
+          </label>
+          <label class="quick-toggle">
+            <input type="checkbox" role="switch" class="switch switch-sm" id="toggle-badge" data-setting="notificationsEnabled" />
+            <span data-i18n="popupToggleBadge">Badge</span>
+          </label>
         </div>
-      </div>
-
-      <div id="error-message" class="flash flash-error mt-2" style="display: none"></div>
-      <div id="success-message" class="flash flash-success mt-2" style="display: none"></div>
-
-      <div class="mt-1">
-        <button id="open-options" class="btn btn-block mb-2">
-          <span class="footer-icon octicon-inline mr-1"></span>
-          <span>__MSG_openSettings__</span>
-        </button>
-        <p class="text-center text-small color-fg-muted mb-0">
-          __MSG_madeWith__
-          <span class="footer-heart octicon-inline mx-1"></span>
-          <span>__MSG_forBetterExperience__</span>
-        </p>
-      </div>
+        <p class="footer-hint" id="shortcut-hint" hidden></p>
+      </footer>
     </div>
-
     <script src="popup.js"></script>
   </body>
 </html>

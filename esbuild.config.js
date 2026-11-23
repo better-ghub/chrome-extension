@@ -3,113 +3,91 @@ const path = require('path');
 const fs = require('fs');
 
 const isWatch = process.argv.includes('--watch');
+const isDev = isWatch || process.argv.includes('--dev');
+const DIST = 'dist';
 
-// Entry points for the extension
+// Script entry points (outfile → source). CSS imported from a TS entry is
+// emitted next to it (e.g. src/content/index.ts imports styles → dist/content.css).
 const entryPoints = {
-  // Content scripts
-  'content': 'src/content.ts',
-  'dashboard': 'src/dashboard.ts',
-  'pr-shortcuts': 'src/pr-shortcuts.ts',
-  
-  // Background service worker
-  'background': 'src/background.ts',
-  
-  // Popup and options pages
+  content: 'src/content/index.ts',
+  background: 'src/background.ts',
   'popup/popup': 'popup/popup.ts',
   'options/options': 'options/options.ts',
 };
 
-// Common build options
 const buildOptions = {
-  entryPoints: Object.entries(entryPoints).map(([outfile, input]) => ({
-    in: input,
-    out: outfile,
-  })),
+  entryPoints: Object.entries(entryPoints).map(([out, input]) => ({ in: input, out })),
   bundle: true,
-  outdir: 'dist',
+  outdir: DIST,
   format: 'iife',
-  target: 'es2021',
-  sourcemap: true,
-  minify: !isWatch,
+  target: 'chrome116',
+  // Sourcemaps only for dev builds: production zips must not ship full sources.
+  sourcemap: isDev ? 'inline' : false,
+  minify: !isDev,
+  legalComments: 'none',
+  logLevel: 'warning',
   define: {
-    'process.env.NODE_ENV': isWatch ? '"development"' : '"production"',
+    __DEV__: JSON.stringify(isDev),
   },
 };
 
-// Copy static files to dist
-function copyStaticFiles() {
-  const staticFiles = [
-    { src: 'manifest.json', dest: 'dist/manifest.json' },
-    { src: 'icons', dest: 'dist/icons' },
-    { src: '_locales', dest: 'dist/_locales' },
-    { src: 'src/styles.css', dest: 'dist/styles.css' },
-    { src: 'src/dashboard-styles.css', dest: 'dist/dashboard-styles.css' },
-    // HTML files use Chrome's native __MSG_*__ syntax - just copy them
-    { src: 'popup/popup.html', dest: 'dist/popup/popup.html' },
-    { src: 'popup/popup.css', dest: 'dist/popup/popup.css' },
-    { src: 'node_modules/@primer/css/dist/primer.css', dest: 'dist/popup/primer.css' },
-    { src: 'options/options.html', dest: 'dist/options/options.html' },
-    { src: 'options/options.css', dest: 'dist/options/options.css' },
-    { src: 'node_modules/@primer/css/dist/primer.css', dest: 'dist/options/primer.css' },
-  ];
-
-  // Ensure dist directories exist
-  const dirs = ['dist', 'dist/popup', 'dist/options', 'dist/icons', 'dist/_locales'];
-  dirs.forEach(dir => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-  });
-
-  staticFiles.forEach(({ src, dest }) => {
-    if (fs.existsSync(src)) {
-      if (fs.statSync(src).isDirectory()) {
-        copyDir(src, dest);
-      } else {
-        fs.copyFileSync(src, dest);
-      }
-    }
-  });
+function copyDir(src, dest, filter = () => true) {
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const s = path.join(src, entry.name);
+    const d = path.join(dest, entry.name);
+    if (entry.name === '.DS_Store') continue;
+    if (entry.isDirectory()) copyDir(s, d, filter);
+    else if (filter(s)) fs.copyFileSync(s, d);
+  }
 }
 
-function copyDir(src, dest) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
-  }
-  
-  const entries = fs.readdirSync(src, { withFileTypes: true });
-  
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-    
-    if (entry.isDirectory()) {
-      copyDir(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
+// Static assets. Extension pages (popup/options) get every non-TS file in
+// their folder copied as-is, so adding an .html/.css/.svg needs no config.
+function copyStaticFiles() {
+  fs.mkdirSync(DIST, { recursive: true });
+  fs.copyFileSync('manifest.json', path.join(DIST, 'manifest.json'));
+  // Only ship the sized icons (+ the SVG for pages); icons/icon.png is the 220 KB source art.
+  copyDir('icons', path.join(DIST, 'icons'), (f) => /icon(16|32|48|128)\.png$|icon\.svg$/.test(f));
+  copyDir('_locales', path.join(DIST, '_locales'));
+  const notTs = (f) => !f.endsWith('.ts');
+  copyDir('popup', path.join(DIST, 'popup'), notTs);
+  copyDir('options', path.join(DIST, 'options'), notTs);
+  if (fs.existsSync('shared')) copyDir('shared', path.join(DIST, 'shared'), notTs);
 }
 
 async function build() {
+  const started = Date.now();
   try {
-    console.log('Building extension...');
-    
-    // Copy static files first
+    fs.rmSync(DIST, { recursive: true, force: true });
     copyStaticFiles();
-    
+
     if (isWatch) {
-      // Watch mode
-      const ctx = await esbuild.context(buildOptions);
+      const ctx = await esbuild.context({
+        ...buildOptions,
+        plugins: [
+          {
+            name: 'copy-static',
+            setup(b) {
+              b.onEnd(() => {
+                try {
+                  copyStaticFiles();
+                } catch (e) {
+                  console.error('Static copy failed:', e.message);
+                }
+              });
+            },
+          },
+        ],
+      });
       await ctx.watch();
       console.log('Watching for changes...');
     } else {
-      // Single build
       await esbuild.build(buildOptions);
-      console.log('Build complete!');
+      console.log(`Build complete in ${Date.now() - started}ms (${isDev ? 'dev' : 'production'}).`);
     }
   } catch (error) {
-    console.error('Build failed:', error);
+    console.error('Build failed:', error.message || error);
     process.exit(1);
   }
 }
