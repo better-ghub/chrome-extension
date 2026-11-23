@@ -42,7 +42,8 @@ function installFakeGitHub(opts) {
     return {
       number,
       url: `https://github.com/${owner}/${repo}/pull/${number}`,
-      title: `Fake PR ${number}`,
+      // Realistic sample titles (the screenshots end up in the store listing).
+      title: ['Add keyboard shortcut for the file finder', 'Fix flaky checkout test on Windows', 'Speed up diff rendering for large files', 'Show review progress in the header', 'Update dependencies and lockfile', 'Handle expired tokens gracefully', 'Refactor settings storage', 'Add dark mode to the options page', 'Improve error message for missing permissions', 'Cache GraphQL responses per repository', 'Remove deprecated API calls'][number % 11],
       additions,
       deletions,
       changedFiles: Math.max(1, Math.round(size / 60)),

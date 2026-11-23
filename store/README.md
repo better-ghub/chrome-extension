@@ -28,7 +28,7 @@ Renders the PNGs below from `e2e/shots/` and `icons/icon.svg` with Chrome for Te
 
 Store icon (128x128): `icons/icon128.png` (already in the package).
 
-Note: the captured UI inside the screenshots is Polish (the e2e harness runs with the Polish UI language). Only the headlines differ between the English and Polish sets. Recapture the shots with the English UI if you want fully English screenshots.
+The English set is rendered from `e2e/shots/en/` and the Polish set from `e2e/shots/pl/`; capture them with `E2E_LANG=en npm run e2e` and `E2E_LANG=pl npm run e2e`. Real author names and avatars from the live GitHub pages are replaced with fictional ones before each screenshot (`e2e/anonymize.js`).
 
 ## 3. Listing text
 
@@ -59,3 +59,27 @@ The extension name and description inside the package come from `_locales/*/mess
 - [ ] Single purpose, permission justifications and data-usage answers pasted
 - [ ] Test instructions (reviewers): the extension works without a token on any pull request page (press Alt+/); list details and inbox need a GitHub token, which reviewers can create read-only at github.com/settings/personal-access-tokens
 - [ ] Submit for review and choose staged or immediate publishing
+
+## 6. Automated releases (GitHub Actions)
+
+`.github/workflows/release.yml` runs on every pushed tag `v*`: it checks that the tag matches `manifest.json` and `package.json`, runs `npm run check`, builds `better-ghub-<version>.zip`, attaches it to a GitHub release and, in the `chrome-web-store` job, uploads it to the store and submits it for review (`scripts/cws-publish.js`, Chrome Web Store API v2).
+
+One-time setup:
+
+1. The item must already exist in the store: the API cannot create items or edit the listing, so the first version and every listing change go through the dashboard.
+2. Google Cloud: create a project, enable the **Chrome Web Store API**, create a service account and download a JSON key.
+3. Developer Dashboard > Publisher > **Settings** > Service account: add the service account's e-mail (one per publisher).
+4. GitHub > Settings > Environments > `chrome-web-store`: deployments are limited to `v*` tags and need a required reviewer's approval. Add these as **environment** secrets there (never as repository secrets, which every workflow on any branch could read):
+   - `CWS_SERVICE_ACCOUNT_KEY`: the whole JSON key
+   - `CWS_PUBLISHER_ID` (optional): the publisher ID from Publisher > Settings; with it the script uses API v2, without it API v1.1
+   - `CWS_ITEM_ID`: the 32-character extension ID
+5. Keep secret scanning and push protection on (Settings > Code security) so a key can't be pushed to this public repository by accident.
+
+Release a new version:
+
+```bash
+# bump "version" in manifest.json and package.json (and SECURITY.md), merge to main, then
+git tag v0.4.1 && git push origin v0.4.1
+```
+
+Without the secrets the workflow still builds the release and skips the store step with a warning. Locally, `CWS_SERVICE_ACCOUNT_KEY_FILE=… CWS_PUBLISHER_ID=… CWS_ITEM_ID=… npm run store:publish` does the same upload.

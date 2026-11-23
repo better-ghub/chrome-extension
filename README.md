@@ -7,6 +7,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-MV3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/)
 [![Version](https://img.shields.io/badge/version-0.4.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Install-4285F4?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/better-ghub/hblfaadiojnkmlklakmlehpechkoobgl)
+
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/better-ghub/hblfaadiojnkmlklakmlehpechkoobgl)**
 
 [Features](#-features) • [Keyboard shortcuts](#-keyboard-shortcuts) • [Installation](#-installation) • [Development](#-development) • [License](#-license)
 
@@ -77,6 +80,12 @@ Shortcuts match the **physical key** (`KeyboardEvent.code`), so `⌥C` works on 
 ---
 
 ## 📦 Installation
+
+### From the Chrome Web Store
+
+Install **[Better GHub from the Chrome Web Store](https://chromewebstore.google.com/detail/better-ghub/hblfaadiojnkmlklakmlehpechkoobgl)**. It updates automatically. The options page opens on first install, where you can connect a GitHub token (or do it later from the toolbar popup).
+
+### From source
 
 ```bash
 git clone https://github.com/better-ghub/chrome-extension.git

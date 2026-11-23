@@ -46,10 +46,14 @@ function mockBackground(handler: (msg: Msg) => unknown): jest.Mock {
   return fn;
 }
 
-/** Text of the shared screen-reader announcer (set on the next frame). */
+/** Text of the shared screen-reader announcer (set on the next animation frame, so poll for it). */
 async function announced(): Promise<string> {
-  await flush(20);
-  return document.getElementById('bghub-announcer')?.textContent ?? '';
+  for (let waited = 0; waited < 1000; waited += 10) {
+    const text = document.getElementById('bghub-announcer')?.textContent ?? '';
+    if (text) return text;
+    await flush(10);
+  }
+  return '';
 }
 
 /** Click the inline confirm's confirm button past its double-click guard. */

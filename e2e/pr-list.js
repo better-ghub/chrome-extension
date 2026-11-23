@@ -1,6 +1,7 @@
 // E2E: PR list chips on live github.com with a fake API behind the extension.
 // usage: node e2e/pr-list.js <distDir> [--dark]
 const { launch, shotsDir } = require('./launch');
+const { anonymizePeople } = require('./anonymize');
 const { installFakeGitHub } = require('./fake-github');
 const path = require('path');
 const fs = require('fs');
@@ -61,6 +62,7 @@ const check = (name, ok, detail = '') => {
   });
   check('chips rendered on every row', stats.rows > 0 && stats.withChips === stats.rows, JSON.stringify(stats));
   check('no skeletons left after load', stats.skeletons === 0);
+  await anonymizePeople(page);
   await page.screenshot({ path: path.join(SHOTS, `pr-list${sfx}.png`) });
   await page.locator('ul[data-listview-component="items-list"]').screenshot({ path: path.join(SHOTS, `pr-list-rows${sfx}.png`) }).catch(() => {});
 

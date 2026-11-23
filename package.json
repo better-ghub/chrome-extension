@@ -20,7 +20,8 @@
     "store:assets": "node scripts/store-assets.js",
     "e2e": "npm run build && node e2e/run.js",
     "e2e:install": "playwright-core install chromium",
-    "icons:app": "node scripts/app-icons.js"
+    "icons:app": "node scripts/app-icons.js",
+    "store:publish": "node scripts/cws-publish.js better-ghub.zip"
   },
   "keywords": [
     "chrome-extension",
@@ -41,9 +42,9 @@
     "@types/chrome": "^0.0.268",
     "@types/jest": "^29.5.0",
     "@types/node": "^25.1.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "esbuild": "^0.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.73.0",
+    "@typescript-eslint/parser": "^8.73.0",
+    "esbuild": "^0.28.2",
     "eslint": "^8.54.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",

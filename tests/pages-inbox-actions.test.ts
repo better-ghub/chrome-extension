@@ -12,6 +12,16 @@ const DAY = 24 * HOUR;
 const iso = (ms: number): string => new Date(ms).toISOString();
 const flush = (ms = 0): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
+/** Text of the shared screen-reader announcer (set on the next animation frame, so poll for it). */
+async function announced(): Promise<string> {
+  for (let waited = 0; waited < 1000; waited += 10) {
+    const text = document.getElementById('bghub-announcer')?.textContent ?? '';
+    if (text) return text;
+    await flush(10);
+  }
+  return '';
+}
+
 function pr(n: number, over: Partial<InboxItem> = {}): InboxItem {
   return {
     url: `https://github.com/o/r/pull/${n}`,
@@ -176,7 +186,7 @@ describe('row actions menu', () => {
     resolve(inbox([pr(1), pr(2), pr(3, { pinned: true })]));
     await flush(20);
     expect(rowNumbers()).toEqual([3, 1, 2]);
-    expect(document.getElementById('bghub-announcer')?.textContent).toBe('Pinned to the top');
+    expect(await announced()).toBe('Pinned to the top');
   });
 
   test('a failed action rolls back and says so', async () => {
@@ -208,7 +218,7 @@ describe('row actions menu', () => {
     const section = document.querySelector<HTMLDetailsElement>('.inbox-snoozed')!;
     expect(section.querySelector('summary')?.textContent).toBe('Snoozed (1)');
     expect(section.querySelector('.snoozed-until')?.textContent).toMatch(/^until /);
-    expect(document.getElementById('bghub-announcer')?.textContent).toMatch(/^Snoozed until /);
+    expect(await announced()).toMatch(/^Snoozed until /);
     expect(document.querySelector('.inbox-tab[data-tab="review"] .counter')?.textContent).toBe('2');
 
     handlers.snooze.mockResolvedValue(inbox([pr(1), pr(2), pr(3)]));
