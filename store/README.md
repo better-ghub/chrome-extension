@@ -28,7 +28,7 @@ Renders the PNGs below from `e2e/shots/` and `icons/icon.svg` with Chrome for Te
 
 Store icon (128x128): `icons/icon128.png` (already in the package).
 
-Note: the captured UI inside the screenshots is Polish (the e2e harness runs with the Polish UI language). Only the headlines differ between the English and Polish sets. Recapture the shots with the English UI if you want fully English screenshots.
+The English set is rendered from `e2e/shots/en/` and the Polish set from `e2e/shots/pl/`; capture them with `E2E_LANG=en npm run e2e` and `E2E_LANG=pl npm run e2e`. Real author names and avatars from the live GitHub pages are replaced with fictional ones before each screenshot (`e2e/anonymize.js`).
 
 ## 3. Listing text
 
