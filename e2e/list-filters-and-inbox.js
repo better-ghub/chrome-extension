@@ -1,6 +1,7 @@
 // E2E: ready/stale chips + quick filters on the live PR list, popup pin/snooze.
 // usage: node e2e/list-filters-and-inbox.js <distDir> [--dark]
 const { launch, shotsDir } = require('./launch');
+const { anonymizePeople } = require('./anonymize');
 const { installFakeGitHub } = require('./fake-github');
 const path = require('path');
 const fs = require('fs');
@@ -58,12 +59,14 @@ const check = (name, ok, detail = '') => {
   const s0 = await state();
   check('ready and stale chips rendered', s0.ready > 0 && s0.stale > 0, JSON.stringify(s0));
   check('quick filter bar with live counts', s0.filters.length >= 5 && s0.filters.some((f) => f === `ready:${s0.ready}`), s0.filters.join(' '));
+  await anonymizePeople(page);
   await page.screenshot({ path: path.join(SHOTS, `w2-list${sfx}.png`) });
 
   await page.click('.bghub-prl-filter[data-filter="ready"]');
   await page.waitForTimeout(500);
   const s1 = await state();
   check('"Ready to merge" filter shows only ready rows', s1.visible === s0.ready && s1.visibleReady === s0.ready, JSON.stringify({ visible: s1.visible, ready: s0.ready }));
+  await anonymizePeople(page);
   await page.screenshot({ path: path.join(SHOTS, `w2-list-filtered${sfx}.png`) });
   const pressed = await page.getAttribute('.bghub-prl-filter[data-filter="ready"]', 'aria-pressed');
   check('filter chip exposes aria-pressed', pressed === 'true', pressed);
