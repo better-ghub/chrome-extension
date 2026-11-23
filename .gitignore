@@ -29,3 +29,6 @@ yarn-error.log*
 # Temporary files
 *.tmp
 .cache/
+
+# E2E screenshots
+e2e/shots/

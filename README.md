@@ -2,13 +2,13 @@
 
 # 🚀 Better GHub
 
-### Enhance your GitHub Pull Request workflow
+### A sharper GitHub pull request workflow
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://www.google.com/chrome/)
-[![Version](https://img.shields.io/badge/version-0.3.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-MV3-blue.svg)](https://developer.chrome.com/docs/extensions/mv3/)
+[![Version](https://img.shields.io/badge/version-0.4.0-green.svg)](https://github.com/better-ghub/chrome-extension/releases)
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Contributing](#-contributing) • [License](#-license)
+[Features](#-features) • [Keyboard shortcuts](#-keyboard-shortcuts) • [Installation](#-installation) • [Development](#-development) • [License](#-license)
 
 </div>
 
@@ -17,267 +17,178 @@
 ## 🤖 About This Project
 
 > **This extension is developed entirely using AI assistance as a fun after-work experiment.**
-> 
+>
 > The entire codebase, architecture, and documentation were created through conversations with AI. This project serves as an exploration of what's possible when humans and AI collaborate on software development. We encourage you to fork, modify, and develop this project using AI tools in a similar way!
 
 ---
 
 ## ✨ Features
 
-**Better GHub** transforms your GitHub Pull Request experience by providing instant insights directly on PR list pages:
+Everything is drawn with GitHub's own design tokens, so it follows your GitHub theme — light, dark, dimmed, high contrast and colorblind — and respects *reduced motion*.
 
-### 🎯 Core Features
+### Pull request list
+Under every pull request in `/{owner}/{repo}/pulls`:
 
-- **📊 Real-time Activity Tracking**
-  - See the last activity on every PR at a glance
-  - Track whether it was a comment or commit
-  - View commit titles and author information
-  - Always visible - no clicking required!
+- **Size** — `XS … XL` bucket with `+additions −deletions` (hover for the number of files).
+- **Review state** — *Your review* (highlighted row) when you are a requested reviewer, otherwise *Review requested · 2d* with the reviewers on hover.
+- **Unresolved threads** — count with a per-author breakdown on hover (outdated threads included and flagged).
+- **Merge conflicts**.
+- **Last activity** — who commented / pushed / reviewed and when.
+- **Suggested labels** — derived from the changed paths (`needs tests`, `docs`, `CI`, `dependencies`, …). Can be turned off.
+- **Summary bar** above the list: *3 need your review · 2 have conflicts · 7 unresolved threads*, with a one-click *review requested* filter.
 
-- **⚠️ Unresolved Review Threads**
-  - Accurate count of unresolved review suggestions
-  - Detailed breakdown by author on hover
-  - Uses GitHub GraphQL API for precision
+All rows are fetched with **one batched GraphQL request per 10 pull requests** (the 0.3 version made ~4 REST calls per row), cached for a few minutes and re-applied instantly when GitHub re-renders the list.
 
-- **⚡ Smart Performance**
-  - Intelligent batching: 1 GraphQL call for all PRs
-  - 5-minute caching to minimize API usage
-  - Parallel processing for instant load times
-  - ~41 API calls for 20 PRs (then cached)
+### Pull request page
+- **Keyboard shortcuts** for collapsing threads and files, jumping between unresolved threads, switching tabs and copying the branch name or a Markdown link — see below.
+- **Cheat sheet** (`⌥/`) and a small floating keyboard button.
+- **Toasts** that confirm what a shortcut did (*Collapsed 9 files*).
 
-- **🎨 Seamless Integration**
-  - Matches GitHub's Primer design system
-  - Full dark mode support
-  - Native look and feel
-  - No UI disruption
+### Toolbar popup — your pull request inbox
+- **Review requests**, **your pull requests** and **assigned** pull requests with checks, review decision, conflicts, unresolved threads and diff size.
+- **Unread badge** on the toolbar icon when someone else pushes, comments or reviews (your own activity never counts).
+- Quick toggles for shortcuts and notifications.
 
-- **🌍 Bilingual Support**
-  - English and Polish localization
-  - Uses Chrome i18n API
-  - Easy to extend with more languages
+### Dashboard
+- A **Your pull requests** card on the github.com home page.
 
-### 🔐 Authentication Options
+### Options
+- Account, per-feature switches, a **shortcut editor** (record any combination, conflict detection, reset), notification interval, cache duration, language (English / Polski).
+- Settings sync across your Chrome profiles through `chrome.storage.sync` (values too large for sync, or a failed sync write, stay local automatically). Tokens never sync. **Export / Import** (About) saves and restores settings as `better-ghub-settings.json`.
 
-- **Personal Access Token** (Recommended): Quick setup, full control
-- **OAuth Support**: Enterprise-ready authentication
-- **No Token Mode**: Works with public repos (limited rate)
+---
+
+## ⌨️ Keyboard shortcuts
+
+Shortcuts work on any pull request page and never fire while you are typing. All of them can be remapped in **Options → Keyboard shortcuts**. On macOS `Alt` is `⌥ Option`.
+
+| Shortcut | Action | Where |
+|---|---|---|
+| `Alt+C` | Collapse / expand all review threads (inline comments on *Files changed*) | Conversation, Files changed |
+| `Alt+Shift+F` | Collapse / expand all files | Files changed |
+| `Alt+J` / `Alt+K` | Next / previous unresolved thread | Conversation, Files changed |
+| `Alt+1` … `Alt+4` | Conversation / Commits / Checks / Files changed | Any PR tab |
+| `Alt+B` | Copy the head branch name | Any PR tab |
+| `Alt+L` | Copy `[Title (#123)](url)` | Any PR tab |
+| `Alt+/` | Show all shortcuts | Any PR tab |
+
+Shortcuts match the **physical key** (`KeyboardEvent.code`), so `⌥C` works on a Mac even though it types `ç`. When items are in a mixed state, a toggle brings everything to one state: if anything is expanded it collapses all, otherwise it expands all.
 
 ---
 
 ## 📦 Installation
 
-### Prerequisites
-
-- Google Chrome or Chromium-based browser
-- GitHub account (optional for public repos)
-
-### Quick Start
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/better-ghub/chrome-extension.git
-   cd chrome-extension
-   ```
-
-2. **Generate extension icons** (one-time setup)
-   - Open `generate-icons.html` in your browser
-   - Click "Download All Icons"
-   - Icons will be saved to the `icons/` folder
-
-3. **Load in Chrome**
-   - Navigate to `chrome://extensions/`
-   - Enable **Developer mode** (toggle in top right)
-   - Click **Load unpacked**
-   - Select the `BetterGithubPR` folder
-
-4. **Configure authentication** (optional but recommended)
-   - Click the extension icon in your toolbar
-   - Follow the setup wizard to add your GitHub token
-   - See [Authentication Guide](#-authentication) below
-
----
-
-## 🔑 Authentication
-
-### Option A: Fine-grained Personal Access Token (Recommended)
-
-1. Go to [GitHub Settings → Fine-grained tokens](https://github.com/settings/personal-access-tokens/new?name=Better+GHub&description=Enhanced+GitHub+PR+workflow&pull_requests=read&contents=read)
-2. Set **Repository access** to **All repositories**
-3. Under **Permissions**, set:
-   - **Pull requests**: Read
-   - **Contents**: Read
-   - **Metadata**: Read (enabled by default)
-4. Click **Generate token**, copy it, and paste it in the extension popup
-
-**Rate Limits:**
-- With token: 5,000 requests/hour
-- Without token: 60 requests/hour
-
-### Option B: No Authentication
-
-The extension works with public repositories without authentication, but with reduced rate limits.
-
----
-
-## 🎮 Usage
-
-1. **Navigate to any PR list page**
-   ```
-   https://github.com/{owner}/{repo}/pulls
-   ```
-
-2. **View enhanced information**
-   - Activity indicators appear below each PR title
-   - Unresolved thread counts show as yellow badges
-   - Hover over badges for detailed breakdowns
-
-3. **Customize settings**
-   - Click the extension icon
-   - Access the options page
-   - Configure cache duration and other preferences
-
-### Visual Examples
-
-**Last Activity Display:**
-```
-💬 Last comment by johndoe
-📝 Last commit by janedoe: "Fix authentication bug"
+```bash
+git clone https://github.com/better-ghub/chrome-extension.git
+cd chrome-extension
+npm ci
+npm run build
 ```
 
-**Unresolved Threads:**
-```
-⚠️ Unresolved suggestions (3)
-   [Hover to see breakdown by author]
-```
+1. Open `chrome://extensions/` and enable **Developer mode**.
+2. Click **Load unpacked** and select the **`dist/`** folder.
+3. The options page opens on first install — connect a GitHub token there or in the popup.
 
----
+### GitHub tokens
 
-## 🏗️ Architecture
+Keyboard shortcuts work without a token. The list details, inbox, badge and dashboard card need one.
 
-**Better GHub** uses modern Chrome Extension Manifest V3 with a clean, modular architecture:
+A **fine-grained** token can read the private repositories of exactly **one owner** — you or one organization — plus every public repository. Better GHub therefore lets you add **one token per organization** to the same account and picks the right one for every repository automatically:
 
-```
-src/
-├── api/                    # GitHub API clients
-│   ├── github-rest.js      # REST API with caching
-│   └── github-graphql.js   # GraphQL with batching
-├── services/               # Business logic
-│   ├── pr-processor.js     # PR orchestration
-│   └── pr-analyzer.js      # Data analysis
-├── ui/                     # UI components
-│   ├── activity-element.js # Activity display
-│   ├── loader.js           # Loading states
-│   ├── tooltip.js          # Interactive tooltips
-│   └── version-badge.js    # Version indicator
-├── utils/                  # Utilities
-│   ├── cache.js            # Cache management
-│   ├── token-manager.js    # Token handling
-│   ├── api-metrics.js      # API tracking
-│   ├── octicons.js         # Icon library
-│   ├── dom-helpers.js      # DOM utilities
-│   └── i18n.js             # Localization
-├── content.js              # Content script entry
-├── background.js           # Service worker
-└── constants.js            # App constants
-```
+1. **Options → Account → Add a token for another organization**, type the organization (e.g. `acme`) and click **Create token on GitHub** — the form opens pre-filled with that organization, read-only permissions (*Pull requests*, *Metadata*, *Contents*) and a 90-day expiry.
+2. Paste the token back. The list shows which organizations each token covers, when it expires, and problems such as *pending organization approval* or *SSO authorization needed*.
+3. On a pull request list the extension can't read, the bar above the list offers **Add token for `<org>`** — one click to the same pre-filled flow.
 
-### Design Principles
+A **classic** token (`ghp_…`) covers every organization at once but grants write access to all your repositories; it is supported, not recommended.
 
-- **DRY** (Don't Repeat Yourself): Centralized utilities and shared components
-- **KISS** (Keep It Simple, Stupid): Simple, focused modules
-- **YAGNI** (You Aren't Gonna Need It): Only essential features
-- **SOLID**: Single responsibility, dependency inversion
+Tokens never leave the background service worker; scripts running on github.com never see them. See [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md).
 
 ---
 
 ## 🛠️ Development
 
-### Local Development
-
 ```bash
-# Make changes to source files
-# Then reload the extension:
-# 1. Go to chrome://extensions/
-# 2. Click reload icon on Better GHub card
-# 3. Refresh GitHub PR pages to see changes
+npm run build:watch   # rebuild dist/ on change (inline sourcemaps)
+npm run check         # typecheck + lint + tests + production build
+npm run package       # production build zipped to better-ghub.zip
+npm run store:assets  # Chrome Web Store screenshots and promo tiles (see store/README.md)
 ```
 
-### Project Structure
+After a rebuild, click **Reload** on the extension card in `chrome://extensions/` and refresh GitHub. Add `localStorage['bghub-debug'] = '1'` on github.com for verbose logs.
 
-- `manifest.json` - Extension configuration (Manifest V3)
-- `src/` - Source code (ES6 modules)
-- `popup/` - Extension popup UI
-- `options/` - Options page
-- `_locales/` - Internationalization files
-- `icons/` - Extension icons
+### End-to-end tests
 
-### Tech Stack
+```bash
+npm run e2e:install   # once: downloads Chrome for Testing (branded Chrome ignores --load-extension)
+npm run e2e           # build, then every spec in light and dark
+node e2e/run.js pr-list --light   # one spec, light only; HEADED=1 shows the browser
+E2E_LANG=en npm run e2e        # pin the extension UI language; screenshots go to e2e/shots/en/
+```
 
-- **Manifest V3**: Latest Chrome extension standard
-- **ES6 Modules**: Modern JavaScript
-- **GitHub APIs**: REST + GraphQL
-- **Primer CSS**: GitHub's design system
-- **Chrome APIs**: storage.local, i18n, runtime
+The specs in `e2e/` load `dist/` into Chrome for Testing, open live public github.com pages while logged out, and replace `api.github.com` with a deterministic fake inside the extension's service worker (`e2e/fake-github.js`), so no token is needed. Screenshots land in `e2e/shots/`. GitHub changes its markup without notice, so a failure there can be GitHub rather than the extension; the specs are not part of CI for that reason. Set `CHROME_PATH` to use another Chromium build.
+
+### Architecture
+
+```
+src/
+├── content/index.ts        # single content script for github.com/*: boots settings + i18n, starts the router
+├── core/
+│   ├── router.ts           # SPA router — mounts features per URL with an AbortSignal for cleanup
+│   ├── page.ts             # URL → page kind (PR, PR list, dashboard) and PR tab
+│   ├── messages.ts         # typed contract between content scripts, popup/options and the background
+│   ├── settings.ts         # every stored preference: keys, defaults, validation
+│   ├── dom.ts / icons.ts   # tiny h() element factory, observers, octicons (generated subset)
+├── features/
+│   ├── pr-page/            # shortcuts, toasts, cheat sheet, floating hint
+│   ├── pr-list/            # batched GraphQL query, analysis, row chips, summary bar
+│   └── dashboard/          # "Your pull requests" card
+├── background.ts + background/  # token owner: API proxy, cache, rate limits, auth, inbox + badge, alarms
+├── shortcuts.ts            # shortcut registry, matching, formatting, storage
+├── i18n.ts                 # user-selectable language (en / pl)
+├── ui/                     # shared tooltip (Popover API), time + plural helpers
+└── styles/                 # injected CSS, built on GitHub Primer variables
+popup/ options/ src/pages/  # extension pages
+```
+
+Key decisions:
+
+- **One content script + router** instead of one script per URL pattern: GitHub navigates client-side, so per-URL scripts were never injected after soft navigations.
+- **Shortcuts are page-level** (no `chrome.commands`): the manifest command duplicated the page listener and could not be remapped from Options.
+- **The background owns the tokens** (IndexedDB, never `chrome.storage`) and is the only place that talks to GitHub; it routes each request to the token that covers the repository owner, caches responses, tracks rate-limit budgets per resource, and treats a 403 as a rate limit only when GitHub says so.
+- **No z-index wars**: floating UI uses the browser top layer (`popover`, `<dialog>`).
+
+### Adding an icon
+
+Add the octicon name to `ICONS` in `scripts/gen-icons.js` and run `npm run gen:icons`.
+
+### Translations
+
+Strings live in `_locales/en/messages.json` and `_locales/pl/messages.json`. In code use `t('key', 'English fallback', substitutions)`.
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! This project is a great opportunity to experiment with AI-assisted development.
+1. Fork the repository and create a feature branch.
+2. Make your changes — feel free to use AI tools and document interesting prompts.
+3. Run `npm run check` and test in Chrome in both light and dark GitHub themes.
+4. Open a pull request.
 
-### How to Contribute
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Make your changes**
-   - Feel free to use AI tools (ChatGPT, Claude, Copilot, etc.)
-   - Document your AI-assisted development process
-4. **Test thoroughly**
-   - Load the extension in Chrome
-   - Test on various GitHub repositories
-5. **Commit your changes**
-   ```bash
-   git commit -m "Add amazing feature"
-   ```
-6. **Push and create a Pull Request**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-
-### Development Guidelines
-
-- Follow the existing code structure
-- Use ES6 modules
-- Maintain compatibility with Manifest V3
-- Add translations for new UI strings
-- Test in both light and dark mode
-- Update README if adding new features
-
-### AI-Assisted Development
-
-We encourage you to:
-- Use AI coding assistants for development
-- Document interesting AI interactions
-- Share prompts that led to breakthrough solutions
-- Experiment with different AI tools
+Guidelines: keep modules small, add translations for both locales, use the `--bghub-*` CSS tokens instead of hard-coded colors, and clean up everything a feature adds when its `AbortSignal` fires.
 
 ---
 
-## 🐛 Known Issues & Limitations
+## 🐛 Known limitations
 
-- Requires page refresh after loading GitHub PR list
-- GraphQL batching has a 500ms delay for optimization
-- OAuth requires manual app registration (PAT recommended)
-- Rate limits apply based on authentication method
+- GitHub changes its markup often. The list uses stable `data-testid` hooks, but a redesign can still break an enhancement until it is updated.
+- "Your review" covers review requests addressed to you directly, not to one of your teams.
+- The new React *Files changed* experience (opt-in on GitHub) is supported on a best-effort basis.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see below for details:
+This project is licensed under the **MIT License**.
 
 ```
 MIT License
@@ -307,18 +218,9 @@ SOFTWARE.
 
 ## 🙏 Acknowledgments
 
-- **GitHub** for their excellent API and Primer design system
+- **GitHub** for their excellent API and the Primer design system
 - **The AI Community** for making tools that enable projects like this
 - **Open Source Contributors** who inspire collaborative development
-- **You** for checking out this project!
-
----
-
-## 📞 Support & Contact
-
-- **Issues**: [GitHub Issues](https://github.com/better-ghub/chrome-extension/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/better-ghub/chrome-extension/discussions)
-- **Pull Requests**: Always welcome!
 
 ---
 

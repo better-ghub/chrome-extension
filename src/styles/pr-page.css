@@ -1,0 +1,844 @@
+/* Better GHub - PR page UI (toast, cheat sheet, hint, thread highlight, generated-file chip,
+   review progress pill, unresolved threads panel). Owned by the PR-page workstream.
+   Colors come only from the --bghub-* tokens (Primer-mapped, theme-aware). Motion animates
+   opacity/transform, except the brief thread highlight (outline/box-shadow, paint-only). */
+
+/* macOS modifier glyphs (⌃⌥⇧⌘) are barely legible in monospace fonts. */
+.bghub-kbd.bghub-kbd--glyph { font-family: var(--bghub-font); font-size: 13px; }
+
+/* ==========================================================================
+   Toasts — host is popover="manual" (top layer), stacked bottom-center
+   ========================================================================== */
+
+@keyframes bghub-toast-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes bghub-toast-bump {
+  0%, 100% { transform: none; }
+  40% { transform: scale(1.03); }
+}
+
+.bghub-toast-host {
+  /* Reset UA [popover] styles (inset: 0; margin: auto; border; padding; Canvas bg). */
+  position: fixed;
+  inset: auto 0 24px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  overflow: visible;
+  color: var(--bghub-fg);
+  background: transparent;
+  border: 0;
+  pointer-events: none;
+}
+/* Separate rules: a browser that doesn't know :popover-open would drop a combined selector list. */
+.bghub-toast-host:popover-open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.bghub-toast-host--fallback {
+  z-index: var(--bghub-z-float);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.bghub-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 8px 10px 8px 12px;
+  font: 400 14px/20px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-overlay-bg);
+  border: 1px solid var(--bghub-border-muted);
+  border-radius: var(--bghub-radius-lg);
+  box-shadow: var(--bghub-shadow-medium);
+  pointer-events: auto;
+  animation: bghub-toast-in var(--bghub-dur) var(--bghub-ease-out) both;
+}
+.bghub-toast--bump { animation: bghub-toast-bump var(--bghub-dur-slow) var(--bghub-ease-out); }
+
+.bghub-toast-icon { display: inline-flex; flex: none; color: var(--bghub-success); }
+.bghub-toast--info .bghub-toast-icon { color: var(--bghub-accent); }
+.bghub-toast--warning .bghub-toast-icon { color: var(--bghub-attention); }
+
+.bghub-toast-text { min-width: 0; padding-right: 2px; overflow-wrap: anywhere; }
+.bghub-toast-code {
+  margin-left: 6px;
+  padding: 1px 6px;
+  font: 12px/18px var(--bghub-mono);
+  color: var(--bghub-fg);
+  background: var(--bghub-bg-neutral);
+  border-radius: var(--bghub-radius);
+}
+
+.bghub-toast-action {
+  flex: none;
+  padding: 2px 8px;
+  font: 600 13px/20px var(--bghub-font);
+  color: var(--bghub-accent);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-toast-action:hover { background: var(--bghub-accent-bg); }
+
+.bghub-toast-keys {
+  flex: none;
+  padding-left: 10px;
+  border-left: 1px solid var(--bghub-border-muted);
+}
+
+/* ==========================================================================
+   Cheat sheet — <dialog> via showModal(), enter/exit with @starting-style
+   ========================================================================== */
+
+.bghub-cheatsheet {
+  width: min(720px, calc(100vw - 32px));
+  max-width: none;
+  max-height: min(680px, calc(100vh - 48px));
+  margin: max(8vh, 24px) auto auto;
+  padding: 0;
+  overflow: hidden;
+  font: 400 14px/20px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-overlay-bg);
+  border: 0;
+  border-radius: var(--bghub-radius-lg);
+  box-shadow: var(--bghub-shadow-large);
+  opacity: 0;
+  transform: translateY(6px) scale(0.98);
+  /* Closing: quick ease-in; display/overlay keep it in the top layer until the fade ends. */
+  transition:
+    opacity var(--bghub-dur-fast) var(--bghub-ease-in),
+    transform var(--bghub-dur-fast) var(--bghub-ease-in),
+    overlay var(--bghub-dur-fast) allow-discrete,
+    display var(--bghub-dur-fast) allow-discrete;
+}
+.bghub-cheatsheet[open] {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--bghub-dur) var(--bghub-ease-out),
+    transform var(--bghub-dur-slow) var(--bghub-ease-out),
+    overlay var(--bghub-dur) allow-discrete,
+    display var(--bghub-dur) allow-discrete;
+}
+@starting-style {
+  .bghub-cheatsheet[open] { opacity: 0; transform: translateY(6px) scale(0.98); }
+}
+/* The panel is focused on open (autofocus); its elevation already shows where focus is. */
+.bghub-cheatsheet:focus-visible { outline: none; }
+
+.bghub-cheatsheet::backdrop {
+  background-color: var(--bghub-backdrop);
+  opacity: 0;
+  transition:
+    opacity var(--bghub-dur-fast) var(--bghub-ease-in),
+    overlay var(--bghub-dur-fast) allow-discrete,
+    display var(--bghub-dur-fast) allow-discrete;
+}
+.bghub-cheatsheet[open]::backdrop {
+  opacity: 1;
+  transition-duration: var(--bghub-dur);
+  transition-timing-function: var(--bghub-ease-out);
+}
+@starting-style {
+  .bghub-cheatsheet[open]::backdrop { opacity: 0; }
+}
+
+.bghub-cs-header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 12px 12px 16px;
+  border-bottom: 1px solid var(--bghub-border-muted);
+}
+.bghub-cs-header-icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: var(--bghub-brand);
+  background: var(--bghub-brand-bg);
+  border-radius: var(--bghub-radius);
+}
+.bghub-cs-title { margin: 0; font: 600 16px/24px var(--bghub-font); color: var(--bghub-fg); }
+.bghub-cs-close {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  padding: 0;
+  color: var(--bghub-fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-cs-close:hover { color: var(--bghub-fg); background: var(--bghub-bg-neutral); }
+
+.bghub-cs-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 4px 16px 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+/* Two balanced columns: View + Copy + Help on the left, Navigate on the right. */
+.bghub-cs-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "view navigate" "copy navigate" "help navigate";
+  column-gap: 32px;
+}
+.bghub-cs-group--view { grid-area: view; }
+.bghub-cs-group--navigate { grid-area: navigate; }
+.bghub-cs-group--copy { grid-area: copy; }
+.bghub-cs-group--help { grid-area: help; }
+
+.bghub-cs-group-title {
+  margin: 14px 0 2px;
+  font: 600 12px/20px var(--bghub-font);
+  letter-spacing: 0.02em;
+  color: var(--bghub-fg-muted);
+}
+.bghub-cs-list { margin: 0; padding: 0; list-style: none; }
+.bghub-cs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 40px;
+  padding: 6px 0;
+  border-top: 1px solid var(--bghub-border-muted);
+}
+.bghub-cs-row:first-child { border-top: 0; }
+.bghub-cs-label { display: flex; flex-direction: column; min-width: 0; }
+.bghub-cs-scope { font-size: 12px; line-height: 16px; color: var(--bghub-fg-muted); }
+.bghub-cs-row--inactive .bghub-cs-label { color: var(--bghub-fg-muted); }
+.bghub-cs-row--inactive .bghub-kbd-group { opacity: 0.55; }
+.bghub-cs-unset { flex: none; font-size: 12px; font-style: italic; color: var(--bghub-fg-muted); }
+
+.bghub-cs-footer {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  padding: 10px 12px 10px 16px;
+  background: var(--bghub-bg-muted);
+  border-top: 1px solid var(--bghub-border-muted);
+}
+.bghub-cs-tip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--bghub-fg-muted); }
+.bghub-cs-actions { display: inline-flex; gap: 8px; margin-left: auto; }
+/* Mirrors Primer's default / invisible buttons through their own tokens. */
+.bghub-cs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  font: 500 14px/20px var(--bghub-font);
+  color: var(--bghub-fg);
+  white-space: nowrap;
+  background: var(--button-default-bgColor-rest, var(--bghub-bg));
+  border: 1px solid var(--button-default-borderColor-rest, var(--bghub-border));
+  border-radius: var(--bghub-radius);
+  box-shadow: var(--bghub-shadow-small);
+  cursor: pointer;
+  transition: transform var(--bghub-dur-press) var(--bghub-ease-out);
+}
+.bghub-cs-btn:hover { background: var(--button-default-bgColor-hover, var(--bghub-bg-muted)); }
+.bghub-cs-btn:active { transform: scale(0.98); }
+.bghub-cs-btn .octicon { color: var(--bghub-fg-muted); }
+.bghub-cs-btn--invisible { color: var(--bghub-fg-muted); background: transparent; border-color: transparent; box-shadow: none; }
+.bghub-cs-btn--invisible:hover { color: var(--bghub-fg); background: var(--bghub-bg-neutral); }
+
+/* ==========================================================================
+   Floating hint — 32px round button, bottom-right, subtle until hovered
+   ========================================================================== */
+
+.bghub-hint {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: var(--bghub-z-float);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: var(--bghub-fg-muted);
+  background: var(--bghub-overlay-bg);
+  border: 1px solid var(--bghub-border-muted);
+  border-radius: var(--bghub-radius-full);
+  box-shadow: var(--bghub-shadow-medium);
+  opacity: 0.72;
+  cursor: pointer;
+  transition:
+    opacity var(--bghub-dur-fast) var(--bghub-ease-out),
+    transform var(--bghub-dur) var(--bghub-ease-spring);
+}
+.bghub-hint:hover,
+.bghub-hint:focus-visible,
+.bghub-hint[aria-expanded="true"] { color: var(--bghub-fg); opacity: 1; transform: translateY(-2px); }
+.bghub-hint:active { transform: scale(0.92); transition-duration: var(--bghub-dur-press); }
+.bghub-hint--enter { animation: bghub-pop-in var(--bghub-dur-slow) var(--bghub-ease-spring) both; }
+
+/* Tooltip (accessible name comes from aria-label; this is the visual twin). */
+.bghub-hint::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 8px);
+  padding: 4px 8px;
+  font: 500 12px/18px var(--bghub-font);
+  color: var(--bghub-fg-on-emphasis);
+  white-space: nowrap;
+  background: var(--bghub-bg-emphasis);
+  border-radius: var(--bghub-radius);
+  opacity: 0;
+  transform: translate(4px, -50%);
+  pointer-events: none;
+  transition:
+    opacity var(--bghub-dur-fast) var(--bghub-ease-out),
+    transform var(--bghub-dur-fast) var(--bghub-ease-out);
+}
+.bghub-hint:hover::after,
+.bghub-hint:focus-visible::after { opacity: 1; transform: translate(0, -50%); transition-delay: 150ms; }
+.bghub-hint[aria-expanded="true"]::after { opacity: 0; transition-delay: 0s; }
+
+/* ==========================================================================
+   Thread highlight after next/prev unresolved jump
+   ========================================================================== */
+
+@keyframes bghub-thread-glow {
+  0% { outline-color: transparent; }
+  12%, 70% { outline-color: var(--bghub-focus); }
+  100% { outline-color: transparent; }
+}
+.bghub-thread-focus {
+  /* !important beats GitHub's `:focus:not(:focus-visible) { outline: none }`; the
+     color stays non-important so the animation can drive it. */
+  outline-style: solid !important;
+  outline-width: 2px !important;
+  outline-offset: 4px !important;
+  outline-color: transparent;
+  animation:
+    bghub-thread-glow 1.6s var(--bghub-ease-out) both,
+    bghub-pulse-ring 0.9s var(--bghub-ease-out) 2;
+}
+
+/* ==========================================================================
+   Diff views: generated-file chip + file highlight after Alt+V / Alt+N
+   ========================================================================== */
+
+.bghub-gen-chip {
+  height: 18px;
+  margin-left: 8px;
+  padding: 0 6px;
+  font-size: 11px;
+  cursor: default;
+}
+
+.bghub-file-focus {
+  outline-style: solid !important;
+  outline-width: 2px !important;
+  outline-offset: -2px !important;
+  outline-color: transparent;
+  animation: bghub-thread-glow 1.4s var(--bghub-ease-out) both;
+}
+
+/* ==========================================================================
+   Review progress pill — fixed bottom-left, below GitHub's sticky layer
+   ========================================================================== */
+
+@keyframes bghub-progress-celebrate {
+  0%, 100% { transform: none; }
+  35% { transform: translateY(-3px) scale(1.04); }
+}
+
+.bghub-progress {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: var(--bghub-z-float);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  padding: 0 4px 0 12px;
+  font: 500 12px/16px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-overlay-bg);
+  border: 1px solid var(--bghub-border-muted);
+  border-radius: var(--bghub-radius-full);
+  box-shadow: var(--bghub-shadow-medium);
+  animation: bghub-slide-up var(--bghub-dur-slow) var(--bghub-ease-out) both;
+}
+.bghub-progress--instant { animation: none; }
+.bghub-progress--done { padding-right: 14px; }
+.bghub-progress--celebrate { animation: bghub-progress-celebrate 520ms var(--bghub-ease-spring) both; }
+
+.bghub-progress-icon { display: inline-flex; flex: none; color: var(--bghub-fg-muted); }
+.bghub-progress--done .bghub-progress-icon { color: var(--bghub-success); }
+.bghub-progress-text { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.bghub-progress-meter {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 4px;
+  overflow: hidden;
+  background: var(--bghub-bg-neutral);
+  border-radius: var(--bghub-radius-full);
+}
+.bghub-progress-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--bghub-accent-emphasis);
+  border-radius: inherit;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--bghub-dur-slow) var(--bghub-ease-out);
+}
+.bghub-progress--done .bghub-progress-fill { background: var(--bghub-success); }
+
+.bghub-progress-next {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 8px 0 10px;
+  font: 600 12px/16px var(--bghub-font);
+  color: var(--bghub-accent);
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius-full);
+  cursor: pointer;
+  transition: transform var(--bghub-dur-press) var(--bghub-ease-out);
+}
+.bghub-progress-next:hover { background: var(--bghub-accent-bg); }
+.bghub-progress-next:active { transform: scale(0.97); }
+.bghub-progress-next[hidden] { display: none; }
+
+/* Toasts sit bottom-center; lift them clear of the pill where they could meet. */
+@media (max-width: 1100px) {
+  html:has(> .bghub-progress) .bghub-toast-host { bottom: 64px; }
+}
+
+/* ==========================================================================
+   Unresolved threads panel — popover="manual" (top layer), right edge
+   ========================================================================== */
+
+.bghub-tp {
+  /* Reset UA [popover] styles; `display` is set only while open (see below). */
+  position: fixed;
+  inset: 80px 16px auto auto;
+  width: min(360px, calc(100vw - 32px));
+  max-height: 70vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font: 400 14px/20px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-overlay-bg);
+  border: 0;
+  border-radius: var(--bghub-radius-lg);
+  box-shadow: var(--bghub-shadow-large);
+  opacity: 0;
+  transform: translateX(12px);
+  transition:
+    opacity var(--bghub-dur-fast) var(--bghub-ease-in),
+    transform var(--bghub-dur-fast) var(--bghub-ease-in),
+    overlay var(--bghub-dur-fast) allow-discrete,
+    display var(--bghub-dur-fast) allow-discrete;
+}
+.bghub-tp:popover-open {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--bghub-dur) var(--bghub-ease-out),
+    transform var(--bghub-dur-slow) var(--bghub-ease-out),
+    overlay var(--bghub-dur) allow-discrete,
+    display var(--bghub-dur) allow-discrete;
+}
+@starting-style {
+  .bghub-tp:popover-open { opacity: 0; transform: translateX(12px); }
+}
+.bghub-tp--fallback {
+  z-index: var(--bghub-z-float);
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transform: none;
+}
+.bghub-tp--fallback[hidden] { display: none; }
+
+.bghub-tp-header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px 10px 12px;
+  border-bottom: 1px solid var(--bghub-border-muted);
+}
+.bghub-tp-header-icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: var(--bghub-brand);
+  background: var(--bghub-brand-bg);
+  border-radius: var(--bghub-radius);
+}
+.bghub-tp-title { margin: 0; font: 600 14px/20px var(--bghub-font); color: var(--bghub-fg); }
+.bghub-tp-count { font-variant-numeric: tabular-nums; }
+.bghub-tp-close {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+  padding: 0;
+  color: var(--bghub-fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-tp-close:hover { color: var(--bghub-fg); background: var(--bghub-bg-neutral); }
+
+.bghub-tp-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 4px;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+/* minmax(0, 1fr): a long nowrap path must truncate, not widen the track. */
+.bghub-tp-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; margin: 0; padding: 0; list-style: none; }
+.bghub-tp-row { min-width: 0; }
+
+.bghub-tp-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  color: var(--bghub-fg);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+  min-width: 0;
+}
+.bghub-tp-item:hover { background: var(--bghub-bg-neutral); }
+.bghub-tp-item[aria-current="true"] { background: var(--bghub-accent-bg); box-shadow: inset 2px 0 0 var(--bghub-accent); }
+.bghub-tp-item:focus-visible { outline-offset: -2px; }
+
+.bghub-tp-meta { display: flex; align-items: center; gap: 6px; min-width: 0; }
+/* Truncated from the LEFT: an rtl box overflows at its start, the <bdi dir="ltr">
+   keeps the path itself in reading order (no stray leading dots/slashes). */
+.bghub-tp-path {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font: 12px/18px var(--bghub-mono);
+  color: var(--bghub-fg-muted);
+  white-space: nowrap;
+  text-align: left;
+  text-overflow: ellipsis;
+  direction: rtl;
+}
+.bghub-tp-outdated { flex: none; height: 18px; padding: 0 6px; font-size: 11px; }
+
+.bghub-tp-comment {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--bghub-fg-muted);
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.bghub-tp-avatar { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; border-radius: 50%; }
+.bghub-tp-author { margin-right: 6px; font-weight: 600; color: var(--bghub-fg); }
+
+.bghub-tp-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 28px 16px;
+  color: var(--bghub-fg-muted);
+  text-align: center;
+}
+.bghub-tp-empty p { margin: 0; }
+.bghub-tp-empty-icon { display: inline-flex; color: var(--bghub-success); }
+
+.bghub-tp-footer {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--bghub-fg-muted);
+  background: var(--bghub-bg-muted);
+  border-top: 1px solid var(--bghub-border-muted);
+}
+.bghub-tp-footer > span { display: inline-flex; align-items: center; gap: 4px; }
+.bghub-tp-footer .bghub-kbd { min-width: 18px; height: 18px; font-size: 10px; }
+
+/* ==========================================================================
+   File finder — reuses the cheat sheet <dialog> shell
+   ========================================================================== */
+
+.bghub-finder { width: min(560px, calc(100vw - 32px)); max-height: min(480px, calc(100vh - 48px)); }
+.bghub-ff-search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  color: var(--bghub-fg-muted);
+  border-bottom: 1px solid var(--bghub-border-muted);
+}
+.bghub-ff-input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  font: 400 16px/24px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+.bghub-ff-input::placeholder { color: var(--bghub-fg-muted); }
+.bghub-ff-body { min-height: 0; overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
+.bghub-ff-list { margin: 0; padding: 0; list-style: none; }
+.bghub-ff-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-ff-option:hover { background: var(--bghub-bg-neutral); }
+.bghub-ff-option[aria-selected="true"] { background: var(--bghub-accent-bg); box-shadow: inset 2px 0 0 var(--bghub-accent); }
+.bghub-ff-icon { display: inline-flex; flex: none; color: var(--bghub-fg-muted); }
+.bghub-ff-path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font: 400 13px/20px var(--bghub-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Truncate from the left: the file name is the informative end. */
+  direction: rtl;
+  text-align: left;
+}
+.bghub-ff-mark { color: var(--bghub-accent); font-weight: 600; background: transparent; }
+.bghub-ff-generated { flex: none; }
+.bghub-ff-empty { margin: 0; padding: 20px; color: var(--bghub-fg-muted); text-align: center; }
+
+/* ==========================================================================
+   "Changes since your last visit" pill — under the PR header
+   ========================================================================== */
+
+.bghub-since {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 8px 0;
+  padding: 4px 4px 4px 10px;
+  font: 400 13px/20px var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-accent-bg);
+  border: 1px solid var(--bghub-accent-border);
+  border-radius: var(--bghub-radius-full);
+}
+.bghub-since--rewritten { background: var(--bghub-attention-bg); border-color: var(--bghub-attention-border); }
+.bghub-since-icon { display: inline-flex; flex: none; color: var(--bghub-accent); }
+.bghub-since--rewritten .bghub-since-icon { color: var(--bghub-attention); }
+.bghub-since-text { min-width: 0; }
+.bghub-since-btn,
+.bghub-since-close {
+  flex: none;
+  font: 600 12px/20px var(--bghub-font);
+  color: var(--bghub-accent);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius-full);
+  cursor: pointer;
+}
+.bghub-since-btn { padding: 2px 8px; }
+.bghub-since-close { display: inline-flex; padding: 2px; color: var(--bghub-fg-muted); }
+.bghub-since-btn:hover,
+.bghub-since-close:hover { background: var(--bghub-bg-neutral); }
+
+/* ==========================================================================
+   Responsive, preferences, print
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .bghub-cheatsheet { width: calc(100vw - 16px); max-height: calc(100vh - 32px); margin-top: 16px; }
+  .bghub-since { flex-wrap: wrap; border-radius: var(--bghub-radius-lg); }
+  .bghub-cs-groups {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas: "view" "navigate" "copy" "help";
+  }
+  .bghub-cs-tip { flex-basis: 100%; }
+  .bghub-progress-meter { display: none; }
+  .bghub-tp { inset: auto 8px 64px; width: auto; max-height: 60vh; }
+}
+
+/* Keep toasts clear of the floating hint where they could overlap it. */
+@media (max-width: 720px) {
+  .bghub-toast-host { bottom: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bghub-cheatsheet,
+  .bghub-cheatsheet::backdrop,
+  .bghub-tp { transition-duration: 1ms !important; }
+  /* No glow animation → show a static outline for the highlight's lifetime. */
+  .bghub-thread-focus,
+  .bghub-file-focus { animation: none !important; outline-color: var(--bghub-focus); }
+  .bghub-progress--celebrate { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .bghub-toast,
+  .bghub-hint,
+  .bghub-cheatsheet,
+  .bghub-progress,
+  .bghub-tp { border: 1px solid CanvasText; }
+  .bghub-progress-meter { border: 1px solid CanvasText; }
+  .bghub-progress-fill { background: Highlight; }
+  .bghub-tp-item[aria-current="true"] { outline: 2px solid Highlight; }
+  .bghub-thread-focus,
+  .bghub-file-focus { outline-color: Highlight !important; }
+}
+
+@media print {
+  .bghub-toast-host,
+  .bghub-hint,
+  .bghub-progress,
+  .bghub-tp,
+  .bghub-gen-chip { display: none !important; }
+}
+
+/* ==========================================================================
+   Comment templates picker — anchored variant of the finder dialog
+   ========================================================================== */
+
+.bghub-ct { width: min(420px, calc(100vw - 16px)); max-height: min(360px, calc(100vh - 16px)); margin: 0; position: fixed; inset: auto; }
+.bghub-ct::backdrop { background: transparent; }
+.bghub-ct-option { flex-wrap: wrap; row-gap: 0; }
+.bghub-ct-title { flex: none; font-weight: 600; }
+.bghub-ct-hint {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--bghub-fg-muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bghub-ct-chip { flex: none; }
+
+/* ==========================================================================
+   Load all (next to GitHub's "Load more") and the review checklist
+   ========================================================================== */
+
+.bghub-load-all {
+  margin-left: 8px;
+  padding: 3px 12px;
+  font: 500 14px/20px var(--bghub-font);
+  color: var(--bghub-accent);
+  background: transparent;
+  border: 1px solid var(--bghub-border);
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-load-all:hover { background: var(--bghub-bg-neutral); }
+.bghub-load-all:focus-visible { outline: 2px solid var(--bghub-accent); outline-offset: 2px; }
+
+.bghub-checklist {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: var(--bghub-z-float);
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6px;
+  max-width: min(340px, calc(100vw - 32px));
+  font: 400 13px/18px var(--bghub-font);
+  color: var(--bghub-fg);
+}
+.bghub-checklist-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 5px 12px 5px 8px;
+  font: 500 12px/18px var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  background: var(--bghub-overlay-bg);
+  border: 1px solid var(--bghub-border-muted);
+  border-radius: var(--bghub-radius-full);
+  box-shadow: var(--bghub-shadow-medium);
+  cursor: pointer;
+  transition: color var(--bghub-dur-fast) var(--bghub-ease-out);
+ }
+.bghub-checklist-toggle:hover,
+.bghub-checklist-toggle[aria-expanded="true"] { color: var(--bghub-fg); }
+.bghub-checklist-toggle:focus-visible { outline: 2px solid var(--bghub-accent); outline-offset: 2px; }
+.bghub-checklist[data-complete="true"] .bghub-checklist-toggle { color: var(--bghub-success, var(--bghub-fg)); }
+.bghub-checklist-body {
+  max-height: min(50vh, 360px);
+  margin: 0;
+  padding: 8px 12px;
+  overflow: auto;
+  background: var(--bghub-overlay-bg);
+  border: 1px solid var(--bghub-border-muted);
+  border-radius: var(--bghub-radius-lg);
+  box-shadow: var(--bghub-shadow-medium);
+}
+.bghub-checklist-body[hidden] { display: none; }
+.bghub-checklist-item { display: flex; align-items: flex-start; gap: 8px; padding: 3px 0; }
+.bghub-checklist-item input { flex: none; margin: 2px 0 0; }
+.bghub-checklist-item label { cursor: pointer; overflow-wrap: anywhere; }
+.bghub-checklist-item input:checked + label { color: var(--bghub-fg-muted); text-decoration: line-through; }

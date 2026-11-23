@@ -1,93 +1,49 @@
 #!/usr/bin/env node
+// Checks the size of the BUILT extension (dist/) — what users actually install.
+// Run after `npm run build`.
 
 const fs = require('fs');
 const path = require('path');
 
-console.log('📊 Checking extension bundle size...\n');
+const DIST = path.join(__dirname, '..', 'dist');
+const MAX_TOTAL_KB = 1024; // whole package
+const MAX_SCRIPT_KB = 200; // any single JS/CSS bundle
 
-const MAX_SIZE_MB = 5; // Chrome Web Store limit is much higher, but let's keep it small
-const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
-
-function getDirectorySize(dirPath) {
-  let totalSize = 0;
-  
-  const files = fs.readdirSync(dirPath);
-  
-  files.forEach(file => {
-    const filePath = path.join(dirPath, file);
-    const stats = fs.statSync(filePath);
-    
-    // Skip directories we don't want to include
-    if (stats.isDirectory()) {
-      if (file === 'node_modules' || file === '.git' || file === 'dist' || file === '.github') {
-        return;
-      }
-      totalSize += getDirectorySize(filePath);
-    } else {
-      // Skip certain files
-      if (file.endsWith('.md') || file === 'package.json' || file === 'package-lock.json') {
-        return;
-      }
-      totalSize += stats.size;
-    }
-  });
-  
-  return totalSize;
-}
-
-try {
-  const rootDir = path.join(__dirname, '..');
-  const totalSize = getDirectorySize(rootDir);
-  const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
-  
-  console.log(`Total extension size: ${sizeMB} MB`);
-  console.log(`Maximum allowed: ${MAX_SIZE_MB} MB`);
-  
-  if (totalSize > MAX_SIZE_BYTES) {
-    console.error(`❌ Extension size (${sizeMB} MB) exceeds limit (${MAX_SIZE_MB} MB)`);
-    process.exit(1);
-  }
-  
-  const percentUsed = ((totalSize / MAX_SIZE_BYTES) * 100).toFixed(1);
-  console.log(`✓ Size check passed (${percentUsed}% of limit used)`);
-  
-  // Check individual file sizes
-  console.log('\n📁 Largest files:');
-  const files = [];
-  
-  function collectFiles(dirPath, baseDir = '') {
-    const items = fs.readdirSync(dirPath);
-    items.forEach(item => {
-      const itemPath = path.join(dirPath, item);
-      const stats = fs.statSync(itemPath);
-      
-      if (stats.isDirectory()) {
-        if (item !== 'node_modules' && item !== '.git' && item !== 'dist' && item !== '.github') {
-          collectFiles(itemPath, path.join(baseDir, item));
-        }
-      } else {
-        if (!item.endsWith('.md') && item !== 'package.json' && item !== 'package-lock.json') {
-          files.push({
-            path: path.join(baseDir, item),
-            size: stats.size
-          });
-        }
-      }
-    });
-  }
-  
-  collectFiles(rootDir);
-  files.sort((a, b) => b.size - a.size);
-  
-  files.slice(0, 10).forEach(file => {
-    const sizeKB = (file.size / 1024).toFixed(2);
-    console.log(`  ${file.path}: ${sizeKB} KB`);
-  });
-  
-  console.log('\n✅ Size check completed successfully!');
-  process.exit(0);
-} catch (error) {
-  console.error('❌ Error checking size:', error.message);
+if (!fs.existsSync(DIST)) {
+  console.error('dist/ not found — run `npm run build` first.');
   process.exit(1);
 }
 
+const files = [];
+(function walk(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) walk(p);
+    else files.push({ path: path.relative(DIST, p), size: fs.statSync(p).size });
+  }
+})(DIST);
+
+const kb = (n) => (n / 1024).toFixed(1);
+const total = files.reduce((s, f) => s + f.size, 0);
+let failed = false;
+
+console.log(`Extension package: ${kb(total)} KB (limit ${MAX_TOTAL_KB} KB)`);
+if (total > MAX_TOTAL_KB * 1024) {
+  console.error('✗ Package exceeds the size limit');
+  failed = true;
+}
+
+for (const f of files) {
+  if (/\.(js|css)$/.test(f.path) && f.size > MAX_SCRIPT_KB * 1024) {
+    console.error(`✗ ${f.path} is ${kb(f.size)} KB (limit ${MAX_SCRIPT_KB} KB)`);
+    failed = true;
+  }
+}
+
+console.log('\nLargest files:');
+files
+  .sort((a, b) => b.size - a.size)
+  .slice(0, 8)
+  .forEach((f) => console.log(`  ${kb(f.size).padStart(7)} KB  ${f.path}`));
+
+process.exit(failed ? 1 : 0);

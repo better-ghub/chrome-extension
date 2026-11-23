@@ -1,0 +1,306 @@
+/* Better GHub - PR list row chips, summary bar & the shared tooltip.
+   Owned by the PR-list workstream. Colors come from base.css tokens (Primer),
+   motion is opacity/transform only, reduced motion is handled in base.css. */
+
+/* ---------- Chip row under each list item's meta line ---------- */
+
+.bghub-prl-slot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  min-height: 20px;
+  margin-top: 4px;
+  font: 400 12px/20px var(--bghub-font);
+  color: var(--bghub-fg-muted);
+}
+
+.bghub-prl-skeleton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+}
+
+.bghub-prl-enter {
+  animation: bghub-fade-in 150ms var(--bghub-ease-out) both;
+  animation-delay: calc(var(--bghub-i, 0) * 30ms);
+}
+
+.bghub-prl-chip .octicon { width: 12px; height: 12px; }
+
+button.bghub-prl-chip--button {
+  margin: 0;
+  font: 500 12px/1 var(--bghub-font);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+button.bghub-prl-chip--button:hover {
+  /* Darken any chip variant a touch without knowing its color. */
+  background-image: linear-gradient(var(--bghub-bg-neutral), var(--bghub-bg-neutral));
+}
+
+.bghub-prl-size-chip { gap: 5px; }
+.bghub-prl-size { font-weight: 600; color: var(--bghub-fg); }
+.bghub-prl-add,
+.bghub-prl-del { font-variant-numeric: tabular-nums; }
+.bghub-prl-add { color: var(--bghub-success); }
+.bghub-prl-del { color: var(--bghub-danger); }
+
+.bghub-prl-activity {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+  color: var(--bghub-fg-muted);
+}
+.bghub-prl-activity .octicon { flex: none; }
+.bghub-prl-activity--approved .octicon { color: var(--bghub-success); }
+.bghub-prl-activity--changes .octicon { color: var(--bghub-danger); }
+.bghub-prl-actor { font-weight: 600; color: var(--bghub-fg); }
+.bghub-prl-slot relative-time { color: inherit; white-space: nowrap; }
+
+/* Suggested labels: dashed outline = "suggestion", not a real label. */
+.bghub-prl-label {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 7px;
+  font: 500 12px/1 var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  border: 1px dashed var(--bghub-border);
+  border-radius: var(--bghub-radius-full);
+  white-space: nowrap;
+}
+.bghub-prl-label--attention {
+  color: var(--bghub-attention);
+  border-color: color-mix(in srgb, var(--bghub-attention) 55%, transparent);
+}
+.bghub-prl-label--more { padding: 0 6px; }
+
+/* Rows that wait for the viewer's review get a subtle left accent. */
+li[data-bghub-accent] { box-shadow: inset 2px 0 0 var(--bghub-done); }
+
+/* ---------- Summary / notice bar above the list ---------- */
+
+.bghub-prl-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 8px 16px;
+  font: 400 12px/18px var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  border-bottom: 1px solid var(--bghub-border-muted);
+  animation: bghub-fade-in 150ms var(--bghub-ease-out) both;
+}
+.bghub-prl-bar[hidden] { display: none; }
+.bghub-prl-bar .octicon { flex: none; }
+.bghub-prl-bar-icon { color: var(--bghub-fg-muted); }
+.bghub-prl-notice .bghub-prl-bar-icon { color: var(--bghub-accent); }
+.bghub-prl-bar-text { flex: 1 1 auto; min-width: 0; }
+.bghub-prl-bar-item { display: inline-flex; align-items: center; gap: 6px; }
+.bghub-prl-bar-item--eye .octicon { color: var(--bghub-done); }
+.bghub-prl-bar-item--alert .octicon { color: var(--bghub-danger); }
+.bghub-prl-bar-item--comment-discussion .octicon { color: var(--bghub-attention); }
+.bghub-prl-bar-sep { color: var(--bghub-fg-muted); }
+.bghub-prl-bar-link { font-weight: 600; color: var(--bghub-accent); text-decoration: none; }
+.bghub-prl-bar-link:hover { text-decoration: underline; }
+
+/* Primer "small" button look. */
+.bghub-prl-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 8px;
+  font: 500 12px/1 var(--bghub-font);
+  color: var(--button-default-fgColor-rest, var(--bghub-fg));
+  background: var(--button-default-bgColor-rest, var(--bghub-bg-muted));
+  border: 1px solid var(--button-default-borderColor-rest, var(--bghub-border));
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.bghub-prl-btn:hover { background: var(--button-default-bgColor-hover, var(--bghub-bg-neutral)); }
+.bghub-prl-btn:active { transform: scale(0.98); }
+
+.bghub-prl-dismiss {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: var(--bghub-fg-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bghub-radius);
+  cursor: pointer;
+}
+.bghub-prl-dismiss:hover { color: var(--bghub-fg); background: var(--bghub-bg-neutral); }
+
+/* ---------- Readiness chips ---------- */
+
+.bghub-prl-stale { color: var(--bghub-fg-muted); }
+.bghub-prl-bar-item--check-circle .octicon { color: var(--bghub-success); }
+
+/* ---------- Quick filters (client-side, current page) ---------- */
+
+.bghub-prl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font: 400 12px/18px var(--bghub-font);
+  border-bottom: 1px solid var(--bghub-border-muted);
+}
+.bghub-prl-filters[hidden] { display: none; }
+
+.bghub-prl-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  margin: 0;
+  padding: 0 9px;
+  font: 500 12px/1 var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  background: transparent;
+  border: 1px solid var(--bghub-border);
+  border-radius: var(--bghub-radius-full);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--bghub-dur-fast) var(--bghub-ease-out), color var(--bghub-dur-fast) var(--bghub-ease-out),
+    border-color var(--bghub-dur-fast) var(--bghub-ease-out);
+}
+.bghub-prl-filter:hover { color: var(--bghub-fg); background: var(--bghub-bg-neutral); }
+.bghub-prl-filter:active { transform: scale(0.98); }
+.bghub-prl-filter[hidden] { display: none; }
+.bghub-prl-filter .octicon { flex: none; }
+.bghub-prl-filter[aria-pressed='true'] {
+  color: var(--bghub-accent);
+  background: var(--bghub-accent-bg);
+  border-color: var(--bghub-accent-border);
+}
+.bghub-prl-filter-count {
+  min-width: 16px;
+  padding: 2px 5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--bghub-fg);
+  background: var(--bghub-bg-neutral);
+  border-radius: var(--bghub-radius-full);
+}
+.bghub-prl-filter[aria-pressed='true'] .bghub-prl-filter-count { color: inherit; }
+
+.bghub-prl-filter-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin: 0 6px 0 -2px;
+  color: var(--bghub-fg-muted);
+  text-decoration: none;
+}
+.bghub-prl-filter-search:hover { color: var(--bghub-accent); text-decoration: underline; }
+
+/* "No pull requests on this page match" — sits where the rows would be. */
+.bghub-prl-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  font: 400 14px/20px var(--bghub-font);
+  color: var(--bghub-fg-muted);
+  border-bottom: 1px solid var(--bghub-border-muted);
+  animation: bghub-fade-in 150ms var(--bghub-ease-out) both;
+}
+.bghub-prl-empty[hidden] { display: none; }
+
+/* Rows hidden by a quick filter: fade out (≤120ms), then leave the layout. */
+li[data-bghub-filtered=''] { display: none !important; }
+li[data-bghub-filtered='leaving'] {
+  pointer-events: none;
+  animation: bghub-fade-out 120ms var(--bghub-ease-in) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  li[data-bghub-filtered='leaving'] { animation: none; opacity: 0; }
+  .bghub-prl-filter { transition: none; }
+}
+
+/* ---------- Shared tooltip (src/ui/tooltip.ts, top layer via Popover API) ---------- */
+
+.bghub-tooltip {
+  position: fixed;
+  inset: auto; /* undo the UA popover centering */
+  margin: 0;
+  max-width: 280px;
+  padding: 6px 8px;
+  overflow: visible;
+  font: 400 12px/1.5 var(--bghub-font);
+  color: var(--tooltip-fgColor, var(--bghub-fg-on-emphasis));
+  background: var(--tooltip-bgColor, var(--bghub-bg-emphasis));
+  border: 0;
+  border-radius: var(--bghub-radius);
+  box-shadow: var(--bghub-shadow-medium);
+  overflow-wrap: anywhere;
+}
+.bghub-tooltip:popover-open { animation: bghub-pop-in var(--bghub-dur-fast) var(--bghub-ease-out); }
+.bghub-tooltip[hidden] { display: none; }
+.bghub-tooltip-title { font-weight: 600; }
+.bghub-tooltip-muted { opacity: 0.75; }
+.bghub-tooltip-list { display: grid; gap: 4px; margin: 4px 0 0; padding: 0; list-style: none; }
+.bghub-tooltip-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.bghub-tooltip-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bghub-tooltip-count { margin-left: auto; padding-left: 8px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bghub-tooltip-avatar { flex: none; width: 16px; height: 16px; border-radius: 50%; }
+.bghub-tooltip relative-time { color: inherit; }
+
+@media (forced-colors: active) {
+  .bghub-tooltip { border: 1px solid CanvasText; }
+  .bghub-prl-label { border-color: CanvasText; }
+  li[data-bghub-accent] { border-left: 2px solid Highlight; }
+}
+
+/* ---------- Failed checks popover (src/ui/popover.ts) ---------- */
+
+.bghub-popover {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  width: max-content;
+  max-width: min(360px, calc(100vw - 16px));
+  padding: 10px 12px;
+  overflow: visible;
+  font: 400 12px/1.5 var(--bghub-font);
+  color: var(--bghub-fg);
+  background: var(--bghub-overlay-bg, var(--bghub-bg));
+  border: 1px solid var(--bghub-border);
+  border-radius: var(--bghub-radius);
+  box-shadow: var(--bghub-shadow-medium);
+  overflow-wrap: anywhere;
+}
+.bghub-popover:popover-open { animation: bghub-pop-in var(--bghub-dur-fast) var(--bghub-ease-out); }
+.bghub-popover[hidden] { display: none; }
+.bghub-popover:focus { outline: none; }
+.bghub-checks-list { display: grid; gap: 4px; margin: 6px 0; padding: 0; list-style: none; }
+.bghub-checks-row { display: flex; align-items: flex-start; gap: 6px; min-width: 0; }
+.bghub-checks-icon { flex: none; margin-top: 3px; color: var(--bghub-danger); }
+.bghub-checks-link { color: var(--bghub-fg); text-decoration: none; }
+.bghub-checks-link:hover { color: var(--bghub-accent); text-decoration: underline; }
+.bghub-checks-workflow { color: var(--bghub-fg-muted); }
+.bghub-checks-all { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; color: var(--bghub-accent); text-decoration: none; }
+.bghub-checks-all:hover { text-decoration: underline; }
+.bghub-popover a:focus-visible { outline: 2px solid var(--bghub-accent); outline-offset: 1px; border-radius: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bghub-popover:popover-open { animation: none; }
+}
+@media (forced-colors: active) {
+  .bghub-popover { border-color: CanvasText; }
+}

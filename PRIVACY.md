@@ -1,10 +1,10 @@
 # Privacy Policy for Better GHub Chrome Extension
 
-**Last Updated:** December 16, 2024
+**Last Updated:** November 22, 2026
 
 ## Overview
 
-Better GHub is a Chrome extension that enhances GitHub's Pull Request pages by displaying real-time activity information and unresolved review thread counts. We take your privacy seriously and are committed to protecting your data.
+Better GHub is a Chrome extension that enhances GitHub pull requests: activity details in pull request lists, keyboard shortcuts on pull request pages, a pull request inbox in the toolbar popup and a dashboard card. We take your privacy seriously and are committed to protecting your data.
 
 ## Data Collection
 
@@ -12,18 +12,25 @@ Better GHub collects and stores minimal data necessary for its functionality:
 
 ### Authentication Information
 
-- **GitHub Fine-grained Personal Access Token or OAuth Token**: You provide this token to authenticate with GitHub's API. The token is stored locally in your browser using Chrome's storage API and is never transmitted to any third-party servers.
-- **Storage Location**: All tokens are stored locally in your browser's secure storage (`chrome.storage.local`).
+- **GitHub personal access token(s)**: You provide one or more tokens of your GitHub account (for example one fine-grained token per organization) to authenticate with GitHub's API. They are stored locally in your browser, in the extension's own IndexedDB, and are never transmitted anywhere except GitHub's API (`api.github.com`).
+- **Who can read them**: Only the extension's background service worker. The popup and options pages ask it to add or remove tokens, and the scripts that run on github.com pages ask it to make API calls on their behalf — none of them ever receives a token.
+- **Token details**: For each token the extension keeps its type, its last four characters, which organizations it can read, and its expiry date, so the options page can show them.
+- **Account details**: Your GitHub login, display name, avatar URL and profile URL are cached locally so the popup can show which account is connected.
 
 ### User Preferences
 
-- **Cache Duration**: Your preferred cache time for PR data
-- **Batch Delay**: Your preferred API batch delay setting
-- These preferences are stored locally in your browser.
+- Language, feature toggles, keyboard shortcut bindings, notification settings and cache duration.
+- These preferences are stored in your browser. If you are signed in to Chrome with sync enabled, Chrome may sync them between your profiles through your Google account (`chrome.storage.sync`); they never go to any server of ours. GitHub tokens are never synced or exported.
+- You can export your settings to a JSON file and import them again from the options page; the file contains settings only.
+
+### Pull request data
+
+- **Inbox state**: The list of open pull requests you authored, were asked to review or are assigned to, plus the time you last looked at each one (used for the unread badge). Stored locally in `chrome.storage.local`.
+- **Response cache**: Recent GitHub API responses are cached in `chrome.storage.session` for a few minutes (configurable) to save API quota. This cache lives in memory and is cleared when the browser closes, or immediately with "Clear cached data" in the options.
 
 ## How We Use Data
 
-- **GitHub Fine-grained Token**: Used exclusively to authenticate API requests to GitHub's official REST and GraphQL APIs to fetch Pull Request data, commit information, and review thread counts.
+- **GitHub token**: Used exclusively to authenticate requests to GitHub's official REST and GraphQL APIs to read pull request data (diff size, review requests, review threads, last activity, checks status) for the pages you visit and for your inbox.
 - **User Preferences**: Used to customize the extension's behavior according to your settings.
 
 ## Data Storage
@@ -49,8 +56,9 @@ The extension communicates only with:
 
 ## Data Security
 
-- Your authentication token is stored securely using Chrome's built-in storage API
-- The token is encrypted by Chrome's security mechanisms
+- Your tokens are stored in the extension's own IndexedDB, which is isolated from websites and other extensions. Note that it is not encrypted at rest — anyone with access to your browser profile on disk could read it, as with any locally stored credential.
+- We recommend a fine-grained token with read-only access (Pull requests: Read, Metadata: Read).
+- The extension requests only the `storage`, `alarms` and `notifications` permissions (desktop notifications appear only after you turn them on in the options) plus access to `github.com` and `api.github.com`.
 - The extension follows Chrome Web Store security best practices
 - All communication with GitHub uses HTTPS encryption
 
@@ -58,17 +66,17 @@ The extension communicates only with:
 
 You can:
 
-- **View your data**: Access your stored token and preferences through the extension's options page
+- **View your data**: See your preferences and the details of each stored token (type, last four characters, organizations, expiry) on the extension's options page
 - **Delete your data**: Remove your token at any time through the extension's popup or options page
-- **Export your data**: Your token and preferences are standard JSON format in Chrome storage
+- **Export your data**: Export your preferences to a JSON file from the options page (About section). Tokens are never exported; they stay in the extension's IndexedDB
 - **Uninstall**: Uninstalling the extension will delete all stored data
-- **Use without authentication**: Use the extension without a token (for public repositories only, with limited functionality)
+- **Use without authentication**: Keyboard shortcuts on pull request pages work without a token; list details, the inbox and the dashboard card need one
 
 ## Data Retention
 
 - Data is retained only as long as the extension is installed
 - Upon uninstallation, all data is automatically deleted by Chrome
-- You can manually delete your token at any time without uninstalling
+- You can remove a single token or sign out (removing all of them) at any time in the popup or options page. Revoke tokens on GitHub as well if you no longer need them.
 
 ## Children's Privacy
 
